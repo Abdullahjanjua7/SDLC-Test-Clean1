@@ -1,0 +1,13 @@
+/**
+ * This declaration file is automatically generated for CSS Modules.
+ * It provides type safety when importing CSS Modules in TypeScript files.
+ *
+ * When importing a .module.css file, it returns an object
+ * where keys are the original CSS class names and values are
+ * the unique, generated class names.
+ */
+declare const styles: {
+  readonly [key: string]: string;
+};
+
+export default styles;

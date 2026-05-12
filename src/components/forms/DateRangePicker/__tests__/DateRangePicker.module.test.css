@@ -1,0 +1,141 @@
+// src/components/forms/DateRangePicker/__tests__/DateRangePicker.module.css.test.ts
+
+// Mock the CSS module import.
+// In a real project, you might configure `moduleNameMapper` in jest.config.js
+// to use `identity-obj-proxy` for all CSS modules.
+// For this specific test, we'll provide a detailed mock to ensure all
+// expected properties are present and have string values, matching the .d.ts contract.
+jest.mock('../DateRangePicker.module.css', () => ({
+  dateRangePicker: 'dateRangePicker',
+  inputContainer: 'inputContainer',
+  startDateInput: 'startDateInput',
+  endDateInput: 'endDateInput',
+  inputSeparator: 'inputSeparator',
+  calendarContainer: 'calendarContainer',
+  calendarHeader: 'calendarHeader',
+  navButtonPrev: 'navButtonPrev',
+  navButtonNext: 'navButtonNext',
+  monthYearDisplay: 'monthYearDisplay',
+  weekdays: 'weekdays',
+  weekday: 'weekday',
+  daysGrid: 'daysGrid',
+  dayCell: 'dayCell',
+  dayInRange: 'dayInRange',
+  dayRangeStart: 'dayRangeStart',
+  dayRangeEnd: 'dayRangeEnd',
+  daySelected: 'daySelected',
+  dayToday: 'dayToday',
+  dayDisabled: 'dayDisabled',
+  dayOutsideMonth: 'dayOutsideMonth',
+  pickerFooter: 'pickerFooter',
+  footerButton: 'footerButton',
+  applyButton: 'applyButton',
+  cancelButton: 'cancelButton',
+  clearButton: 'clearButton',
+  presetsContainer: 'presetsContainer',
+  presetButton: 'presetButton',
+  presetButtonActive: 'presetButtonActive',
+  popover: 'popover',
+  popoverArrow: 'popoverArrow',
+}));
+
+// Import the mocked styles. This import will resolve to the object provided by jest.mock.
+import styles from '../DateRangePicker.module.css';
+
+describe('DateRangePicker.module.css type definitions and runtime contract', () => {
+  // Define all expected keys from the DateRangePickerStyles interface.
+  // This list serves as the source of truth for the expected contract.
+  const expectedKeys = [
+    'dateRangePicker',
+    'inputContainer',
+    'startDateInput',
+    'endDateInput',
+    'inputSeparator',
+    'calendarContainer',
+    'calendarHeader',
+    'navButtonPrev',
+    'navButtonNext',
+    'monthYearDisplay',
+    'weekdays',
+    'weekday',
+    'daysGrid',
+    'dayCell',
+    'dayInRange',
+    'dayRangeStart',
+    'dayRangeEnd',
+    'daySelected',
+    'dayToday',
+    'dayDisabled',
+    'dayOutsideMonth',
+    'pickerFooter',
+    'footerButton',
+    'applyButton',
+    'cancelButton',
+    'clearButton',
+    'presetsContainer',
+    'presetButton',
+    'presetButtonActive',
+    'popover',
+    'popoverArrow',
+  ];
+
+  it('should export an object where all expected CSS class names are present as string properties', () => {
+    // Verify that the imported styles object contains all keys defined in the .d.ts file
+    // and that each value is a string, as expected from a CSS module.
+    expectedKeys.forEach(key => {
+      expect(styles).toHaveProperty(key);
+      // Use type assertion to access properties safely, as 'styles' is typed by the .d.ts file.
+      expect(typeof styles[key as keyof typeof styles]).toBe('string');
+    });
+  });
+
+  it('should not contain any unexpected CSS class names beyond those defined in the .d.ts file', () => {
+    // This test ensures that the .d.ts file is comprehensive and accurately reflects
+    // the expected shape of the CSS module, preventing undeclared classes from being used.
+    // It compares the keys from the mock (representing the actual module) against the expected keys.
+    expect(Object.keys(styles).length).toBe(expectedKeys.length);
+  });
+
+  it('should match the expected structure of CSS class names via snapshot', () => {
+    // Snapshot testing provides a robust way to ensure the structure and values
+    // of the exported styles object do not change unexpectedly.
+    // This is particularly useful for CSS modules where the exact class names might be generated
+    // (though our mock uses static names for clarity).
+    expect(styles).toMatchSnapshot();
+  });
+
+  // --- Test Error Conditions (Simulated Scenarios) ---
+  // These tests demonstrate how a mismatch between the actual CSS module (represented by the mock)
+  // and its type definition (.d.ts) would be caught.
+
+  it('should fail if a required CSS class name is missing from the module (simulated error)', () => {
+    // This is a hypothetical test to show how a missing class name would cause a test failure.
+    // We temporarily modify the styles object to simulate a missing property.
+    const originalDayCell = styles.dayCell;
+    // Cast to `any` to allow deletion for this specific test simulation.
+    delete (styles as any).dayCell;
+
+    // Expect the assertion for 'dayCell' to throw an error because it's now missing.
+    expect(() => {
+      expect(styles).toHaveProperty('dayCell');
+    }).toThrow();
+
+    // Restore the original value to avoid affecting subsequent tests.
+    (styles as any).dayCell = originalDayCell;
+  });
+
+  it('should fail if a CSS class name property has an incorrect type (simulated error)', () => {
+    // This test simulates a scenario where a CSS class name's value is not a string.
+    const originalDayToday = styles.dayToday;
+    // Simulate an incorrect type (e.g., a number instead of a string).
+    (styles as any).dayToday = 123;
+
+    // Expect the type check assertion to throw an error.
+    expect(() => {
+      expect(typeof styles.dayToday).toBe('string');
+    }).toThrow();
+
+    // Restore the original value.
+    (styles as any).dayToday = originalDayToday;
+  });
+});

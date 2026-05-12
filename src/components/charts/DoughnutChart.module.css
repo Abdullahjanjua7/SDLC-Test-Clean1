@@ -1,0 +1,88 @@
+/**
+ * @file src/components/charts/DoughnutChart.module.css.d.ts
+ * @description TypeScript declaration for the CSS module `DoughnutChart.module.css`.
+ *              This file provides type safety and autocompletion when importing CSS classes from the module.
+ */
+
+/**
+ * Defines the shape of the CSS module for DoughnutChart.
+ * Each property corresponds to a CSS class name defined in `DoughnutChart.module.css`.
+ * When imported into a TypeScript file, these properties will hold the unique,
+ * generated class names (e.g., "DoughnutChart_doughnutChartContainer__abc12").
+ *
+ * Using a specific interface instead of `Record<string, string>` provides
+ * better type checking and IDE support for available class names.
+ */
+interface DoughnutChartStyles {
+  /**
+   * Styles for the main container element of the doughnut chart.
+   */
+  readonly doughnutChartContainer: string;
+  /**
+   * Styles for the canvas element where the chart is rendered.
+   */
+  readonly chartCanvas: string;
+  /**
+   * Styles for the title of the doughnut chart.
+   */
+  readonly chartTitle: string;
+  /**
+   * Styles for the description or subtitle of the doughnut chart.
+   */
+  readonly chartDescription: string;
+  /**
+   * Styles for the legend container of the chart.
+   */
+  readonly legend: string;
+  /**
+   * Styles for an individual item within the chart legend.
+   */
+  readonly legendItem: string;
+  /**
+   * Styles for the color box or swatch displayed next to a legend item.
+   */
+  readonly legendColorBox: string;
+  /**
+   * Styles for the text label of a legend item (e.g., category name).
+   */
+  readonly legendLabel: string;
+  /**
+   * Styles for the value displayed in a legend item (e.g., percentage or count).
+   */
+  readonly legendValue: string;
+  /**
+   * Styles for the tooltip container that appears on hover.
+   */
+  readonly tooltip: string;
+  /**
+   * Styles for the title section of the tooltip.
+   */
+  readonly tooltipTitle: string;
+  /**
+   * Styles for the main body content of the tooltip.
+   */
+  readonly tooltipBody: string;
+  /**
+   * Styles for an individual item within the tooltip body.
+   */
+  readonly tooltipItem: string;
+  /**
+   * Styles for the color swatch within a tooltip item.
+   */
+  readonly tooltipColor: string;
+}
+
+/**
+ * The default export of this module is an object containing all CSS class names
+ * defined in `DoughnutChart.module.css` as properties.
+ *
+ * @example
+ * import styles from './DoughnutChart.module.css';
+ *
+ * function MyComponent() {
+ *   return <div className={styles.doughnutChartContainer}>...</div>;
+ * }
+ */
+declare const styles: DoughnutChartStyles;
+
+export default styles;

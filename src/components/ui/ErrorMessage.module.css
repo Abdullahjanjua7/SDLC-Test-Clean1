@@ -1,0 +1,17 @@
+/**
+ * Type definitions for the CSS module `src/components/ui/ErrorMessage.module.css`.
+ * This file provides type safety when importing CSS classes from the module in TypeScript files.
+ *
+ * When a CSS module is imported, it typically resolves to an object where keys are the original
+ * class names defined in the CSS file, and values are the unique, hashed class names generated
+ * by the CSS module loader (e.g., Webpack's css-loader with modules option).
+ *
+ * This generic declaration assumes any string key (CSS class name) will map to a string value
+ * (the unique class name). For more specific type safety, a build tool like `typed-css-modules`
+ * can generate an interface with explicit class names based on the actual CSS content.
+ */
+declare const styles: {
+  readonly [key: string]: string;
+};
+
+export default styles;

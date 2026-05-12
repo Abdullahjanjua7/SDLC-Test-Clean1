@@ -1,0 +1,81 @@
+import styles from './KPIGrid.module';
+
+jest.mock('./KPIGrid.module', () => ({
+  container: 'KPIGrid_container__abc12',
+  item: 'KPIGrid_item__def34',
+  title: 'KPIGrid_title__ghi56',
+  gridArea: 'KPIGrid_gridArea__jkl78',
+  header: 'KPIGrid_header__mno90',
+}));
+
+describe('KPIGrid.module CSS Module Runtime Output', () => {
+
+  it('should export a default object', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  it('should contain expected class names with string values', () => {
+    expect(styles.container).toBe('KPIGrid_container__abc12');
+    expect(styles.item).toBe('KPIGrid_item__def34');
+    expect(styles.title).toBe('KPIGrid_title__ghi56');
+    expect(styles.gridArea).toBe('KPIGrid_gridArea__jkl78');
+    expect(styles.header).toBe('KPIGrid_header__mno90');
+  });
+
+  it('should ensure all exported class names have string values', () => {
+    for (const key in styles) {
+      if (Object.prototype.hasOwnProperty.call(styles, key)) {
+        expect(typeof styles[key]).toBe('string');
+      }
+    }
+  });
+
+  it('should return undefined for non-existent class names', () => {
+    expect(styles.nonExistentClass).toBeUndefined();
+  });
+
+  it('should match the snapshot', () => {
+    expect(styles).toMatchSnapshot();
+  });
+
+  describe('when the CSS module is empty', () => {
+    let emptyStyles: typeof styles;
+
+    beforeAll(() => {
+      jest.resetModules();
+      jest.doMock('./KPIGrid.module', () => ({}));
+      emptyStyles = require('./KPIGrid.module').default;
+    });
+
+    afterAll(() => {
+      jest.resetModules();
+      jest.mock('./KPIGrid.module', () => ({
+        container: 'KPIGrid_container__abc12',
+        item: 'KPIGrid_item__def34',
+        title: 'KPIGrid_title__ghi56',
+        gridArea: 'KPIGrid_gridArea__jkl78',
+        header: 'KPIGrid_header__mno90',
+      }));
+    });
+
+    it('should export an empty object', () => {
+      expect(emptyStyles).toBeDefined();
+      expect(typeof emptyStyles).toBe('object');
+      expect(emptyStyles).not.toBeNull();
+      expect(Object.keys(emptyStyles).length).toBe(0);
+    });
+
+    it('should match an empty object snapshot', () => {
+      expect(emptyStyles).toMatchSnapshot();
+    });
+  });
+
+  it('should allow modification of its properties (standard JS object behavior)', () => {
+    const originalValue = styles.container;
+    styles.container = 'modified_container_class';
+    expect(styles.container).toBe('modified_container_class');
+    styles.container = originalValue;
+  });
+});

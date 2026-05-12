@@ -1,0 +1,132 @@
+import { default as importedStyles } from 'src/components/ui/MetricCard.module.css';
+
+// Define a realistic mock for the CSS module output.
+// This object represents what a CSS Modules loader (e.g., Webpack's css-loader)
+// would typically return when 'src/components/ui/MetricCard.module.css' is imported.
+const mockCssModuleOutput = {
+  metricCard: 'MetricCard_metricCard__abc12',
+  title: 'MetricCard_title__def34',
+  value: 'MetricCard_value__ghi56',
+  icon: 'MetricCard_icon__jkl78',
+  // Simulate a class name with a hyphen, which is common in CSS.
+  'metric-card-wrapper': 'MetricCard_metric-card-wrapper__mno90',
+  // Simulate an empty class name value, which might occur if a CSS rule is empty or malformed.
+  emptyClass: '',
+};
+
+// Mock the actual CSS module import.
+// This ensures that when 'src/components/ui/MetricCard.module.css' is imported
+// within our tests, it resolves to our predefined mock object instead of
+// attempting to process a non-existent or actual CSS file.
+jest.mock('src/components/ui/MetricCard.module.css', () => mockCssModuleOutput);
+
+describe('MetricCard.module.css type declaration', () => {
+  // The `importedStyles` variable at the top of the file already holds the mocked
+  // value due to `jest.mock` being hoisted.
+
+  // Test 1: Test all exported functions/classes (in this case, the default exported object)
+  it('should export a default object conforming to the CSS Modules type', () => {
+    expect(typeof importedStyles).toBe('object');
+    expect(importedStyles).not.toBeNull();
+    expect(Array.isArray(importedStyles)).toBe(false); // Ensure it's a plain object, not an array
+  });
+
+  it('should contain expected class names as properties', () => {
+    expect(importedStyles).toHaveProperty('metricCard');
+    expect(importedStyles).toHaveProperty('title');
+    expect(importedStyles).toHaveProperty('value');
+    expect(importedStyles).toHaveProperty('icon');
+    expect(importedStyles).toHaveProperty('metric-card-wrapper');
+    expect(importedStyles).toHaveProperty('emptyClass');
+  });
+
+  it('should have string values for all class names', () => {
+    for (const key in importedStyles) {
+      if (Object.prototype.hasOwnProperty.call(importedStyles, key)) {
+        expect(typeof importedStyles[key]).toBe('string');
+      }
+    }
+  });
+
+  // Test 2: Test different scenarios and inputs
+  it('should return unique hashed class names for different original class names', () => {
+    // This implicitly tests the mock's realism and the expectation of CSS Modules.
+    const values = Object.values(importedStyles).filter(val => val !== ''); // Exclude empty string for uniqueness check
+    const uniqueValues = new Set(values);
+    expect(values.length).toBe(uniqueValues.size);
+  });
+
+  it('should correctly handle class names with hyphens', () => {
+    expect(importedStyles['metric-card-wrapper']).toBe('MetricCard_metric-card-wrapper__mno90');
+    expect(typeof importedStyles['metric-card-wrapper']).toBe('string');
+  });
+
+  it('should correctly handle class names that result in empty string values', () => {
+    expect(importedStyles.emptyClass).toBe('');
+    expect(typeof importedStyles.emptyClass).toBe('string');
+  });
+
+  it('should not contain unexpected properties beyond the mocked ones', () => {
+    const expectedKeys = Object.keys(mockCssModuleOutput);
+    const actualKeys = Object.keys(importedStyles);
+    expect(actualKeys).toEqual(expect.arrayContaining(expectedKeys));
+    expect(actualKeys.length).toBe(expectedKeys.length);
+  });
+
+  // Test scenario: An empty CSS module
+  it('should correctly represent an empty CSS module', () => {
+    jest.resetModules(); // Clear module cache to allow re-mocking
+    // Mock with an empty object to simulate an empty CSS module
+    jest.mock('src/components/ui/MetricCard.module.css', () => ({}));
+    // Re-import the module to get the new mock.
+    // Using `require` here because `import` statements are hoisted.
+    const emptyStyles = require('src/components/ui/MetricCard.module.css').default || require('src/components/ui/MetricCard.module.css');
+
+    expect(typeof emptyStyles).toBe('object');
+    expect(Object.keys(emptyStyles).length).toBe(0);
+    expect(emptyStyles).toEqual({});
+  });
+
+  // Test 3: Test error conditions (simulated runtime deviations from the type declaration)
+  it('should handle cases where a class name value is not a string (simulated runtime error)', () => {
+    jest.resetModules();
+    // Simulate a scenario where the CSS loader produces an invalid value type
+    jest.mock('src/components/ui/MetricCard.module.css', () => ({
+      validClass: 'valid_hash',
+      invalidClass: 123, // This violates the `string` type declaration
+      anotherInvalid: null, // Another violation
+    }));
+    const erroneousStyles = require('src/components/ui/MetricCard.module.css').default || require('src/components/ui/MetricCard.module.css');
+
+    expect(typeof erroneousStyles.validClass).toBe('string');
+    // These assertions demonstrate how we'd detect runtime type mismatches
+    // if the build process or loader produced incorrect output.
+    expect(typeof erroneousStyles.invalidClass).not.toBe('string');
+    expect(erroneousStyles.invalidClass).toBe(123);
+    expect(typeof erroneousStyles.anotherInvalid).not.toBe('string');
+    expect(erroneousStyles.anotherInvalid).toBeNull();
+  });
+
+  it('should handle cases where the module exports a non-object (simulated runtime error)', () => {
+    jest.resetModules();
+    // Simulate a scenario where the CSS loader produces something other than an object
+    jest.mock('src/components/ui/MetricCard.module.css', () => 'not an object'); // Violates the `{ [key: string]: string }` type
+    const nonObjectStyles = require('src/components/ui/MetricCard.module.css').default || require('src/components/ui/MetricCard.module.css');
+
+    expect(typeof nonObjectStyles).not.toBe('object');
+    expect(nonObjectStyles).toBe('not an object');
+  });
+
+  // Test 5: Follow Jest best practices & Test 6: Include proper setup and teardown
+  // `jest.mock` is hoisted and applies globally for the test file.
+  // `jest.resetModules()` is used within tests for specific scenario isolation.
+
+  // Test Strategy: snapshot_testing: true
+  it('should match the snapshot of the mocked styles object', () => {
+    // Reset modules to ensure we get the original `mockCssModuleOutput` for the snapshot
+    jest.resetModules();
+    jest.mock('src/components/ui/MetricCard.module.css', () => mockCssModuleOutput);
+    const snapshotStyles = require('src/components/ui/MetricCard.module.css').default || require('src/components/ui/MetricCard.module.css');
+    expect(snapshotStyles).toMatchSnapshot();
+  });
+});

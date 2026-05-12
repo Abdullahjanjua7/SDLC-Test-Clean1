@@ -1,0 +1,113 @@
+// BarChartCard.module.test.ts
+
+// Mock the CSS module import. This must be at the top level of the test file.
+// In a typical Jest setup, this would be handled by moduleNameMapper in jest.config.js,
+// often mapping CSS modules to 'identity-obj-proxy'. Here, we explicitly define
+// the mock to ensure all properties from the .d.ts file are represented.
+jest.mock('./BarChartCard.module.css', () => ({
+  barChartCard: 'mock-barChartCard',
+  header: 'mock-header',
+  title: 'mock-title',
+    // Optional properties are included in the mock to test their presence and type
+  description: 'mock-description',
+  content: 'mock-content',
+  chartWrapper: 'mock-chartWrapper',
+  footer: 'mock-footer',
+  actions: 'mock-actions',
+  emptyState: 'mock-emptyState',
+  loadingState: 'mock-loadingState',
+  errorState: 'mock-errorState',
+  button: 'mock-button',
+  primaryButton: 'mock-primaryButton',
+  secondaryButton: 'mock-secondaryButton',
+}));
+
+// Import the mocked module.
+import styles from './BarChartCard.module.css';
+
+describe('BarChartCard.module.css', () => {
+
+  // Test 1: Ensure the default export is an object and not null.
+  test('should export an object by default', () => {
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  // Test 2: Verify all required CSS class names are present and are strings.
+  test('should have all required CSS class names as string properties', () => {
+    expect(styles).toHaveProperty('barChartCard');
+    expect(typeof styles.barChartCard).toBe('string');
+    expect(styles.barChartCard).toBe('mock-barChartCard');
+
+    expect(styles).toHaveProperty('header');
+    expect(typeof styles.header).toBe('string');
+    expect(styles.header).toBe('mock-header');
+
+    expect(styles).toHaveProperty('title');
+    expect(typeof styles.title).toBe('string');
+    expect(styles.title).toBe('mock-title');
+
+    expect(styles).toHaveProperty('content');
+    expect(typeof styles.content).toBe('string');
+    expect(styles.content).toBe('mock-content');
+  });
+
+  // Test 3: Verify all optional CSS class names (if present in the actual CSS)
+  // are present in the mocked object and are strings.
+  test('should have optional CSS class names as string properties if defined in CSS', () => {
+    expect(styles).toHaveProperty('description');
+    expect(typeof styles.description).toBe('string');
+    expect(styles.description).toBe('mock-description');
+
+    expect(styles).toHaveProperty('chartWrapper');
+    expect(typeof styles.chartWrapper).toBe('string');
+    expect(styles.chartWrapper).toBe('mock-chartWrapper');
+
+    expect(styles).toHaveProperty('footer');
+    expect(typeof styles.footer).toBe('string');
+    expect(styles.footer).toBe('mock-footer');
+
+    expect(styles).toHaveProperty('actions');
+    expect(typeof styles.actions).toBe('string');
+    expect(styles.actions).toBe('mock-actions');
+
+    expect(styles).toHaveProperty('emptyState');
+    expect(typeof styles.emptyState).toBe('string');
+    expect(styles.emptyState).toBe('mock-emptyState');
+
+    expect(styles).toHaveProperty('loadingState');
+    expect(typeof styles.loadingState).toBe('string');
+    expect(styles.loadingState).toBe('mock-loadingState');
+
+    expect(styles).toHaveProperty('errorState');
+    expect(typeof styles.errorState).toBe('string');
+    expect(styles.errorState).toBe('mock-errorState');
+
+    expect(styles).toHaveProperty('button');
+    expect(typeof styles.button).toBe('string');
+    expect(styles.button).toBe('mock-button');
+
+    expect(styles).toHaveProperty('primaryButton');
+    expect(typeof styles.primaryButton).toBe('string');
+    expect(styles.primaryButton).toBe('mock-primaryButton');
+
+    expect(styles).toHaveProperty('secondaryButton');
+    expect(typeof styles.secondaryButton).toBe('string');
+    expect(styles.secondaryButton).toBe('mock-secondaryButton');
+  });
+
+  // Test 4: Use snapshot testing to ensure the entire structure of the styles object
+  // remains consistent over time. This catches any accidental additions or removals.
+  test('should match the snapshot for the entire styles object structure', () => {
+    expect(styles).toMatchSnapshot();
+  });
+
+  // Test 5: Ensure that properties not defined in the .d.ts file (and thus not in the mock)
+  // are not present on the styles object. This helps catch unexpected exports.
+  test('should not have properties for non-existent CSS classes', () => {
+    expect(styles).not.toHaveProperty('nonExistentClass');
+    // Type assertion to 'any' is used here to access a potentially non-existent property
+    // without TypeScript compilation errors, as we are explicitly testing its absence.
+    expect((styles as any).nonExistentClass).toBeUndefined();
+  });
+});

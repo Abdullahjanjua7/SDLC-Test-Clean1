@@ -1,0 +1,118 @@
+// ChartGrid.module.test.ts
+
+// Mock the actual CSS module file.
+// This mock simulates what a CSS loader (like css-loader with modules enabled) would return
+// when 'ChartGrid.module.css' is imported.
+// The keys here correspond to the class names defined in the actual CSS file,
+// and the values are the unique, generated class names that would be used at runtime.
+jest.mock('./ChartGrid.module.css', () => ({
+  gridContainer: 'ChartGrid_gridContainer__abc12',
+  gridItem: 'ChartGrid_gridItem__def34',
+  header: 'ChartGrid_header__xyz78',
+  footer: 'ChartGrid_footer__pqr56',
+  // Add more mock classes to cover various naming conventions and scenarios
+  someDynamicClass: 'ChartGrid_someDynamicClass__uvw90',
+  'class-with-dash-123': 'ChartGrid_class-with-dash-123__mno45', // Example for bracket notation access
+  // An empty string value might occur if a class is defined but not used/processed correctly,
+  // though typically it would be a valid generated string.
+  emptyClass: '',
+}));
+
+// Import the module. Jest will resolve './ChartGrid.module.css' to our mock.
+// The .d.ts file provides type definitions for this import, ensuring TypeScript
+// understands the shape of the `styles` object.
+import styles from './ChartGrid.module.css';
+
+describe('ChartGrid.module.css styles object', () => {
+
+  // Test 1: Verify that the default export is an object
+  it('should export a default object', () => {
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+    expect(Array.isArray(styles)).toBe(false); // Ensure it's not an array
+  });
+
+  // Test 2: Verify that the object contains expected CSS class names and their values are strings
+  it('should contain expected CSS class names as string values', () => {
+    // Test a standard class name
+    expect(styles).toHaveProperty('gridContainer');
+    expect(typeof styles.gridContainer).toBe('string');
+    expect(styles.gridContainer).toBe('ChartGrid_gridContainer__abc12');
+
+    // Test another standard class name
+    expect(styles).toHaveProperty('gridItem');
+    expect(typeof styles.gridItem).toBe('string');
+    expect(styles.gridItem).toBe('ChartGrid_gridItem__def34');
+
+    // Test additional mocked class names
+    expect(styles).toHaveProperty('header');
+    expect(typeof styles.header).toBe('string');
+    expect(styles.header).toBe('ChartGrid_header__xyz78');
+
+    expect(styles).toHaveProperty('footer');
+    expect(typeof styles.footer).toBe('string');
+    expect(styles.footer).toBe('ChartGrid_footer__pqr56');
+
+    // Test a class name that might be dynamically generated or less common
+    expect(styles).toHaveProperty('someDynamicClass');
+    expect(typeof styles.someDynamicClass).toBe('string');
+    expect(styles.someDynamicClass).toBe('ChartGrid_someDynamicClass__uvw90');
+
+    // Test a class name that requires bracket notation access (e.g., if it contains hyphens)
+    // The `[key: string]: string` in the .d.ts file allows for this.
+    expect(styles).toHaveProperty('class-with-dash-123');
+    expect(typeof styles['class-with-dash-123']).toBe('string');
+    expect(styles['class-with-dash-123']).toBe('ChartGrid_class-with-dash-123__mno45');
+
+    // Test a class name that might have an empty string value (unlikely for a valid CSS module, but possible in mock)
+    expect(styles).toHaveProperty('emptyClass');
+    expect(typeof styles.emptyClass).toBe('string');
+    expect(styles.emptyClass).toBe('');
+  });
+
+  // Test 3: Test different scenarios - accessing a non-existent property
+  // TypeScript would catch this at compile time based on the .d.ts,
+  // but at runtime, accessing a non-existent property on a JavaScript object returns `undefined`.
+  it('should return undefined for non-existent class names', () => {
+    // @ts-ignore - Intentionally accessing a property that TypeScript would flag as potentially non-existent
+    expect(styles.nonExistentClass).toBeUndefined();
+    // @ts-ignore
+    expect(styles['another-non-existent-class']).toBeUndefined();
+  });
+
+  // Test 4: Verify the 'readonly' aspect (as declared in .d.ts)
+  // Note: `readonly` is a TypeScript compile-time feature. It guides the developer
+  // to treat the object as immutable. At runtime, the JavaScript object produced
+  // by a CSS module loader is typically a plain mutable object, unless explicitly frozen
+  // by the loader or application code. This test demonstrates that runtime JavaScript
+  // does not enforce `readonly` by default.
+  it('should allow modification of properties at runtime (readonly is a compile-time check)', () => {
+    const originalValue = styles.gridContainer;
+    // Attempt to modify a property. TypeScript would issue a compile-time error,
+    // but JavaScript allows this at runtime.
+    // @ts-ignore - Suppress TypeScript error for this intentional runtime test
+    styles.gridContainer = 'new_modified_value';
+    expect(styles.gridContainer).not.toBe(originalValue);
+    expect(styles.gridContainer).toBe('new_modified_value');
+
+    // This modification persists within this test file's execution context.
+    // If subsequent tests relied on the original mock value, one might use
+    // `jest.resetModules()` in `beforeEach` or a more sophisticated mock setup.
+    // For this simple module, it's generally acceptable as Jest isolates module imports per test file.
+  });
+
+  // Test 5: Snapshot testing for the overall structure and content of the styles object
+  // This provides a quick way to detect unexpected changes to the exported styles object.
+  it('should match the snapshot for the styles object', () => {
+    expect(styles).toMatchSnapshot();
+  });
+
+  // Error Conditions:
+  // For a .d.ts file, direct runtime error conditions are not applicable as it's a type declaration.
+  // Runtime errors would stem from the actual CSS module processing or its usage in components.
+  // The 'error condition' of accessing a non-existent property is covered by asserting `undefined`.
+
+  // Setup and Teardown:
+  // `jest.mock` serves as the primary setup, creating a controlled environment for the module import.
+  // No complex teardown is required for this simple, mocked object.
+});

@@ -1,0 +1,74 @@
+// __tests__/Card.module.css.d.test.ts
+
+// Mock the module itself to provide a runtime object that matches its declaration.
+// This is necessary because .d.ts files are compile-time only and do not have
+// runtime exports in a standard Node.js/Jest environment.
+// We are essentially testing that if such an object *were* imported (e.g., from
+// the actual .css module processed by a loader), it would have the expected shape
+// as defined by this declaration file.
+jest.mock('../src/components/ui/Card/Card.module.css.d.ts', () => ({
+  // These values mimic the behavior of css-loader with identity-obj-proxy,
+  // where class names resolve to themselves in a test environment.
+  card: 'card',
+  header: 'header',
+  content: 'content',
+  footer: 'footer',
+}));
+
+// Now, import the mocked module.
+// This 'styles' object will be the one provided by the jest.mock call above.
+import styles from '../src/components/ui/Card/Card.module.css.d.ts';
+
+describe('Card.module.css.d.ts type definitions', () => {
+  // This test suite verifies the structure and types described by the .d.ts file.
+  // Since .d.ts files are purely for compile-time type checking, these tests
+  // effectively confirm that a runtime object conforming to its definition
+  // would behave as expected in terms of property existence and type.
+  // In a real application, the primary "testing" of a .d.ts file is done
+  // implicitly by the TypeScript compiler during compilation.
+
+  it('should export a default object', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  it('should contain the "card" class name as a string', () => {
+    expect(styles).toHaveProperty('card');
+    expect(typeof styles.card).toBe('string');
+    // Asserting the value based on the mock's behavior
+    expect(styles.card).toBe('card');
+  });
+
+  it('should contain the "header" class name as a string', () => {
+    expect(styles).toHaveProperty('header');
+    expect(typeof styles.header).toBe('string');
+    expect(styles.header).toBe('header');
+  });
+
+  it('should contain the "content" class name as a string', () => {
+    expect(styles).toHaveProperty('content');
+    expect(typeof styles.content).toBe('string');
+    expect(styles.content).toBe('content');
+  });
+
+  it('should contain the "footer" class name as a string', () => {
+    expect(styles).toHaveProperty('footer');
+    expect(typeof styles.footer).toBe('string');
+    expect(styles.footer).toBe('footer');
+  });
+
+  it('should not contain any undeclared properties', () => {
+    const expectedProperties = ['card', 'header', 'content', 'footer'];
+    const actualProperties = Object.keys(styles);
+
+    // Sort both arrays to ensure consistent comparison regardless of order
+    expect(actualProperties.sort()).toEqual(expectedProperties.sort());
+  });
+
+  // Snapshot testing for the overall structure of the exported styles object.
+  // This helps to quickly detect any unexpected changes to the declared class names.
+  it('should match the expected structure (snapshot)', () => {
+    expect(styles).toMatchSnapshot();
+  });
+});

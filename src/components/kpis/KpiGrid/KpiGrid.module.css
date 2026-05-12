@@ -1,0 +1,49 @@
+/**
+ * @file src/components/kpis/KpiGrid/KpiGrid.module.css.d.ts
+ * @description Type definitions for the CSS module src/components/kpis/KpiGrid/KpiGrid.module.css.
+ * This file provides TypeScript types for the imported CSS module, allowing for type-safe access
+ * to CSS class names defined within the module.
+ *
+ * When a CSS module is imported, it typically exports a default object where keys are the
+ * original class names defined in the CSS file, and values are the unique, generated class names
+ * (strings) that are used at runtime to prevent naming collisions.
+ */
+
+/**
+ * Represents the type of the default export when importing 'KpiGrid.module.css'.
+ * It's an object where keys correspond to the CSS class names defined in the module.
+ * The values are the generated unique class names as strings.
+ */
+declare const styles: {
+  /**
+   * CSS class for the main container wrapping the KPI grid.
+   * Example usage: `<div className={styles.kpiGridContainer}>...</div>`
+   */
+  readonly kpiGridContainer: string;
+  /**
+   * CSS class for the grid layout itself, defining the structure for KPI items.
+   * Example usage: `<div className={styles.kpiGrid}>...</div>`
+   */
+  readonly kpiGrid: string;
+  /**
+   * CSS class for an individual KPI item within the grid.
+   * Example usage: `<div className={styles.kpiGridItem}>...</div>`
+   */
+  readonly kpiGridItem: string;
+  /**
+   * Modifier class for a KPI item that should span a larger area in the grid.
+   * Example usage: `<div className={`${styles.kpiGridItem} ${styles['kpiGridItem--large']}`}>...</div>`
+   */
+  readonly 'kpiGridItem--large': string;
+  // Add other class names as they are defined in the KpiGrid.module.css file.
+  // For example:
+  // readonly anotherClassName: string;
+  // readonly 'another-modifier--class': string;
+};
+
+/**
+ * Exports the `styles` object as the default export of the module.
+ * This enables importing the CSS module in TypeScript files like:
+ * `import styles from './KpiGrid.module.css';`
+ */
+export default styles;

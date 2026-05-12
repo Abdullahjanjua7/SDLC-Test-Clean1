@@ -1,0 +1,24 @@
+/**
+ * @file src/components/dashboard/ChartGrid/ChartGrid.module.css.d.ts
+ * @description Type definitions for CSS Modules in ChartGrid.module.css.
+ * This file provides TypeScript type safety when importing CSS classes from the module.
+ */
+
+/**
+ * Declares the shape of the imported CSS module.
+ * When `ChartGrid.module.css` is imported, it will resolve to an object
+ * where keys are the CSS class names defined in the module, and values
+ * are the unique, generated class names (strings).
+ *
+ * The `readonly` modifier ensures that the imported styles object
+ * cannot be accidentally modified at runtime.
+ */
+declare const styles: {
+  readonly [key: string]: string;
+};
+
+/**
+ * Exports the `styles` object as the default export, allowing it to be
+ * imported like: `import styles from './ChartGrid.module.css';`.
+ */
+export default styles;

@@ -1,0 +1,98 @@
+// charts.module.test.ts
+
+// Mock the CSS module import.
+// This simulates what a bundler (like Webpack with css-loader) would provide
+// when a .module.css file is imported.
+// The structure of this mock adheres to the type declared in the source code
+// (i.e., an object with string keys and string values).
+jest.mock('../charts.module.css', () => ({
+  // __esModule: true is important for Jest to correctly handle default exports
+  __esModule: true,
+  default: {
+    chartContainer: 'chartContainer_abc123',
+    chartTitle: 'chartTitle_def456',
+    chartLegend: 'chartLegend_ghi789',
+    chartDataPoint: 'chartDataPoint_jkl012',
+    // Add more mock class names as needed to represent a typical CSS module
+    buttonPrimary: 'buttonPrimary_mno345',
+    buttonSecondary: 'buttonSecondary_pqr678',
+  },
+}));
+
+// Import the mocked styles.
+// Even though the original source file is a TypeScript declaration (.d.ts),
+// we are testing the runtime behavior of a .module.css file that would be
+// typed by that declaration. Jest will resolve '../charts.module.css' to our mock.
+import styles from '../charts.module.css';
+
+describe('charts.module.css runtime behavior (mocked)', () => {
+  // No specific setup or teardown is required for this simple module mock,
+  // as Jest's module mocking handles the isolation.
+
+  it('should export a default object when imported', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  it('should have string keys (class names) and string values (generated class names)', () => {
+    const classNames = Object.keys(styles);
+
+    // Ensure there are some classes mocked to test against
+    expect(classNames.length).toBeGreaterThan(0);
+
+    classNames.forEach(key => {
+      // Test that keys are strings
+      expect(typeof key).toBe('string');
+      // Test that values are strings
+      expect(typeof styles[key]).toBe('string');
+      // Ensure the generated class name is not an empty string
+      expect(styles[key]).not.toBe('');
+      // Optionally, test for a common pattern of generated class names
+      // (e.g., originalName_hash)
+      expect(styles[key]).toMatch(/^[a-zA-Z0-9_-]+_[a-zA-Z0-9]+$/);
+    });
+  });
+
+  it('should contain specific expected class names with their generated values', () => {
+    // Test for the presence and correctness of specific mocked class names
+    expect(styles.chartContainer).toBe('chartContainer_abc123');
+    expect(styles.chartTitle).toBe('chartTitle_def456');
+    expect(styles.chartLegend).toBe('chartLegend_ghi789');
+    expect(styles.chartDataPoint).toBe('chartDataPoint_jkl012');
+    expect(styles.buttonPrimary).toBe('buttonPrimary_mno345');
+    expect(styles.buttonSecondary).toBe('buttonSecondary_pqr678');
+  });
+
+  it('should not contain unexpected or undeclared class names beyond the mock', () => {
+    const expectedKeys = [
+      'chartContainer',
+      'chartTitle',
+      'chartLegend',
+      'chartDataPoint',
+      'buttonPrimary',
+      'buttonSecondary',
+    ];
+    const actualKeys = Object.keys(styles);
+
+    // Ensure that all expected keys are present
+    expect(actualKeys).toEqual(expect.arrayContaining(expectedKeys));
+    // Ensure that no extra keys are present beyond what was mocked
+    expect(actualKeys.length).toBe(expectedKeys.length);
+  });
+
+  // Test for accessing a non-existent class name at runtime.
+  // TypeScript would prevent this at compile time, but at runtime,
+  // accessing a non-existent property on a JavaScript object returns undefined.
+  it('should return undefined for non-existent class names', () => {
+    expect(styles.nonExistentClass).toBeUndefined();
+    expect(styles['anotherUnknownClass']).toBeUndefined();
+  });
+
+  // Snapshot testing to ensure the structure and content of the styles object
+  // remains consistent over time. This helps catch unintended changes to the
+  // mocked CSS module output.
+  it('should match the snapshot', () => {
+    expect(styles).toMatchSnapshot();
+  });
+});

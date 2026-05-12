@@ -1,0 +1,82 @@
+/**
+ * @file Type definitions for CSS module `src/pages/DashboardPage.module.css`.
+ * @description This file provides type safety and autocompletion for the CSS class names
+ * defined in the corresponding CSS module, representing the layout and grid styling
+ * for the DashboardPage.
+ */
+
+/**
+ * Defines the shape of the object exported by `DashboardPage.module.css`.
+ * Each property corresponds to a CSS class name defined in the module,
+ * and its value will be the unique, hashed class name generated at build time.
+ */
+interface DashboardPageStyles {
+  /**
+   * Styles for the main container of the dashboard page.
+   * Typically applies to the outermost wrapper element.
+   */
+  readonly dashboardContainer: string;
+  /**
+   * Styles for the header section of the dashboard.
+   */
+  readonly dashboardHeader: string;
+  /**
+   * Styles for the sidebar navigation area of the dashboard.
+   */
+  readonly dashboardSidebar: string;
+  /**
+   * Styles for the primary content area of the dashboard, excluding header/sidebar/footer.
+   */
+  readonly dashboardMainContent: string;
+  /**
+   * Styles for the grid layout container within the dashboard's main content.
+   * Defines the grid structure (e.g., `display: grid`, `grid-template-columns`).
+   */
+  readonly dashboardGrid: string;
+  /**
+   * Styles for individual items or cells within the `dashboardGrid`.
+   * (e.g., padding, background, border).
+   */
+  readonly dashboardGridItem: string;
+  /**
+   * Styles for a generic card component often used within `dashboardGridItem`s.
+   */
+  readonly dashboardCard: string;
+  /**
+   * Styles for the header section of a `dashboardCard`.
+   */
+  readonly dashboardCardHeader: string;
+  /**
+   * Styles for the content area of a `dashboardCard`.
+   */
+  readonly dashboardCardContent: string;
+  /**
+   * Styles for the footer section of the dashboard.
+   */
+  readonly dashboardFooter: string;
+  /**
+   * Utility class to make a grid item span across multiple columns (e.g., full width).
+   */
+  readonly gridSpanFull: string;
+  /**
+   * Utility class to make a grid item span across a specific number of columns (e.g., half width).
+   */
+  readonly gridSpanHalf: string;
+  /**
+   * Styles for a title within a dashboard section or card.
+   */
+  readonly sectionTitle: string;
+  /**
+   * Styles for a description or subtitle within a dashboard section or card.
+   */
+  readonly sectionDescription: string;
+}
+
+/**
+ * Declares the default export of the CSS module.
+ * When `import styles from './DashboardPage.module.css'` is used in a TypeScript file,
+ * the `styles` variable will be typed as `DashboardPageStyles`, providing
+ * compile-time checks and autocompletion for the available class names.
+ */
+declare const styles: DashboardPageStyles;
+export default styles;

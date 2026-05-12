@@ -1,0 +1,83 @@
+// __mocks__/MetricCard.module.ts
+/**
+ * This mock simulates the runtime output of a CSS module loader for
+ * MetricCard.module.css, providing concrete string values for each
+ * declared class name. This allows Jest tests to import and verify
+ * the structure and content of the 'styles' object as defined by
+ * the MetricCard.module.d.ts type definition.
+ */
+const mockStyles = {
+  metricCard: 'MetricCard_metricCard__mockHash1',
+  header: 'MetricCard_header__mockHash2',
+  title: 'MetricCard_title__mockHash3',
+  valueContainer: 'MetricCard_valueContainer__mockHash4',
+  value: 'MetricCard_value__mockHash5',
+  change: 'MetricCard_change__mockHash6',
+  positive: 'MetricCard_positive__mockHash7',
+  negative: 'MetricCard_negative__mockHash8',
+  icon: 'MetricCard_icon__mockHash9',
+  footer: 'MetricCard_footer__mockHash10',
+  description: 'MetricCard_description__mockHash11',
+  loading: 'MetricCard_loading__mockHash12',
+  error: 'MetricCard_error__mockHash13',
+};
+
+export default mockStyles;
+```
+
+```typescript
+// MetricCard.module.test.ts
+import styles from '../MetricCard.module'; // Adjust the path based on your project structure
+
+describe('MetricCard.module styles', () => {
+  // No specific setup or teardown is required for testing a static object mock.
+
+  it('should export a default object', () => {
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  it('should contain all expected CSS class names as non-empty string values', () => {
+    const expectedKeys = [
+      'metricCard',
+      'header',
+      'title',
+      'valueContainer',
+      'value',
+      'change',
+      'positive',
+      'negative',
+      'icon',
+      'footer',
+      'description',
+      'loading',
+      'error',
+    ];
+
+    // Verify that all expected keys are present and their values are non-empty strings
+    expectedKeys.forEach(key => {
+      expect(styles).toHaveProperty(key);
+      const value = styles[key as keyof typeof styles];
+      expect(typeof value).toBe('string');
+      expect(value.length).toBeGreaterThan(0); // Ensure the string is not empty
+    });
+
+    // Verify that no unexpected keys are present in the exported object
+    const actualKeys = Object.keys(styles);
+    expect(actualKeys.sort()).toEqual(expectedKeys.sort());
+  });
+
+  it('should match the snapshot to ensure consistent structure and mock values', () => {
+    // This snapshot test verifies that the structure and the mock values
+    // of the 'styles' object remain consistent over time.
+    expect(styles).toMatchSnapshot();
+  });
+
+  // Note: This module is a type definition for CSS modules.
+  // It does not contain executable functions, classes, or complex logic
+  // that would require testing different scenarios, inputs, or error conditions
+  // in the traditional sense. The tests focus on verifying its structure
+  // and adherence to the defined contract via a mock implementation.
+  // Strategies like 'jest-rtl' and 'accessibility_testing' are not applicable
+  // to this specific file, but would be relevant for components that consume these styles.
+});

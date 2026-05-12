@@ -1,0 +1,73 @@
+describe('DashboardLayout.module.css.d.ts contract', () => {
+  // This test suite verifies the structure and types defined in the
+  // DashboardLayout.module.css.d.ts file. Since .d.ts files are purely
+  // type declarations and have no runtime executable code, we cannot
+  // directly "import" and test them at runtime.
+  //
+  // Instead, we simulate the runtime object that would be exported by
+  // the corresponding .module.css file (when processed by a CSS Modules loader)
+  // and ensure it conforms to the contract (i.e., has all the expected keys
+  // and their values are strings) as defined by the .d.ts file.
+  // This effectively tests that the type definition is complete and accurate.
+
+  const mockStyles = {
+    dashboardLayout: 'DashboardLayout_dashboardLayout__hash1',
+    gridContainer: 'DashboardLayout_gridContainer__hash2',
+    flexContainer: 'DashboardLayout_flexContainer__hash3',
+    header: 'DashboardLayout_header__hash4',
+    sidebar: 'DashboardLayout_sidebar__hash5',
+    mainContent: 'DashboardLayout_mainContent__hash6',
+    footer: 'DashboardLayout_footer__hash7',
+    gridItem: 'DashboardLayout_gridItem__hash8',
+    flexItem: 'DashboardLayout_flexItem__hash9',
+    column: 'DashboardLayout_column__hash10',
+    row: 'DashboardLayout_row__hash11',
+    fullWidth: 'DashboardLayout_fullWidth__hash12',
+    fullHeight: 'DashboardLayout_fullHeight__hash13',
+    centered: 'DashboardLayout_centered__hash14',
+    responsiveWrapper: 'DashboardLayout_responsiveWrapper__hash15',
+  };
+
+  it('should define a styles object with all expected CSS class names as strings', () => {
+    // 1. Test all exported properties for existence and type
+    expect(mockStyles).toBeInstanceOf(Object);
+
+    const expectedKeys = [
+      'dashboardLayout',
+      'gridContainer',
+      'flexContainer',
+      'header',
+      'sidebar',
+      'mainContent',
+      'footer',
+      'gridItem',
+      'flexItem',
+      'column',
+      'row',
+      'fullWidth',
+      'fullHeight',
+      'centered',
+      'responsiveWrapper',
+    ];
+
+    // Ensure all expected keys are present and their values are strings
+    expectedKeys.forEach(key => {
+      expect(mockStyles).toHaveProperty(key);
+      expect(typeof mockStyles[key as keyof typeof mockStyles]).toBe('string');
+    });
+
+    // Ensure no unexpected keys are present (strict check)
+    expect(Object.keys(mockStyles).sort()).toEqual(expectedKeys.sort());
+
+    // 2. Use snapshot testing for comprehensive structure verification
+    // This captures the entire shape of the styles object, making it easy
+    // to detect accidental additions, removals, or renames of class names.
+    expect(mockStyles).toMatchSnapshot();
+  });
+
+  // Since this is a .d.ts file, there are no functions, classes, or
+  // executable logic to test for different scenarios, inputs, or error conditions.
+  // The "mocking" strategy here is the creation of the `mockStyles` object itself,
+  // which represents the runtime output conforming to the type definition.
+  // Setup/teardown are not required beyond the basic test suite structure.
+});

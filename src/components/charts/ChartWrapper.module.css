@@ -1,0 +1,33 @@
+/**
+ * @file src/components/charts/ChartWrapper.module.css.d.ts
+ * @description TypeScript type definitions for the CSS module `ChartWrapper.module.css`.
+ *
+ * This file provides type safety and auto-completion for CSS class names
+ * defined in `ChartWrapper.module.css` when imported into TypeScript files.
+ *
+ * When `ChartWrapper.module.css` is imported, it resolves to an object
+ * where keys are the original CSS class names and values are the
+ * unique, generated class names (e.g., `chartWrapper_abc123`).
+ */
+
+/**
+ * Interface representing the structure of the imported CSS module.
+ * Each key corresponds to a CSS class name defined in `ChartWrapper.module.css`,
+ * and its value is the unique, generated class name string.
+ */
+interface ChartWrapperStyles {
+  /**
+   * Allows access to any CSS class name defined in the module.
+   * The `readonly` modifier ensures that the imported styles object cannot be modified.
+   */
+  readonly [key: string]: string;
+}
+
+/**
+ * The default export of the CSS module.
+ *
+ * @type {ChartWrapperStyles}
+ */
+declare const styles: ChartWrapperStyles;
+
+export default styles;

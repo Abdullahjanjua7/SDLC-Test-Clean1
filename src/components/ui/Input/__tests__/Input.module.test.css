@@ -1,0 +1,107 @@
+// Test file: src/components/ui/Input/Input.module.test.ts
+
+// The provided source code is a TypeScript declaration file (`.d.ts`) for a CSS module.
+// This file itself does not contain executable JavaScript/TypeScript code that can be
+// directly tested at runtime. Its purpose is to provide type information for the
+// actual `Input.module.css` file when it's imported into a TypeScript project.
+//
+// To generate Jest tests, we must simulate the runtime behavior that the `.d.ts` file
+// describes: importing the `Input.module.css` file should yield an object with
+// string keys and string values (the CSS class names and their hashed equivalents).
+//
+// Therefore, these tests will mock the actual `Input.module.css` import to return
+// a typical CSS module object and then assert its structure and properties,
+// effectively testing that the runtime output conforms to the type declaration.
+
+describe('Input.module.css type declaration', () => {
+  let importedStyles: { [key: string]: string };
+
+  // Setup: Mock the CSS module before each test
+  beforeEach(() => {
+    // Clear module cache to ensure the mock is applied correctly for each test
+    jest.resetModules();
+
+    // Mock the actual CSS module file.
+    // This mock simulates what a CSS module loader (e.g., css-loader in Webpack)
+    // would return when `Input.module.css` is imported.
+    jest.doMock('../../../src/components/ui/Input/Input.module.css', () => ({
+      // These are example class names that would be defined in Input.module.css
+      // and their corresponding unique, hashed values.
+      container: 'Input_container__abc12',
+      label: 'Input_label__def34',
+      inputField: 'Input_inputField__ghi56',
+      error: 'Input_error__jkl78',
+      disabled: 'Input_disabled__mno90',
+      'custom-class': 'Input_custom-class__pqr12', // Example with a hyphenated class
+    }));
+
+    // Dynamically import the module *after* the mock has been set up.
+    // Using `require` ensures synchronous loading and respects the mock.
+    importedStyles = require('../../../src/components/ui/Input/Input.module.css');
+  });
+
+  // Teardown: Unmock the module after each test
+  afterEach(() => {
+    jest.unmock('../../../src/components/ui/Input/Input.module.css');
+  });
+
+  // Test 1: Ensure the default export is an object
+  it('should export an object by default', () => {
+    expect(typeof importedStyles).toBe('object');
+    expect(importedStyles).not.toBeNull();
+    expect(Array.isArray(importedStyles)).toBe(false);
+  });
+
+  // Test 2: Ensure the exported object has string keys and string values
+  it('should export an object where all keys and values are strings', () => {
+    // Assuming a CSS module will typically have at least one class
+    expect(Object.keys(importedStyles).length).toBeGreaterThan(0);
+
+    for (const key in importedStyles) {
+      // Check if the key itself is a string
+      expect(typeof key).toBe('string');
+      // Check if the value associated with the key is a string
+      expect(typeof importedStyles[key]).toBe('string');
+    }
+  });
+
+  // Test 3: Test different scenarios/inputs - ensure specific, expected class names are present
+  it('should contain expected class names from the CSS module', () => {
+    expect(importedStyles).toHaveProperty('container');
+    expect(importedStyles).toHaveProperty('label');
+    expect(importedStyles).toHaveProperty('inputField');
+    expect(importedStyles).toHaveProperty('error');
+    expect(importedStyles).toHaveProperty('disabled');
+    expect(importedStyles).toHaveProperty('custom-class'); // Test with a hyphenated class name
+  });
+
+  // Test 4: Snapshot testing for the structure and content of the styles object
+  it('should match the expected structure and content via snapshot', () => {
+    expect(importedStyles).toMatchSnapshot();
+  });
+
+  // Note on `readonly`: The `readonly` modifier in the `.d.ts` file is a TypeScript
+  // compile-time check. It prevents modification of the object at compile time.
+  // At runtime, a standard JavaScript object returned by a CSS module loader is not
+  // inherently immutable unless `Object.freeze()` is explicitly applied.
+  // Therefore, directly testing `readonly` at runtime in Jest is not feasible
+  // without altering the mock to return a frozen object, which would deviate
+  // from typical CSS module behavior.
+  // For example, the following test would likely pass, indicating mutability,
+  // but TypeScript would prevent such code from compiling if `importedStyles`
+  // was typed according to the `.d.ts` file.
+  /*
+  it('should allow modification at runtime (TypeScript readonly is compile-time only)', () => {
+    const originalValue = importedStyles.container;
+    importedStyles.container = 'new_container_class';
+    expect(importedStyles.container).not.toBe(originalValue);
+    expect(importedStyles.container).toBe('new_container_class');
+  });
+  */
+
+  // Error conditions: There are no executable functions or logic in a `.d.ts` file
+  // to produce runtime errors that can be tested. The primary "error condition"
+  // for a `.d.ts` file would be a TypeScript compilation error if the type
+  // declaration is incorrect or inconsistent with its usage, which is handled
+  // by the TypeScript compiler, not Jest.
+});

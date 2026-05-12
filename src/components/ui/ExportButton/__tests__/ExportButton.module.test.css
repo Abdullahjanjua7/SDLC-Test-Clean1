@@ -1,0 +1,92 @@
+import styles from '../ExportButton.module.css'; // Adjust the path to your CSS module as needed
+
+// Mock the CSS module to provide a predictable runtime object for testing.
+// This simulates the output of a CSS module loader (e.g., css-loader, postcss-modules).
+jest.mock('../ExportButton.module.css', () => ({
+  button: 'ExportButton_button__mockedHash1',
+  container: 'ExportButton_container__mockedHash2',
+  primary: 'ExportButton_primary__mockedHash3',
+  secondary: 'ExportButton_secondary__mockedHash4',
+  // Include a property to explicitly test the index signature access
+  dynamicClass: 'ExportButton_dynamicClass__mockedHash5',
+}));
+
+describe('ExportButton.module.css styles', () => {
+  /**
+   * Test Case 1: Verify that the default export is an object.
+   * This ensures that the CSS module, when processed, yields a structured object.
+   */
+  it('should export an object of styles', () => {
+    expect(styles).toBeInstanceOf(Object);
+    expect(styles).not.toBeNull();
+    expect(Object.keys(styles).length).toBeGreaterThan(0);
+  });
+
+  /**
+   * Test Case 2: Verify that all properties (class names) in the exported object are strings.
+   * This aligns with the `[key: string]: string;` index signature in the type definition.
+   */
+  it('should have string values for all class names', () => {
+    for (const key in styles) {
+      expect(typeof styles[key]).toBe('string');
+      expect(styles[key]).not.toBe(''); // Ensure class names are not empty strings
+      // Optionally, check for a specific pattern if class names are expected to follow one
+      expect(styles[key]).toMatch(/^ExportButton_[a-zA-Z0-9]+__mockedHash[0-9]$/);
+    }
+  });
+
+  /**
+   * Test Case 3: Verify specific, known class names exist and have expected string values.
+   * This checks for the presence and correctness of individual class names.
+   */
+  it('should contain specific class names with their expected string values', () => {
+    expect(typeof styles.button).toBe('string');
+    expect(styles.button).toBe('ExportButton_button__mockedHash1');
+
+    expect(typeof styles.container).toBe('string');
+    expect(styles.container).toBe('ExportButton_container__mockedHash2');
+
+    expect(typeof styles.primary).toBe('string');
+    expect(styles.primary).toBe('ExportButton_primary__mockedHash3');
+
+    expect(typeof styles.secondary).toBe('string');
+    expect(styles.secondary).toBe('ExportButton_secondary__mockedHash4');
+  });
+
+  /**
+   * Test Case 4: Verify that properties can be accessed via the index signature and return strings.
+   * This directly tests the flexibility provided by `[key: string]: string;`.
+   */
+  it('should allow accessing properties via index signature and return string values', () => {
+    const dynamicKey = 'dynamicClass';
+    expect(typeof styles[dynamicKey]).toBe('string');
+    expect(styles[dynamicKey]).toBe('ExportButton_dynamicClass__mockedHash5');
+
+    // Test with a key that is not explicitly defined in the mock but would be covered by the index signature
+    // In a real scenario, if the CSS module had a class like '.anotherOne', it would appear here.
+    // For this mock, we only test keys that are actually present.
+    const nonExistentKey = 'nonExistentClass';
+    expect(styles[nonExistentKey]).toBeUndefined(); // JavaScript behavior for non-existent properties
+    // Note: The TypeScript type `[key: string]: string;` implies that accessing any string key will yield a string.
+    // This is a compile-time guarantee. At runtime, accessing a non-existent key yields `undefined`.
+    // We are testing the runtime behavior of the *mocked* module, not the TypeScript compiler.
+  });
+
+  /**
+   * Test Case 5: Use snapshot testing to capture the entire structure of the styles object.
+   * This helps in detecting unintended changes to the exported class names or their values.
+   */
+  it('should match the expected structure via snapshot', () => {
+    expect(styles).toMatchSnapshot();
+  });
+
+  // Error Conditions:
+  // This module is a type definition for a CSS module. It does not contain executable logic
+  // that could throw runtime errors based on inputs or scenarios. The 'readonly' modifier
+  // is a TypeScript compile-time feature and cannot be tested at runtime with Jest.
+  // Therefore, error condition testing is not applicable here.
+
+  // Setup and Teardown:
+  // For this simple module mock, explicit `beforeAll` or `afterAll` are not strictly necessary.
+  // The `jest.mock` call at the top level handles the setup for all tests in this file.
+});

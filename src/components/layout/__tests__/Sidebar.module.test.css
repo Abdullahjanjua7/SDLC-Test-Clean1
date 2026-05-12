@@ -1,0 +1,113 @@
+// Assuming this test file is located at `src/components/layout/__tests__/Sidebar.module.test.ts`
+// The path to the CSS module would then be `../Sidebar.module.css`.
+
+// Mock the CSS module itself. This simulates what a CSS module loader (e.g., Webpack's css-loader)
+// would produce at runtime when `Sidebar.module.css` is imported.
+// The `.d.ts` file being tested provides the TypeScript type definition for this runtime object.
+jest.mock('../Sidebar.module.css', () => ({
+  // These are example class names and their corresponding unique, generated values.
+  // In a real build, these generated values would be unique hashes.
+  sidebar: 'Sidebar_module__sidebar__abc12',
+  header: 'Sidebar_module__header__def34',
+  item: 'Sidebar_module__item__ghi56',
+  footer: 'Sidebar_module__footer__jkl78',
+  'some-dashed-class': 'Sidebar_module__some-dashed-class__mno90', // Example of a dashed class name
+  active: 'Sidebar_module__active__pqr01',
+  disabled: 'Sidebar_module__disabled__stu23',
+  'another-class-name': 'Sidebar_module__another-class-name__vwx45',
+}));
+
+// Now, import the mocked module.
+// This import statement will resolve to the object provided by `jest.mock` above.
+import styles from '../Sidebar.module.css';
+
+describe('Sidebar.module.css runtime contract verification', () => {
+  // Test 1: Ensure the imported 'styles' object is defined and is a plain object.
+  test('should export a defined object', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+    expect(Array.isArray(styles)).toBe(false); // Ensure it's not an array
+  });
+
+  // Test 2: Ensure the object contains expected CSS class names as keys.
+  // This verifies that common class names are accessible.
+  test('should contain expected CSS class names as keys', () => {
+    expect(styles).toHaveProperty('sidebar');
+    expect(styles).toHaveProperty('header');
+    expect(styles).toHaveProperty('item');
+    expect(styles).toHaveProperty('footer');
+    expect(styles).toHaveProperty('active');
+    expect(styles).toHaveProperty('disabled');
+    expect(styles).toHaveProperty('some-dashed-class'); // Test accessing a dashed class name
+    expect(styles).toHaveProperty('another-class-name');
+  });
+
+  // Test 3: Ensure all values in the 'styles' object are strings and are not empty.
+  // These strings represent the unique, generated class names.
+  test('all values should be non-empty strings', () => {
+    for (const key in styles) {
+      if (Object.prototype.hasOwnProperty.call(styles, key)) {
+        expect(typeof styles[key]).toBe('string');
+        expect(styles[key].length).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  // Test 4: Ensure the generated class names are unique.
+  // This is a core feature of CSS Modules to prevent class name collisions.
+  test('generated class names should be unique', () => {
+    const classNames = Object.values(styles);
+    const uniqueClassNames = new Set(classNames);
+    expect(uniqueClassNames.size).toBe(classNames.length);
+  });
+
+  // Test 5: Snapshot testing for the entire styles object structure.
+  // This helps catch unintended changes to the class names or their generated values.
+  test('styles object structure should match snapshot', () => {
+    expect(styles).toMatchSnapshot();
+  });
+
+  // Test 6: Test accessing a non-existent class name at runtime.
+  // While TypeScript would catch this at compile time if directly accessed (due to the .d.ts),
+  // at runtime, accessing a non-existent property on a JavaScript object yields `undefined`.
+  test('accessing a non-existent class should return undefined at runtime', () => {
+    // @ts-ignore: Intentionally accessing a non-existent property for runtime verification.
+    expect(styles.nonExistentClass).toBeUndefined();
+    // @ts-ignore: Another example with a dashed name
+    expect(styles['non-existent-dashed-class']).toBeUndefined();
+  });
+
+  // Test 7: Verify runtime mutability despite TypeScript's `readonly` modifier.
+  // The `readonly` keyword in TypeScript is a compile-time type safety feature.
+  // At runtime, a plain JavaScript object (as typically returned by CSS modules) is mutable
+  // unless explicitly frozen (e.g., with `Object.freeze()`). Standard CSS module loaders
+  // do not freeze the exported styles object. This test clarifies this distinction.
+  test('properties are mutable at runtime despite TypeScript readonly declaration', () => {
+    const originalValue = styles.sidebar;
+    const newValue = 'a-new-runtime-value';
+
+    // @ts-ignore: Intentionally trying to write to a 'readonly' property for runtime check.
+    styles.sidebar = newValue;
+
+    expect(styles.sidebar).toBe(newValue);
+    expect(styles.sidebar).not.toBe(originalValue);
+
+    // Resetting the mock is handled by Jest's module caching for top-level mocks.
+    // If this test were to affect other tests in the same file, a `beforeEach` with `jest.doMock`
+    // and `require` would be needed for isolation. For this scenario, it's generally fine.
+  });
+
+  // Test 8: Ensure no extra unexpected properties are present beyond the mocked ones.
+  // This helps maintain strictness and ensures the module exports only what's expected.
+  test('should only contain the expected properties', () => {
+    const expectedKeys = new Set([
+      'sidebar', 'header', 'item', 'footer', 'some-dashed-class',
+      'active', 'disabled', 'another-class-name'
+    ]);
+    const actualKeys = new Set(Object.keys(styles));
+
+    expect(actualKeys.size).toBe(expectedKeys.size);
+    expectedKeys.forEach(key => expect(actualKeys).toContain(key));
+  });
+});

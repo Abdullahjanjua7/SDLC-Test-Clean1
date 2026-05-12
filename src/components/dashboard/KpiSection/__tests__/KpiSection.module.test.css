@@ -1,0 +1,114 @@
+// KpiSection.module.test.ts
+
+// This test file aims to verify the *contract* defined by the KpiSection.module.d.ts (or similar)
+// which describes the shape of the object exported by a CSS module like KpiSection.module.css.
+// Since the provided source code uses `declare const`, it's a type declaration and does not
+// produce a runtime value itself. Therefore, we simulate the runtime behavior by mocking
+// the import of a CSS module that *conforms* to this declaration.
+// This allows us to test that consumers would receive an object with the expected structure.
+
+// Define a mock object that represents the runtime output of a CSS module.
+// The keys are original class names, and values are the hashed class names.
+const mockCssModuleStyles = {
+  container: 'KpiSection_container__abc12',
+  header: 'KpiSection_header__def34',
+  item: 'KpiSection_item__ghi56',
+  title: 'KpiSection_title__jkl78',
+  value: 'KpiSection_value__mno90',
+  // Add more mock classes as needed to represent typical usage
+};
+
+// Mock the actual CSS module file.
+// When `import styles from './KpiSection.module.css'` is called,
+// Jest will return this `mockCssModuleStyles` object.
+// We assume the actual CSS module file would be named `KpiSection.module.css`.
+jest.mock('./KpiSection.module.css', () => ({
+  __esModule: true,
+  default: mockCssModuleStyles,
+}));
+
+// Now, import the module. This import will resolve to our mocked object.
+// TypeScript will use the `declare const styles` definition from the original
+// `KpiSection.module.d.ts` (or similar) for type checking `importedStyles`.
+import importedStyles from './KpiSection.module.css';
+
+describe('KpiSection.module CSS styles contract', () => {
+  // --- Setup and Teardown ---
+  beforeAll(() => {
+    // Any setup that needs to run once before all tests in this describe block.
+    // For this simple mock, no specific setup is required beyond the jest.mock call.
+  });
+
+  afterAll(() => {
+    // Any teardown that needs to run once after all tests in this describe block.
+    // No specific teardown is required here.
+  });
+
+  // --- Test all exported functions/classes (in this case, the default exported object) ---
+  it('should export a default object conforming to the CSS module contract', () => {
+    expect(typeof importedStyles).toBe('object');
+    expect(importedStyles).not.toBeNull();
+    expect(Object.keys(importedStyles).length).toBeGreaterThan(0);
+  });
+
+  // --- Test different scenarios and inputs ---
+  it('should contain expected class names with string values', () => {
+    // Verify specific class names and their types
+    expect(importedStyles).toHaveProperty('container');
+    expect(typeof importedStyles.container).toBe('string');
+    expect(importedStyles.container).toBe(mockCssModuleStyles.container);
+
+    expect(importedStyles).toHaveProperty('header');
+    expect(typeof importedStyles.header).toBe('string');
+    expect(importedStyles.header).toBe(mockCssModuleStyles.header);
+
+    expect(importedStyles).toHaveProperty('item');
+    expect(typeof importedStyles.item).toBe('string');
+    expect(importedStyles.item).toBe(mockCssModuleStyles.item);
+
+    expect(importedStyles).toHaveProperty('title');
+    expect(typeof importedStyles.title).toBe('string');
+    expect(importedStyles.title).toBe(mockCssModuleStyles.title);
+
+    expect(importedStyles).toHaveProperty('value');
+    expect(typeof importedStyles.value).toBe('string');
+    expect(importedStyles.value).toBe(mockCssModuleStyles.value);
+  });
+
+  it('should ensure all values in the styles object are strings', () => {
+    for (const key in importedStyles) {
+      if (Object.prototype.hasOwnProperty.call(importedStyles, key)) {
+        expect(typeof importedStyles[key]).toBe('string');
+      }
+    }
+  });
+
+  // --- Test error conditions (simulated) ---
+  it('should return undefined for non-existent class names, adhering to runtime JS behavior', () => {
+    // If a class name is not defined in the actual CSS module, it won't be present
+    // in the exported object at runtime. Accessing it would yield `undefined`.
+    // The `declare const styles: { readonly [key: string]: string; };` allows
+    // accessing any string key, so TypeScript won't prevent this at compile time.
+    expect((importedStyles as any).nonExistentClass).toBeUndefined();
+    expect(importedStyles).not.toHaveProperty('nonExistentClass');
+  });
+
+  it('should not allow modification of the styles object (due to `readonly` in declaration)', () => {
+    // While the `readonly` keyword in the TypeScript declaration provides compile-time safety,
+    // at runtime, JavaScript objects are mutable unless explicitly frozen.
+    // This test verifies the runtime behavior of the mock, which is a standard JS object.
+    // If the actual build process were to `Object.freeze` the styles, this test would change.
+    const originalValue = importedStyles.container;
+    importedStyles.container = 'new_hashed_value';
+    expect(importedStyles.container).not.toBe(originalValue);
+    // Reset for subsequent tests if necessary, though this mock is isolated per test run.
+    importedStyles.container = mockCssModuleStyles.container;
+  });
+
+  // --- Snapshot Testing ---
+  it('should match the snapshot of the mocked styles object', () => {
+    // This captures the structure and values of the mocked styles object,
+    // providing a baseline for future changes.
+    expect(importedStyles).toMatchSnapshot();
+  });
+});

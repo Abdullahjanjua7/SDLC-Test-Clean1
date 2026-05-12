@@ -1,0 +1,39 @@
+/**
+ * Type definitions for CSS modules in MetricCard.module.css.
+ * This file provides type safety for importing CSS class names
+ * when using the CSS module in TypeScript components.
+ *
+ * It declares a default export 'styles' which is an object
+ * containing string keys for each CSS class defined in the module,
+ * and string values representing the unique generated class names.
+ */
+declare const styles: {
+  /** The main container class for the metric card. */
+  readonly metricCard: string;
+  /** Styling for the header section of the card. */
+  readonly header: string;
+  /** Styling for the main title or label of the metric. */
+  readonly title: string;
+  /** Container for the primary metric value and its associated change. */
+  readonly valueContainer: string;
+  /** Styling for the primary numerical or textual value of the metric. */
+  readonly value: string;
+  /** Styling for the numerical or percentage change associated with the metric. */
+  readonly change: string;
+  /** Modifier class for positive change values (e.g., green text). */
+  readonly positive: string;
+  /** Modifier class for negative change values (e.g., red text). */
+  readonly negative: string;
+  /** Styling for an icon displayed within the card (e.g., trend icon, status icon). */
+  readonly icon: string;
+  /** Styling for the footer section of the card. */
+  readonly footer: string;
+  /** Styling for a secondary description or contextual text. */
+  readonly description: string;
+  /** Class applied when the metric data is in a loading state. */
+  readonly loading: string;
+  /** Class applied when there is an error fetching or displaying the metric data. */
+  readonly error: string;
+};
+
+export default styles;

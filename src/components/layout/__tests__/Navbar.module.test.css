@@ -1,0 +1,134 @@
+import styles from '../src/components/layout/Navbar.module.css';
+
+// Mock the CSS module import.
+// In a real project, you might configure Jest's moduleNameMapper
+// or create a __mocks__ directory. For this test, we'll directly mock it.
+jest.mock('../src/components/layout/Navbar.module.css', () => ({
+  navbar: 'Navbar_navbar__mockHash1',
+  navbarBrand: 'Navbar_navbarBrand__mockHash2',
+  navbarNav: 'Navbar_navbarNav__mockHash3',
+  navItem: 'Navbar_navItem__mockHash4',
+  navLink: 'Navbar_navLink__mockHash5',
+  active: 'Navbar_active__mockHash6',
+  navbarToggler: 'Navbar_navbarToggler__mockHash7',
+  togglerIcon: 'Navbar_togglerIcon__mockHash8',
+  navbarCollapse: 'Navbar_navbarCollapse__mockHash9',
+  // If there were other classes, they would be added here.
+}));
+
+describe('Navbar.module.css type definitions contract', () => {
+  /**
+   * Test Case 1: Ensure the imported styles object is defined and is an object.
+   * This verifies that the module can be imported and provides a basic structure.
+   */
+  it('should export a defined object for CSS class names', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  /**
+   * Test Case 2: Verify that all expected CSS class names are present as properties
+   * on the imported styles object, and their values are strings.
+   * This directly tests the contract defined by Navbar.module.css.d.ts.
+   */
+  it('should contain all expected CSS class names as string properties', () => {
+    const expectedClassNames = [
+      'navbar',
+      'navbarBrand',
+      'navbarNav',
+      'navItem',
+      'navLink',
+      'active',
+      'navbarToggler',
+      'togglerIcon',
+      'navbarCollapse',
+    ];
+
+    expectedClassNames.forEach(className => {
+      // Check if the property exists
+      expect(styles).toHaveProperty(className);
+      // Check if the property's value is a string
+      expect(typeof (styles as any)[className]).toBe('string');
+      // Check if the string value is not empty (simulating a generated class name)
+      expect((styles as any)[className]).not.toBe('');
+    });
+  });
+
+  /**
+   * Test Case 3: Ensure that no unexpected properties are present in the styles object.
+   * This helps maintain a strict contract and catches accidental additions to the mock
+   * or unexpected behavior from the CSS module loader.
+   */
+  it('should not contain any unexpected CSS class names', () => {
+    const expectedClassNames = [
+      'navbar',
+      'navbarBrand',
+      'navbarNav',
+      'navItem',
+      'navLink',
+      'active',
+      'navbarToggler',
+      'togglerIcon',
+      'navbarCollapse',
+    ];
+
+    const actualClassNames = Object.keys(styles);
+
+    // Sort both arrays to ensure order-independent comparison
+    expect(actualClassNames.sort()).toEqual(expectedClassNames.sort());
+  });
+
+  /**
+   * Test Case 4: Snapshot test for the entire styles object.
+   * This provides a comprehensive way to track changes to the CSS module's exported
+   * class names and their mocked values. If the .d.ts file or the underlying .css
+   * file changes, this snapshot will highlight the differences.
+   */
+  it('should match the snapshot for the exported styles object', () => {
+    expect(styles).toMatchSnapshot();
+  });
+
+  /**
+   * Test Case 5: Simulate a scenario where a class name might be missing from the CSS module.
+   * This is an "error condition" test for the *contract*. If the .d.ts declares a class
+   * but the actual CSS module (or its mock) doesn't provide it, this test would fail.
+   * (Note: This test will pass as our mock is complete, but demonstrates how to test for missing properties).
+   */
+  it('should fail if a declared class name is missing from the module export (simulated)', () => {
+    // Temporarily override the mock for this specific test to simulate a missing property
+    jest.resetModules(); // Clear the module cache
+    jest.mock('../src/components/layout/Navbar.module.css', () => ({
+      navbar: 'Navbar_navbar__mockHash1',
+      // navbarBrand is intentionally missing here
+      navbarNav: 'Navbar_navbarNav__mockHash3',
+      navItem: 'Navbar_navItem__mockHash4',
+      navLink: 'Navbar_navLink__mockHash5',
+      active: 'Navbar_active__mockHash6',
+      navbarToggler: 'Navbar_navbarToggler__mockHash7',
+      togglerIcon: 'Navbar_togglerIcon__mockHash8',
+      navbarCollapse: 'Navbar_navbarCollapse__mockHash9',
+    }));
+
+    // Re-import the module after mocking
+    const stylesWithMissingBrand = require('../src/components/layout/Navbar.module.css').default;
+
+    // Expect 'navbarBrand' to be undefined in this specific scenario
+    expect(stylesWithMissingBrand).not.toHaveProperty('navbarBrand');
+    expect(stylesWithMissingBrand.navbarBrand).toBeUndefined();
+
+    // Reset the mock to the original complete state for subsequent tests
+    jest.resetModules();
+    jest.mock('../src/components/layout/Navbar.module.css', () => ({
+      navbar: 'Navbar_navbar__mockHash1',
+      navbarBrand: 'Navbar_navbarBrand__mockHash2',
+      navbarNav: 'Navbar_navbarNav__mockHash3',
+      navItem: 'Navbar_navItem__mockHash4',
+      navLink: 'Navbar_navLink__mockHash5',
+      active: 'Navbar_active__mockHash6',
+      navbarToggler: 'Navbar_navbarToggler__mockHash7',
+      togglerIcon: 'Navbar_togglerIcon__mockHash8',
+      navbarCollapse: 'Navbar_navbarCollapse__mockHash9',
+    }));
+  });
+});

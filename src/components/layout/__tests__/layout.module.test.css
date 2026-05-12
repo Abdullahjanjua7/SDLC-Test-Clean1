@@ -1,0 +1,87 @@
+import { jest } from '@jest/globals';
+
+describe('layout.module', () => {
+  let styles: { [key: string]: string };
+
+  // Mock the module to return a representative CSS module object.
+  // This simulates what a bundler would provide at runtime when importing
+  // a CSS module that conforms to the type declared in layout.module.ts.
+  // We are effectively testing the *shape* and *contract* that the declaration describes.
+  beforeAll(() => {
+    jest.doMock('./layout.module', () => ({
+      default: {
+        container: 'layout_container_abc123',
+        header: 'layout_header_def456',
+        footer: 'layout_footer_xyz789',
+        'some-dashed-class': 'layout_some-dashed-class_111',
+        anotherClass: 'layout_anotherClass_222',
+        emptyValue: '', // Test an empty string value
+      },
+    }));
+
+    // Dynamically import the mocked module after setting up the mock.
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    styles = require('./layout.module').default;
+  });
+
+  // Clean up the mock after all tests are done to prevent interference with other test files.
+  afterAll(() => {
+    jest.resetModules();
+  });
+
+  it('should export a default object', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+    expect(Array.isArray(styles)).toBe(false);
+  });
+
+  it('should contain expected CSS class names as keys', () => {
+    expect(styles).toHaveProperty('container');
+    expect(styles).toHaveProperty('header');
+    expect(styles).toHaveProperty('footer');
+    expect(styles).toHaveProperty('some-dashed-class');
+    expect(styles).toHaveProperty('anotherClass');
+    expect(styles).toHaveProperty('emptyValue');
+  });
+
+  it('should have string values for all class names', () => {
+    const keys = Object.keys(styles);
+    expect(keys.length).toBeGreaterThan(0); // Ensure there are keys to test
+    keys.forEach(key => {
+      expect(typeof styles[key]).toBe('string');
+    });
+  });
+
+  it('should have non-empty string values for typical class names', () => {
+    expect(styles.container).not.toBe('');
+    expect(styles.header).not.toBe('');
+    expect(styles.footer).not.toBe('');
+    expect(styles['some-dashed-class']).not.toBe('');
+    expect(styles.anotherClass).not.toBe('');
+  });
+
+  it('should allow empty string values for class names', () => {
+    expect(styles.emptyValue).toBe('');
+  });
+
+  it('should return undefined for non-existent class names', () => {
+    // This is standard JavaScript object behavior and confirms the object
+    // behaves as expected when accessing properties that are not defined.
+    expect(styles.nonExistentClass).toBeUndefined();
+    expect(styles['another-non-existent']).toBeUndefined();
+  });
+
+  it('should match the snapshot for the overall structure', () => {
+    // This snapshot ensures that the structure and values of the mocked
+    // CSS module object remain consistent over time.
+    expect(styles).toMatchSnapshot();
+  });
+
+  // Note on 'readonly': The `readonly` keyword in TypeScript is a compile-time
+  // construct and does not enforce runtime immutability on plain JavaScript objects
+  // unless `Object.freeze()` is explicitly applied. Since the provided source
+  // is a type declaration and does not imply `Object.freeze()`, we cannot
+  // reliably test for runtime immutability with Jest. This aspect is handled
+  // by the TypeScript compiler during development.
+});

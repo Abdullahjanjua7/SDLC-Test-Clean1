@@ -1,0 +1,67 @@
+// This file is a TypeScript declaration file (.d.ts) for the CSS module
+// `src/components/ui/Input.module.css`.
+// It describes the type of the object that is exported when this CSS module is imported
+// into a TypeScript file.
+
+/**
+ * Represents the type of the CSS module `Input.module.css`.
+ *
+ * When `Input.module.css` is imported, it resolves to an object where keys are
+ * the original class names defined in the CSS file, and values are the unique,
+ * generated class names (e.g., `Input_input__abc12`).
+ *
+ * This interface provides type safety and auto-completion for the expected
+ * class names within the `Input` component.
+ */
+interface InputModuleCss {
+  /**
+   * The class name for the main input element.
+   * Example usage: `<input className={styles.input} />`
+   */
+  readonly input: string;
+  /**
+   * The class name for a wrapper element around the input (e.g., for layout or grouping).
+   * Example usage: `<div className={styles.wrapper}>...</div>`
+   */
+  readonly wrapper: string;
+  /**
+   * The class name for an associated label element.
+   * Example usage: `<label className={styles.label}>...</label>`
+   */
+  readonly label: string;
+  /**
+   * The class name for displaying error messages related to the input.
+   * Example usage: `<p className={styles.errorText}>...</p>`
+   */
+  readonly errorText: string;
+  /**
+   * A modifier class applied when the input is in a disabled state.
+   * Example usage: `<input className={`${styles.input} ${isDisabled ? styles.disabled : ''}`} />`
+   */
+  readonly disabled: string;
+  /**
+   * A modifier class applied when the input is in an invalid state (e.g., failed validation).
+   * Example usage: `<input className={`${styles.input} ${isInvalid ? styles.invalid : ''}`} />`
+   */
+  readonly invalid: string;
+  /**
+   * A modifier class applied when the input is focused.
+   * Example usage: `<input className={`${styles.input} ${isFocused ? styles.focused : ''}`} />`
+   */
+  readonly focused: string;
+
+  /**
+   * An index signature to allow for any other class names that might be
+   * defined in the CSS module, providing flexibility without requiring
+   * explicit declaration for every single class.
+   */
+  readonly [key: string]: string;
+}
+
+/**
+ * Declares the default export for `Input.module.css`.
+ * When you `import styles from './Input.module.css'`, `styles` will be of type `InputModuleCss`.
+ */
+declare const styles: InputModuleCss;
+
+export default styles;

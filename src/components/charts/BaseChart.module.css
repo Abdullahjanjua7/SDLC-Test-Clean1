@@ -1,0 +1,28 @@
+/**
+ * @description Type definitions for the CSS module `BaseChart.module.css`.
+ * This file declares the shape of the object that is returned when `BaseChart.module.css` is imported.
+ *
+ * When a CSS module (`.module.css`) is imported in TypeScript, it typically resolves to a JavaScript object.
+ * The keys of this object correspond to the class names defined in the CSS file,
+ * and the values are the unique, generated class names (e.g., `BaseChart_chartWrapper__abc12`).
+ *
+ * This declaration ensures that TypeScript understands the structure of the imported styles object,
+ * allowing for type-safe access to CSS class names.
+ *
+ * @example
+ * import styles from './BaseChart.module.css';
+ *
+ * <div className={styles.chartWrapper}>...</div>
+ */
+
+/**
+ * Represents the type of the imported CSS module.
+ *
+ * @property {Readonly<Record<string, string>>} default - An object where keys are CSS class names
+ *                                                      and values are the generated unique class names.
+ *                                                      The `readonly` modifier indicates that the object
+ *                                                      and its properties should not be modified after import.
+ */
+declare const styles: Readonly<Record<string, string>>;
+
+export default styles;

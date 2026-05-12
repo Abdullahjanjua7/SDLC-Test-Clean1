@@ -1,0 +1,112 @@
+// ChartSection.module.css.test.ts
+
+/**
+ * @description
+ * This test file verifies the runtime structure and content of the object
+ * exported by `ChartSection.module.css`, based on its TypeScript declaration file
+ * `ChartSection.module.css.d.ts`.
+ *
+ * Since `.d.ts` files contain no executable code, these tests simulate the
+ * behavior of a CSS module loader (e.g., Webpack's css-loader) by providing
+ * a mock object that conforms to the declared interface.
+ *
+ * The goal is to ensure that when `ChartSection.module.css` is imported,
+ * the resulting object has the expected class names as string properties.
+ */
+
+// Mock the CSS module import.
+// In a real project, this would typically be handled by jest.config.js's
+// `moduleNameMapper` (e.g., `'\\.(css|less|scss|sass)$': '<rootDir>/__mocks__/cssModule.ts'`).
+// For this self-contained example, we define the mock directly using `jest.mock`.
+jest.mock('./ChartSection.module.css', () => ({
+  // `__esModule: true` is important for mocking ES module default exports.
+  __esModule: true,
+  // This `default` object simulates the actual runtime export of the CSS module.
+  // The values are example hashed class names.
+  default: {
+    chartSectionContainer: 'ChartSection_chartSectionContainer__abc12',
+    chartCard: 'ChartSection_chartCard__def34',
+    chartHeader: 'ChartSection_chartHeader__ghi56',
+    chartTitle: 'ChartSection_chartTitle__jkl78',
+    chartControls: 'ChartSection_chartControls__mno90',
+    chartWrapper: 'ChartSection_chartWrapper__pqr12',
+    loadingSpinner: 'ChartSection_loadingSpinner__stu34',
+    errorMessage: 'ChartSection_errorMessage__vwx56',
+    // An example of a dynamic key covered by the `[key: string]: string;` index signature.
+    someOtherDynamicClass: 'ChartSection_someOtherDynamicClass__yz012',
+  },
+}));
+
+// Import the mocked module. Jest will resolve this to the mock defined above.
+import styles from './ChartSection.module.css';
+
+describe('ChartSection.module.css runtime export', () => {
+  // List of all explicitly defined class names from the `.d.ts` file.
+  const explicitClassNames = [
+    'chartSectionContainer',
+    'chartCard',
+    'chartHeader',
+    'chartTitle',
+    'chartControls',
+    'chartWrapper',
+    'loadingSpinner',
+    'errorMessage',
+  ];
+
+  /**
+   * Test Case 1: The module should export a non-null object by default.
+   * This verifies the basic structure of the export.
+   */
+  it('should export an object by default', () => {
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  /**
+   * Test Case 2: The exported object should contain all explicitly defined
+   * class names as properties, and their values should be non-empty strings.
+   * This ensures type safety and autocompletion benefits are met at runtime.
+   */
+  it('should contain all explicitly defined class names as non-empty string properties', () => {
+    explicitClassNames.forEach(className => {
+      expect(styles).toHaveProperty(className);
+      expect(typeof styles[className]).toBe('string');
+      expect(styles[className].length).toBeGreaterThan(0); // Ensure the string is not empty
+    });
+  });
+
+  /**
+   * Test Case 3: All properties in the exported object (including those
+   * covered by the index signature) should be strings and not empty.
+   * This provides a more comprehensive check beyond just the explicit names.
+   */
+  it('should ensure all properties (explicit and dynamic) are non-empty strings', () => {
+    for (const key in styles) {
+      if (Object.prototype.hasOwnProperty.call(styles, key)) {
+        expect(typeof styles[key]).toBe('string');
+        expect(styles[key].length).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  /**
+   * Test Case 4: The module should correctly handle additional properties
+   * as defined by the `[key: string]: string;` index signature in the `.d.ts` file.
+   * This ensures flexibility for class names not explicitly listed but still expected to be strings.
+   */
+  it('should allow for additional string properties as per the index signature', () => {
+    const dynamicKey = 'someOtherDynamicClass'; // This key is in our mock but not in `explicitClassNames`
+    expect(styles).toHaveProperty(dynamicKey);
+    expect(typeof styles[dynamicKey]).toBe('string');
+    expect(styles[dynamicKey].length).toBeGreaterThan(0);
+  });
+
+  /**
+   * Test Case 5: Snapshot test for the entire styles object.
+   * This helps catch unintended changes to the exported class names or their structure.
+   * It's a good practice for configuration-like objects.
+   */
+  it('should match the snapshot of the exported styles object', () => {
+    expect(styles).toMatchSnapshot();
+  });
+});

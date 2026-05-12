@@ -1,0 +1,72 @@
+/**
+ * @file src/pages/DashboardPage/DashboardPage.module.css.d.ts
+ * @description Type definitions for the CSS module 'DashboardPage.module.css'.
+ * This file provides type safety when importing CSS classes from the corresponding .css module.
+ * It is typically generated automatically by build tools (e.g., css-loader with 'dts-loader' or 'typed-css-modules').
+ * Manual edits to this file might be overwritten.
+ */
+
+/**
+ * Declares a module for the CSS file, exporting a default object containing class names.
+ * Each class name from the CSS file is typed as a `readonly string`, ensuring type safety
+ * and immutability when accessing these generated class names in TypeScript components.
+ */
+declare const styles: {
+  /**
+   * CSS class for the main container of the dashboard page.
+   * Example usage: `<div className={styles.dashboardContainer}>...</div>`
+   */
+  readonly dashboardContainer: string;
+  /**
+   * CSS class for the header section of the dashboard.
+   * Example usage: `<header className={styles.dashboardHeader}>...</header>`
+   */
+  readonly dashboardHeader: string;
+  /**
+   * CSS class for the main content area of the dashboard.
+   * Example usage: `<main className={styles.dashboardContent}>...</main>`
+   */
+  readonly dashboardContent: string;
+  /**
+   * CSS class for a grid layout within the dashboard content.
+   * Example usage: `<div className={styles.dashboardGrid}>...</div>`
+   */
+  readonly dashboardGrid: string;
+  /**
+   * CSS class for individual cards or widgets displayed on the dashboard.
+   * Example usage: `<div className={styles.dashboardCard}>...</div>`
+   */
+  readonly dashboardCard: string;
+  /**
+   * CSS class for a sidebar navigation or information panel within the dashboard.
+   * Example usage: `<aside className={styles.dashboardSidebar}>...</aside>`
+   */
+  readonly dashboardSidebar: string;
+  /**
+   * CSS class for the main area adjacent to the sidebar, if present.
+   * Example usage: `<section className={styles.dashboardMainArea}>...</section>`
+   */
+  readonly dashboardMainArea: string;
+  /**
+   * CSS class for a specific section or panel within the dashboard.
+   * Example usage: `<div className={styles.dashboardSection}>...</div>`
+   */
+  readonly dashboardSection: string;
+  /**
+   * CSS class for a title or heading within a dashboard component.
+   * Example usage: `<h2 className={styles.sectionTitle}>...</h2>`
+   */
+  readonly sectionTitle: string;
+  /**
+   * CSS class for a footer section of the dashboard.
+   * Example usage: `<footer className={styles.dashboardFooter}>...</footer>`
+   */
+  readonly dashboardFooter: string;
+};
+
+/**
+ * Exports the `styles` object as the default export of this module.
+ * This allows components to import the styles like:
+ * `import styles from './DashboardPage.module.css';`
+ */
+export default styles;

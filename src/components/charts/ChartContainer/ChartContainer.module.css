@@ -1,0 +1,51 @@
+/**
+ * @file src/components/charts/ChartContainer/ChartContainer.module.css.d.ts
+ * @description TypeScript declaration for ChartContainer.module.css
+ *
+ * This file provides type definitions for the CSS module
+ * `src/components/charts/ChartContainer/ChartContainer.module.css`.
+ *
+ * When imported into a TypeScript file (e.g., `import styles from './ChartContainer.module.css';`),
+ * this module exports an object where:
+ * - Keys are the original CSS class names defined in the `.module.css` file.
+ * - Values are the generated unique class names (strings) by the CSS module loader.
+ *
+ * This declaration enables TypeScript to provide type checking, autocompletion,
+ * and compile-time error detection for CSS class names used in components,
+ * ensuring that only valid class names are referenced.
+ */
+declare const styles: {
+  /**
+   * Represents the main container for the chart.
+   * Corresponds to the `.chartContainer` class in the CSS module.
+   */
+  readonly chartContainer: string;
+  /**
+   * Represents the header section of the chart container, typically for titles or controls.
+   * Corresponds to the `.header` class in the CSS module.
+   */
+  readonly header: string;
+  /**
+   * Represents the content area where the actual chart visualization will be rendered.
+   * Corresponds to the `.content` class in the CSS module.
+   */
+  readonly content: string;
+  /**
+   * Represents a loading state overlay for the chart container.
+   * Corresponds to the `.loadingOverlay` class in the CSS module.
+   */
+  readonly loadingOverlay: string;
+  /**
+   * Represents the spinner element within the loading overlay.
+   * Corresponds to the `.spinner` class in the CSS module.
+   */
+  readonly spinner: string;
+  /**
+   * Represents any other class names defined in the CSS module.
+   * This index signature provides flexibility for additional classes
+   * without requiring manual updates to this declaration file for every new class.
+   */
+  readonly [key: string]: string;
+};
+
+export default styles;

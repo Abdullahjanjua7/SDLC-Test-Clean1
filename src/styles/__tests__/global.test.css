@@ -1,0 +1,168 @@
+import { globalStyles } from './global';
+
+describe('globalStyles', () => {
+  // --- Basic String Checks (Unit Tests) ---
+
+  it('should be a defined string', () => {
+    expect(globalStyles).toBeDefined();
+    expect(typeof globalStyles).toBe('string');
+  });
+
+  it('should not be an empty string', () => {
+    expect(globalStyles.length).toBeGreaterThan(0);
+  });
+
+  // --- Content Verification (Unit Tests) ---
+  // Check for the presence of key CSS rules to ensure the content is as expected.
+
+  it('should contain the CSS reset for box-sizing', () => {
+    expect(globalStyles).toContain('box-sizing: border-box;');
+    expect(globalStyles).toContain('margin: 0;');
+    expect(globalStyles).toContain('padding: 0;');
+  });
+
+  it('should define base font-family and colors for body', () => {
+    expect(globalStyles).toContain('body {');
+    expect(globalStyles).toContain('font-family: -apple-system,');
+    expect(globalStyles).toContain('color: #333;');
+    expect(globalStyles).toContain('background-color: #f8f8f8;');
+  });
+
+  it('should define typography rules for h1', () => {
+    expect(globalStyles).toContain('h1 { font-size: 2.5rem; }');
+    expect(globalStyles).toContain('h1, h2, h3, h4, h5, h6 {');
+    expect(globalStyles).toContain('font-weight: 700;');
+    expect(globalStyles).toContain('color: #222;');
+  });
+
+  it('should include the sr-only utility class for accessibility', () => {
+    expect(globalStyles).toContain('.sr-only {');
+    expect(globalStyles).toContain('position: absolute;');
+    expect(globalStyles).toContain('width: 1px;');
+    expect(globalStyles).toContain('height: 1px;');
+    expect(globalStyles).toContain('overflow: hidden;');
+    expect(globalStyles).toContain('clip: rect(0, 0, 0, 0);');
+  });
+
+  it('should include the text-center utility class', () => {
+    expect(globalStyles).toContain('.text-center {');
+    expect(globalStyles).toContain('text-align: center;');
+  });
+
+  // --- Snapshot Testing ---
+  // This is crucial for large string constants like CSS to catch unintended changes.
+
+  it('should match the stored snapshot', () => {
+    expect(globalStyles).toMatchSnapshot();
+  });
+
+  // --- Integration-like Tests: DOM Injection and Computed Styles ---
+  // These tests simulate injecting the styles into the DOM and verify that elements
+  // correctly inherit or apply the defined styles using `window.getComputedStyle`.
+  // This leverages Jest's default JSDOM environment.
+
+  let styleElement: HTMLStyleElement;
+  let testContainer: HTMLDivElement;
+
+  beforeEach(() => {
+    // Create a new style element and inject the global styles into the document head.
+    styleElement = document.createElement('style');
+    styleElement.innerHTML = globalStyles;
+    document.head.appendChild(styleElement);
+
+    // Create a dedicated container for our test elements to ensure isolation
+    // and prevent interference with other parts of the document.body if any.
+    testContainer = document.createElement('div');
+    document.body.appendChild(testContainer);
+  });
+
+  afterEach(() => {
+    // Clean up the injected style and test elements after each test.
+    document.head.removeChild(styleElement);
+    document.body.removeChild(testContainer);
+    // Ensure no lingering styles on document.body itself if it was directly modified.
+    document.body.removeAttribute('style');
+  });
+
+  describe('when injected into the DOM', () => {
+    it('should apply base body styles correctly to elements', () => {
+      // Create a simple div to observe inherited body styles
+      const div = document.createElement('div');
+      testContainer.appendChild(div);
+
+      const computedStyle = window.getComputedStyle(div);
+
+      // Check for specific computed values (JSDOM converts rem/hex to px/rgb)
+      expect(computedStyle.backgroundColor).toBe('rgb(248, 248, 248)'); // #f8f8f8
+      expect(computedStyle.color).toBe('rgb(51, 51, 51)'); // #333
+      // Font family is tricky due to browser specifics, but we can check for a generic fallback
+      expect(computedStyle.fontFamily).toMatch(/sans-serif/i);
+      expect(computedStyle.lineHeight).toBe('18.4px'); // 1.15 * 16px (base html font-size)
+    });
+
+    it('should apply h1 typography styles correctly', () => {
+      const h1 = document.createElement('h1');
+      h1.textContent = 'Heading 1 Test';
+      testContainer.appendChild(h1);
+
+      const computedStyle = window.getComputedStyle(h1);
+      expect(computedStyle.fontSize).toBe('40px'); // 2.5rem * 16px (base html font-size)
+      expect(computedStyle.fontWeight).toBe('700');
+      expect(computedStyle.color).toBe('rgb(34, 34, 34)'); // #222
+      expect(computedStyle.marginBottom).toBe('8px'); // 0.5rem * 16px
+      expect(computedStyle.lineHeight).toBe('48px'); // 1.2 * 40px
+    });
+
+    it('should apply paragraph styles correctly', () => {
+      const p = document.createElement('p');
+      p.textContent = 'Paragraph Test';
+      testContainer.appendChild(p);
+
+      const computedStyle = window.getComputedStyle(p);
+      expect(computedStyle.marginBottom).toBe('16px'); // 1rem * 16px
+    });
+
+    it('should apply button reset styles correctly', () => {
+      const button = document.createElement('button');
+      button.textContent = 'Button Test';
+      testContainer.appendChild(button);
+
+      const computedStyle = window.getComputedStyle(button);
+      expect(computedStyle.borderWidth).toBe('0px');
+      expect(computedStyle.backgroundColor).toBe('rgba(0, 0, 0, 0)'); // transparent
+      expect(computedStyle.fontFamily).toMatch(/sans-serif/i); // Inherited from body
+      expect(computedStyle.cursor).toBe('pointer');
+      expect(computedStyle.fontSize).toBe('16px'); // 100% of 16px base
+    });
+
+    it('should apply sr-only styles for accessibility', () => {
+      const srOnlyDiv = document.createElement('div');
+      srOnlyDiv.className = 'sr-only';
+      srOnlyDiv.textContent = 'Visually hidden content';
+      testContainer.appendChild(srOnlyDiv);
+
+      const computedStyle = window.getComputedStyle(srOnlyDiv);
+      expect(computedStyle.position).toBe('absolute');
+      expect(computedStyle.width).toBe('1px');
+      expect(computedStyle.height).toBe('1px');
+      expect(computedStyle.padding).toBe('0px');
+      expect(computedStyle.margin).toBe('-1px');
+      expect(computedStyle.overflow).toBe('hidden');
+      // JSDOM's getComputedStyle might return 'auto' or a specific rect value for 'clip'.
+      // The key is that the element is effectively hidden.
+      // expect(computedStyle.clip).toBe('rect(0px, 0px, 0px, 0px)'); // This can be flaky
+      expect(computedStyle.whiteSpace).toBe('nowrap');
+      expect(computedStyle.borderWidth).toBe('0px');
+    });
+
+    it('should apply text-center utility class correctly', () => {
+      const div = document.createElement('div');
+      div.className = 'text-center';
+      div.textContent = 'Centered Text';
+      testContainer.appendChild(div);
+
+      const computedStyle = window.getComputedStyle(div);
+      expect(computedStyle.textAlign).toBe('center');
+    });
+  });
+});

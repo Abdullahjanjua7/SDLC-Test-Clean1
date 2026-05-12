@@ -1,0 +1,49 @@
+jest.mock('../src/components/layout/DashboardShell.module.css', () => ({
+  dashboardShell: 'dashboardShell_abc123',
+  header: 'header_def456',
+  sidebar: 'sidebar_ghi789',
+  mainContent: 'mainContent_jkl012',
+  footer: 'footer_mno345',
+}));
+
+import styles from '../src/components/layout/DashboardShell.module.css';
+
+describe('DashboardShell.module.css styles object', () => {
+  it('should be an object and not null', () => {
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  it('should export all expected CSS class names as non-empty strings', () => {
+    const expectedClassNames = [
+      'dashboardShell',
+      'header',
+      'sidebar',
+      'mainContent',
+      'footer',
+    ];
+
+    expectedClassNames.forEach(className => {
+      expect(styles).toHaveProperty(className);
+      expect(typeof (styles as any)[className]).toBe('string');
+      expect((styles as any)[className]).not.toBe('');
+    });
+  });
+
+  it('should only export the expected CSS class names', () => {
+    const expectedClassNames = [
+      'dashboardShell',
+      'header',
+      'sidebar',
+      'mainContent',
+      'footer',
+    ];
+    const actualClassNames = Object.keys(styles);
+
+    expect(actualClassNames.sort()).toEqual(expectedClassNames.sort());
+  });
+
+  it('should match the snapshot for the styles object structure', () => {
+    expect(styles).toMatchSnapshot();
+  });
+});

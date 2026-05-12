@@ -1,0 +1,84 @@
+// src/components/kpis/MetricCard/MetricCard.module.test.ts
+
+// Mock the CSS module import.
+// This mock simulates the object that a CSS module loader (e.g., css-loader)
+// would export when importing './MetricCard.module.css'.
+jest.mock('./MetricCard.module.css', () => ({
+  metricCardContainer: 'MetricCard_metricCardContainer__mocked',
+  metricCardHeader: 'MetricCard_metricCardHeader__mocked',
+  metricCardTitle: 'MetricCard_metricCardTitle__mocked',
+  metricCardValue: 'MetricCard_metricCardValue__mocked',
+  metricCardChange: 'MetricCard_metricCardChange__mocked',
+  metricCardChangePositive: 'MetricCard_metricCardChangePositive__mocked',
+  metricCardChangeNegative: 'MetricCard_metricCardChangeNegative__mocked',
+  metricCardDescription: 'MetricCard_metricCardDescription__mocked',
+  metricCardFooter: 'MetricCard_metricCardFooter__mocked',
+}));
+
+// Import the mocked styles. Jest intercepts this import and returns the object
+// defined in `jest.mock()`.
+import styles from './MetricCard.module.css';
+
+describe('MetricCard.module.css type definition contract', () => {
+  // Define the expected keys based on the MetricCardModuleCss interface
+  const expectedClassNames = [
+    'metricCardContainer',
+    'metricCardHeader',
+    'metricCardTitle',
+    'metricCardValue',
+    'metricCardChange',
+    'metricCardChangePositive',
+    'metricCardChangeNegative',
+    'metricCardDescription',
+    'metricCardFooter',
+  ];
+
+  it('should export an object with all expected CSS class names', () => {
+    // Verify that the imported 'styles' is a non-null object
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+
+    // Get the keys from the mocked styles object
+    const receivedClassNames = Object.keys(styles);
+
+    // Ensure the number of keys matches the expected count
+    expect(receivedClassNames).toHaveLength(expectedClassNames.length);
+
+    // Verify each expected class name exists and its value is a string
+    expectedClassNames.forEach(className => {
+      expect(styles).toHaveProperty(className);
+      expect(typeof (styles as any)[className]).toBe('string');
+      // Optionally, check that the string is not empty, which is typical for CSS class names
+      expect((styles as any)[className]).not.toBe('');
+    });
+  });
+
+  it('should not contain any unexpected class names', () => {
+    // Ensure no extra properties are present beyond what's defined in the interface
+    const receivedClassNames = Object.keys(styles);
+    receivedClassNames.forEach(className => {
+      expect(expectedClassNames).toContain(className);
+    });
+  });
+
+  it('should match the expected styles object structure via snapshot', () => {
+    // Snapshot testing provides a robust way to ensure the structure and
+    // mocked values of the styles object remain consistent over time.
+    expect(styles).toMatchSnapshot();
+  });
+
+  it('should have string values for all class names, reflecting the readonly contract', () => {
+    // Although 'readonly' is a compile-time TypeScript feature,
+    // this test reinforces the expectation that the values are simple strings,
+    // which are effectively immutable in this context.
+    expectedClassNames.forEach(className => {
+      const value = (styles as any)[className];
+      expect(typeof value).toBe('string');
+      // Further check for non-empty strings, which is a common expectation for CSS class names
+      expect(value).not.toBe('');
+    });
+  });
+});
+
+// No specific setup or teardown functions are required for this module,
+// as it's a simple object import and Jest handles the mocking environment.

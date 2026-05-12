@@ -1,0 +1,83 @@
+// __mocks__/src/components/ui/Input.module.css.ts
+// This file mocks the actual CSS module export for testing purposes.
+// Jest will automatically pick this up when 'src/components/ui/Input.module.css' is imported.
+
+const mockStyles = {
+  input: 'Input_input__abc12',
+  wrapper: 'Input_wrapper__def34',
+  label: 'Input_label__ghi56',
+  errorText: 'Input_errorText__jkl78',
+  disabled: 'Input_disabled__mno90',
+  invalid: 'Input_invalid__pqr12',
+  focused: 'Input_focused__stu34',
+  // An example of a class name that would fall under the index signature
+  someCustomClass: 'Input_someCustomClass__xyz90',
+  // Another example for index signature
+  anotherModifier: 'Input_anotherModifier__12345',
+};
+
+export default mockStyles;
+```
+
+```typescript
+// src/components/ui/Input.module.test.ts
+// Assuming the actual Input.module.css is located at src/components/ui/Input.module.css
+// and Jest is configured to use the mock from __mocks__/src/components/ui/Input.module.css.ts
+
+import styles from './Input.module.css'; // This will import the mocked module
+
+describe('Input.module.css type declaration and mocked runtime behavior', () => {
+  // Test 1: Ensure the default export exists and is an object
+  it('should export a default object representing the CSS module styles', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  // Test 2: Verify all explicitly declared properties exist and are strings
+  const explicitlyDeclaredProperties = [
+    'input',
+    'wrapper',
+    'label',
+    'errorText',
+    'disabled',
+    'invalid',
+    'focused',
+  ];
+
+  explicitlyDeclaredProperties.forEach((prop) => {
+    it(`should have a '${prop}' property of type string`, () => {
+      expect(styles).toHaveProperty(prop);
+      expect(typeof styles[prop as keyof typeof styles]).toBe('string');
+      // In a real CSS module, class names are typically non-empty.
+      expect(styles[prop as keyof typeof styles].length).toBeGreaterThan(0);
+    });
+  });
+
+  // Test 3: Verify the index signature allows for additional string properties
+  it('should allow for additional string properties via the index signature', () => {
+    // These properties are defined in the mock to simulate classes not explicitly listed
+    // in the InputModuleCss interface but covered by the index signature.
+    const indexSignatureProperties = ['someCustomClass', 'anotherModifier'];
+
+    indexSignatureProperties.forEach((prop) => {
+      expect(styles).toHaveProperty(prop);
+      expect(typeof styles[prop as keyof typeof styles]).toBe('string');
+      expect(styles[prop as keyof typeof styles].length).toBeGreaterThan(0);
+    });
+  });
+
+  // Test 4: Ensure that accessing a non-existent property (not in mock) returns undefined
+  // This implicitly tests that the type system would catch this, but at runtime,
+  // if the CSS module didn't generate it, it would be undefined.
+  it('should return undefined for properties not defined in the CSS module', () => {
+    const nonExistentProperty = 'nonExistentClass';
+    expect(styles).not.toHaveProperty(nonExistentProperty);
+    expect((styles as any)[nonExistentProperty]).toBeUndefined();
+  });
+
+  // Test 5: Snapshot test to ensure the overall structure and values of the styles object remain consistent
+  it('should match the snapshot for its structure and generated class names', () => {
+    expect(styles).toMatchSnapshot();
+  });
+});

@@ -1,0 +1,22 @@
+/**
+ * Type definitions for CSS modules.
+ * This file declares the shape of the imported CSS module,
+ * allowing TypeScript to understand the structure of the styles object.
+ *
+ * When a .module.css file is imported, it typically resolves to an object
+ * where keys are the original CSS class names and values are the
+ * unique, generated class names (e.g., 'chartContainer_abc123').
+ *
+ * This generic declaration ensures type safety for CSS module imports
+ * without requiring specific knowledge of all class names within the CSS file.
+ */
+declare const styles: {
+  /**
+   * Represents a CSS class name from the module.
+   * The key is the original class name defined in the .module.css file,
+   * and the value is the unique, generated class name string.
+   */
+  readonly [key: string]: string;
+};
+
+export default styles;

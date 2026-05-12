@@ -1,0 +1,31 @@
+/**
+ * @file src/components/layout/Sidebar.module.css.d.ts
+ * @description Type definitions for the CSS module `Sidebar.module.css`.
+ * This file provides TypeScript type information for importing CSS classes
+ * defined in `Sidebar.module.css`.
+ *
+ * When `Sidebar.module.css` is imported into a TypeScript file, it resolves
+ * to an object where keys are the original CSS class names and values are
+ * the unique, generated class names (e.g., `sidebar_module__sidebar___abc12`).
+ *
+ * This declaration ensures type safety and autocompletion when using CSS Modules.
+ */
+
+/**
+ * Defines the structure of the object returned when importing `Sidebar.module.css`.
+ * It's an object where each key is a string (representing a CSS class name)
+ * and each value is also a string (representing the unique, generated class name).
+ *
+ * The `readonly` modifier indicates that the properties of this object
+ * should not be modified after import.
+ */
+declare const styles: {
+  readonly [key: string]: string;
+};
+
+/**
+ * Exports the `styles` object as the default export of this module.
+ * This allows consumers to import it like:
+ * `import styles from './Sidebar.module.css';`
+ */
+export default styles;

@@ -1,0 +1,65 @@
+import styles from './DashboardFilters.module.css';
+
+describe('DashboardFilters.module.css', () => {
+  // List of class names declared in DashboardFilters.module.css.d.ts
+  const expectedClassNames = [
+    'filtersContainer',
+    'filterGroup',
+    'filterItem',
+    'filterLabel',
+    'filterInput',
+    'filterSelect',
+    'filterButton',
+    'applyFiltersButton',
+    'resetFiltersButton',
+    'activeFilterIndicator',
+    'errorState',
+    'loadingState',
+    'dateRangePickerContainer',
+    'searchInput',
+    'searchButton',
+    'clearSearchButton',
+    'dropdownMenu',
+  ];
+
+  it('should ensure the imported styles object is defined and an object', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  it('should contain all expected CSS class names as string properties', () => {
+    expectedClassNames.forEach(className => {
+      expect(styles).toHaveProperty(className);
+      expect(typeof styles[className]).toBe('string');
+      // Depending on your Jest CSS module transformer configuration (e.g., jest-css-modules),
+      // the value might be the class name itself or a generic string.
+      // If your mock returns the class name itself, you can uncomment the following:
+      // expect(styles[className]).toBe(className);
+    });
+  });
+
+  it('should not contain any unexpected class names', () => {
+    const actualClassNames = Object.keys(styles);
+    expect(actualClassNames.length).toBe(expectedClassNames.length);
+    actualClassNames.forEach(className => {
+      expect(expectedClassNames).toContain(className);
+    });
+  });
+
+  it('should match the snapshot of the styles object', () => {
+    // This snapshot captures the structure and values provided by the CSS module mock.
+    // It helps ensure that if the .d.ts file or the CSS module itself changes,
+    // we are aware of the impact on the imported styles object.
+    expect(styles).toMatchSnapshot();
+  });
+
+  // Note: This module is a TypeScript declaration file (.d.ts) for a CSS module.
+  // It defines types, not executable code (functions, classes, or logic).
+  // Therefore, traditional unit tests for functions, different scenarios,
+  // error conditions, or specific mocking of runtime behavior are not applicable
+  // directly to the .d.ts file itself.
+  // The tests above verify that the runtime object produced by importing
+  // the corresponding .module.css file conforms to the structure declared
+  // in this .d.ts file, assuming a standard Jest setup for CSS modules.
+});

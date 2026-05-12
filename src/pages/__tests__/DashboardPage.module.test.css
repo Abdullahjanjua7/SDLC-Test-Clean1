@@ -1,0 +1,82 @@
+// __mocks__/src/pages/DashboardPage.module.css.ts
+// This mock simulates the output of a CSS module loader for Jest.
+// It provides string values for each class name defined in the DashboardPageStyles interface.
+const mockStyles = {
+  dashboardContainer: 'DashboardPage_dashboardContainer__abc12',
+  dashboardHeader: 'DashboardPage_dashboardHeader__def34',
+  dashboardSidebar: 'DashboardPage_dashboardSidebar__ghi56',
+  dashboardMainContent: 'DashboardPage_dashboardMainContent__jkl78',
+  dashboardGrid: 'DashboardPage_dashboardGrid__mno90',
+  dashboardGridItem: 'DashboardPage_dashboardGridItem__pqr12',
+  dashboardCard: 'DashboardPage_dashboardCard__stu34',
+  dashboardCardHeader: 'DashboardPage_dashboardCardHeader__vwx56',
+  dashboardCardContent: 'DashboardPage_dashboardCardContent__yza78',
+  dashboardFooter: 'DashboardPage_dashboardFooter__bcd90',
+  gridSpanFull: 'DashboardPage_gridSpanFull__efg12',
+  gridSpanHalf: 'DashboardPage_gridSpanHalf__hij34',
+  sectionTitle: 'DashboardPage_sectionTitle__klm56',
+  sectionDescription: 'DashboardPage_sectionDescription__nop78',
+};
+
+export default mockStyles;
+```
+```typescript
+// src/pages/DashboardPage.module.test.ts
+// Assuming the source file is located at src/pages/DashboardPage.module.css
+// Jest will automatically use the mock defined in __mocks__/src/pages/DashboardPage.module.css.ts
+import styles from './DashboardPage.module.css';
+
+describe('DashboardPage.module.css type definitions', () => {
+  // List all expected class names based on the DashboardPageStyles interface
+  const expectedClassNames = [
+    'dashboardContainer',
+    'dashboardHeader',
+    'dashboardSidebar',
+    'dashboardMainContent',
+    'dashboardGrid',
+    'dashboardGridItem',
+    'dashboardCard',
+    'dashboardCardHeader',
+    'dashboardCardContent',
+    'dashboardFooter',
+    'gridSpanFull',
+    'gridSpanHalf',
+    'sectionTitle',
+    'sectionDescription',
+  ];
+
+  it('should export an object by default', () => {
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  it('should contain all defined CSS class names as properties', () => {
+    expectedClassNames.forEach(className => {
+      expect(styles).toHaveProperty(className);
+    });
+  });
+
+  it('should have string values for all CSS class name properties', () => {
+    expectedClassNames.forEach(className => {
+      const value = styles[className as keyof typeof styles];
+      expect(typeof value).toBe('string');
+      // In a real CSS module, these would be non-empty hashed strings.
+      // We check for length > 0 to ensure the mock provides meaningful values.
+      expect(value.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('should not contain any unexpected properties', () => {
+    const actualProperties = Object.keys(styles);
+    expect(actualProperties.length).toBe(expectedClassNames.length); // Ensure no extra properties
+    actualProperties.forEach(prop => {
+      expect(expectedClassNames).toContain(prop); // Ensure all actual properties are expected
+    });
+  });
+
+  // Snapshot test to ensure the structure and mocked values remain consistent over time.
+  // This helps catch accidental changes to the interface or the mock.
+  it('should match the expected structure and values via snapshot', () => {
+    expect(styles).toMatchSnapshot();
+  });
+});

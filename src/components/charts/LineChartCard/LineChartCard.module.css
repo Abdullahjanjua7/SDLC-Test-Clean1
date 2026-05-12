@@ -1,0 +1,40 @@
+/**
+ * @file Type definitions for the CSS module `LineChartCard.module.css`.
+ * @description This file provides TypeScript type declarations for the CSS module,
+ *              allowing TypeScript to understand the shape of the imported styles object.
+ *              When a CSS module is imported, it typically returns an object where
+ *              keys are the original CSS class names and values are the unique,
+ *              generated class names (strings) for runtime use.
+ *
+ * @example
+ * // In a TypeScript/React component:
+ * import styles from './LineChartCard.module.css';
+ *
+ * function LineChartCard() {
+ *   return (
+ *     <div className={styles.cardContainer}>
+ *       <h2 className={styles.cardTitle}>Line Chart</h2>
+ *       {/ * ... chart content * /}
+ *     </div>
+ *   );
+ * }
+ */
+declare const styles: {
+  /**
+   * A string index signature indicating that any string key will map to a string value.
+   * This represents the CSS class names (keys) mapping to their unique generated names (values).
+   * The `readonly` modifier indicates that the properties of this object should not be modified
+   * after creation, which is typical for imported CSS module objects.
+   *
+   * @type {Readonly<{[key: string]: string}>}
+   */
+  readonly [key: string]: string;
+};
+
+/**
+ * Exports the `styles` object as the default export of this module.
+ * This allows importing the CSS module like: `import styles from './LineChartCard.module.css';`
+ *
+ * @default styles
+ */
+export default styles;

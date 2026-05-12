@@ -1,0 +1,95 @@
+// DoughnutChart.module.test.ts
+// This test file assumes that your Jest configuration includes a moduleNameMapper
+// to handle CSS module imports, typically using 'identity-obj-proxy'.
+// Example jest.config.js snippet:
+// module.exports = {
+//   moduleNameMapper: {
+//     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
+//   },
+// };
+
+import styles from './DoughnutChart.module.css'; // Import the actual CSS module, which is typed by the .d.ts file
+
+describe('DoughnutChart.module.css', () => {
+  /**
+   * Test Case 1: Ensure the styles object is exported and is a valid object.
+   * This verifies the basic existence and type of the module's default export.
+   */
+  it('should export a defined styles object', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  /**
+   * Test Case 2: Verify that all expected CSS class names declared in the
+   * DoughnutChartStyles interface are present as properties in the exported styles object.
+   * This ensures type safety and autocompletion benefits are correctly reflected at runtime.
+   */
+  it('should contain all expected CSS class names as string properties', () => {
+    const expectedClassNames = [
+      'doughnutChartContainer',
+      'chartCanvas',
+      'chartTitle',
+      'chartDescription',
+      'legend',
+      'legendItem',
+      'legendColorBox',
+      'legendLabel',
+      'legendValue',
+      'tooltip',
+      'tooltipTitle',
+      'tooltipBody',
+      'tooltipItem',
+      'tooltipColor',
+    ];
+
+    expectedClassNames.forEach(className => {
+      // Check if the property exists
+      expect(styles).toHaveProperty(className);
+      // Check if the property's value is a string
+      expect(typeof styles[className as keyof typeof styles]).toBe('string');
+    });
+  });
+
+  /**
+   * Test Case 3: If 'identity-obj-proxy' is used for mocking, the value of each
+   * class name property should be the class name itself. This confirms the
+   * mocking strategy is working as expected, which is crucial for components
+   * consuming these styles in tests.
+   */
+  it('should return the class name itself when mocked with identity-obj-proxy', () => {
+    // This test relies on the Jest configuration using 'identity-obj-proxy'
+    // for CSS module imports. If a different mock is used, this test might fail
+    // or need adjustment.
+    expect(styles.doughnutChartContainer).toBe('doughnutChartContainer');
+    expect(styles.chartCanvas).toBe('chartCanvas');
+    expect(styles.chartTitle).toBe('chartTitle');
+    expect(styles.chartDescription).toBe('chartDescription');
+    expect(styles.legend).toBe('legend');
+    expect(styles.legendItem).toBe('legendItem');
+    expect(styles.legendColorBox).toBe('legendColorBox');
+    expect(styles.legendLabel).toBe('legendLabel');
+    expect(styles.legendValue).toBe('legendValue');
+    expect(styles.tooltip).toBe('tooltip');
+    expect(styles.tooltipTitle).toBe('tooltipTitle');
+    expect(styles.tooltipBody).toBe('tooltipBody');
+    expect(styles.tooltipItem).toBe('tooltipItem');
+    expect(styles.tooltipColor).toBe('tooltipColor');
+  });
+
+  /**
+   * Test Case 4: Snapshot test for the entire styles object.
+   * This provides a quick way to detect any unexpected additions or removals
+   * of class names, or changes in the mock's output.
+   */
+  it('should match the expected snapshot', () => {
+    expect(styles).toMatchSnapshot();
+  });
+
+  // Note: Since the provided file is a TypeScript declaration file (.d.ts) for a CSS module,
+  // there are no executable functions, classes, or complex logic to test for different
+  // scenarios, inputs, or error conditions in the traditional sense.
+  // The tests focus on verifying the structure and type conformity of the
+  // object that would be imported at runtime, as defined by this declaration.
+});

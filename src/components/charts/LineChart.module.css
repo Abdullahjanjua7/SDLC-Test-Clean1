@@ -1,0 +1,109 @@
+/**
+ * @file Type definitions for the CSS module `src/components/charts/LineChart.module.css`.
+ * @description This file provides TypeScript type declarations for the CSS module,
+ *              allowing for type-safe access to its class names.
+ *              When `LineChart.module.css` is imported, it resolves to an object
+ *              where keys are the original CSS class names and values are the
+ *              generated unique class names.
+ */
+
+/**
+ * Interface representing the structure of the object exported by `LineChart.module.css`.
+ * Each property corresponds to a CSS class defined in the module.
+ */
+interface LineChartStyles {
+  /**
+   * Style for the main container of the line chart component.
+   */
+  readonly lineChartContainer: string;
+  /**
+   * Style for the wrapper element that holds the chart's SVG or canvas.
+   */
+  readonly chartWrapper: string;
+  /**
+   * Style for the primary drawing area of the chart (e.g., SVG element).
+   */
+  readonly chartArea: string;
+  /**
+   * Style for the actual line path(s) drawn on the chart.
+   */
+  readonly line: string;
+  /**
+   * Style for individual data points or markers on the line.
+   */
+  readonly point: string;
+  /**
+   * Style for the X-axis component of the chart.
+   */
+  readonly xAxis: string;
+  /**
+   * Style for the Y-axis component of the chart.
+   */
+  readonly yAxis: string;
+  /**
+   * Style for the tooltip container that appears on hover.
+   */
+  readonly tooltip: string;
+  /**
+   * Style for the title or header text within the tooltip.
+   */
+  readonly tooltipTitle: string;
+  /**
+   * Style for the value display within the tooltip.
+   */
+  readonly tooltipValue: string;
+  /**
+   * Style for grid lines (if present) in the chart background.
+   */
+  readonly gridLine: string;
+  /**
+   * Style for the chart legend container.
+   */
+  readonly legend: string;
+  /**
+   * Style for an individual item within the legend.
+   */
+  readonly legendItem: string;
+  /**
+   * Style for the color swatch or indicator within a legend item.
+   */
+  readonly legendColor: string;
+  /**
+   * Style for the label text within a legend item.
+   */
+  readonly legendLabel: string;
+  /**
+   * Style for the main title of the chart.
+   */
+  readonly chartTitle: string;
+  /**
+   * Style for a subtitle or secondary title of the chart.
+   */
+  readonly chartSubtitle: string;
+  /**
+   * Style for a footer or source information area of the chart.
+   */
+  readonly chartFooter: string;
+  /**
+   * Generic style for an active or highlighted state of a chart element.
+   */
+  readonly active: string;
+  /**
+   * Generic style for a disabled state of a chart element.
+   */
+  readonly disabled: string;
+}
+
+/**
+ * Declares the default export of the CSS module.
+ * When you import `LineChart.module.css`, you get an object conforming
+ * to the `LineChartStyles` interface.
+ *
+ * @example
+ * import styles from './LineChart.module.css';
+ *
+ * <div className={styles.lineChartContainer}>...</div>
+ */
+declare const styles: LineChartStyles;
+
+export default styles;

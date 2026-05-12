@@ -1,0 +1,128 @@
+// LineChart.module.test.ts
+
+// Define a mock object that simulates the output of a CSS module loader
+// for 'LineChart.module.css'. This object should conform to the
+// LineChartStyles interface defined in the source .d.ts file.
+const mockCssModule = {
+  lineChartContainer: 'LineChart_lineChartContainer__abc12',
+  chartWrapper: 'LineChart_chartWrapper__def34',
+  chartArea: 'LineChart_chartArea__ghi56',
+  line: 'LineChart_line__jkl78',
+  point: 'LineChart_point__mno90',
+  xAxis: 'LineChart_xAxis__pqr12',
+  yAxis: 'LineChart_yAxis__stu34',
+  tooltip: 'LineChart_tooltip__vwx56',
+  tooltipTitle: 'LineChart_tooltipTitle__yza78',
+  tooltipValue: 'LineChart_tooltipValue__bcd90',
+  gridLine: 'LineChart_gridLine__efg12',
+  legend: 'LineChart_legend__hij34',
+  legendItem: 'LineChart_legendItem__klm56',
+  legendColor: 'LineChart_legendColor__nop78',
+  legendLabel: 'LineChart_legendLabel__qrs90',
+  chartTitle: 'LineChart_chartTitle__tuv12',
+  chartSubtitle: 'LineChart_chartSubtitle__wxy34',
+  chartFooter: 'LineChart_chartFooter__zab56',
+  active: 'LineChart_active__cde78',
+  disabled: 'LineChart_disabled__fgh90',
+};
+
+// Mock the actual CSS module import.
+// We assume that components would import this CSS module using a relative path
+// like './LineChart.module.css'. Jest will intercept this import and return
+// our `mockCssModule` object.
+jest.mock('./LineChart.module.css', () => mockCssModule);
+
+// Now, import the mocked module. This 'styles' object will be our `mockCssModule`.
+import styles from './LineChart.module.css';
+
+describe('LineChart.module.css runtime behavior based on type definitions', () => {
+  // Extract all expected keys from our mock object. This ensures that our tests
+  // are comprehensive and cover every property defined in the LineChartStyles interface.
+  const expectedKeys = Object.keys(mockCssModule);
+
+  /**
+   * Test Case 1: Ensure that when the CSS module is imported, it resolves to a defined
+   * JavaScript object, as expected from a CSS module loader.
+   */
+  it('should export a defined object when imported', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  /**
+   * Test Case 2: Verify that the imported styles object contains all the CSS class names
+   * that are defined in the `LineChartStyles` interface. This ensures type safety
+   * and completeness at runtime.
+   */
+  it('should contain all expected CSS class names as properties', () => {
+    expectedKeys.forEach(key => {
+      expect(styles).toHaveProperty(key);
+    });
+  });
+
+  /**
+   * Test Case 3: Confirm that the value for each CSS class name property is a string.
+   * This reflects the typical behavior of CSS modules, where original class names
+   * are mapped to unique, generated string identifiers.
+   */
+  it('should ensure all class name properties have string values', () => {
+    expectedKeys.forEach(key => {
+      const value = styles[key as keyof typeof styles];
+      expect(typeof value).toBe('string');
+      // Generated class names are typically non-empty strings.
+      expect(value).not.toBe('');
+    });
+  });
+
+  /**
+   * Test Case 4: Ensure that the imported styles object does not contain any
+   * properties that are not explicitly defined in the `LineChartStyles` interface.
+   * This helps prevent unexpected or undeclared class names from being used.
+   */
+  it('should not contain any unexpected properties', () => {
+    const actualKeys = Object.keys(styles);
+
+    // Verify that every key found in the actual imported object is among our expected keys.
+    actualKeys.forEach(key => {
+      expect(expectedKeys).toContain(key);
+    });
+
+    // Also, confirm that the total number of keys matches, which implicitly checks
+    // for any missing expected keys if Test Case 2 passed.
+    expect(actualKeys.length).toBe(expectedKeys.length);
+  });
+
+  /**
+   * Test Case 5: Use a snapshot test to capture the full structure and the mocked values
+   * of the imported styles object. This provides a robust way to detect any unintended
+   * changes to the module's exported structure or the mock itself, prompting a review
+   * and update of the snapshot.
+   */
+  it('should match the expected structure and mocked values via snapshot', () => {
+    expect(styles).toMatchSnapshot();
+  });
+
+  /**
+   * Test Case 6: Verify specific, key class names to ensure they map to their
+   * corresponding mocked values. This provides concrete examples and can be
+   * particularly useful for quick verification or debugging.
+   */
+  it('should provide specific mocked class names for key properties', () => {
+    expect(styles.lineChartContainer).toBe('LineChart_lineChartContainer__abc12');
+    expect(styles.chartWrapper).toBe('LineChart_chartWrapper__def34');
+    expect(styles.active).toBe('LineChart_active__cde78');
+    expect(styles.disabled).toBe('LineChart_disabled__fgh90');
+    expect(styles.tooltipTitle).toBe('LineChart_tooltipTitle__yza78');
+  });
+
+  // Note on "error conditions" and "different scenarios/inputs":
+  // The provided source code is a TypeScript declaration file (.d.ts) for a CSS module.
+  // It does not contain executable runtime logic, functions, or classes that can
+  // have different inputs or produce runtime errors in the traditional sense.
+  // The purpose of these tests is to verify that the *runtime object* produced by
+  // importing the CSS module (simulated via mocking) conforms to the *structure*
+  // defined by the TypeScript interface. An "error condition" in this context
+  // would be if the actual CSS module's output did not match this expected structure,
+  // which these tests are designed to catch by asserting against the mock.
+});

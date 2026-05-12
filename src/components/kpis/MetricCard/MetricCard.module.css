@@ -1,0 +1,59 @@
+/**
+ * This file defines the TypeScript interface for the CSS module
+ * `src/components/kpis/MetricCard/MetricCard.module.css`.
+ * It provides type safety when importing and using CSS class names
+ * from the module in TypeScript components.
+ *
+ * This is a declaration file (`.d.ts`) that describes the shape of the
+ * object exported by the CSS module, allowing TypeScript to understand
+ * the available class names and prevent typos or access to non-existent classes.
+ */
+interface MetricCardModuleCss {
+  /**
+   * The main container class for the metric card component.
+   */
+  readonly metricCardContainer: string;
+  /**
+   * Styling for the header section of the metric card.
+   */
+  readonly metricCardHeader: string;
+  /**
+   * Styling for the title or label of the metric.
+   */
+  readonly metricCardTitle: string;
+  /**
+   * Styling for the primary numerical value of the metric.
+   */
+  readonly metricCardValue: string;
+  /**
+   * Styling for the indicator showing change (e.g., percentage change).
+   */
+  readonly metricCardChange: string;
+  /**
+   * Modifier class for `metricCardChange` when the change is positive.
+   * Typically used to apply green color or an upward arrow.
+   */
+  readonly metricCardChangePositive: string;
+  /**
+   * Modifier class for `metricCardChange` when the change is negative.
+   * Typically used to apply red color or a downward arrow.
+   */
+  readonly metricCardChangeNegative: string;
+  /**
+   * Styling for additional descriptive text or context for the metric.
+   */
+  readonly metricCardDescription: string;
+  /**
+   * Styling for the footer section of the metric card.
+   */
+  readonly metricCardFooter: string;
+}
+
+/**
+ * Declares the default export of the CSS module.
+ * When you import `styles` from `./MetricCard.module.css`,
+ * `styles` will be typed as `MetricCardModuleCss`, providing
+ * autocompletion and compile-time checks for your class names.
+ */
+declare const styles: MetricCardModuleCss;
+export default styles;

@@ -1,0 +1,136 @@
+/**
+ * @file This file contains global CSS styles for base elements,
+ *       CSS resets, and typography, exported as a TypeScript string.
+ *       It represents the content of `src/styles/global.css`.
+ */
+
+/**
+ * Global CSS styles including base resets and typography.
+ * This string can be used to inject styles dynamically into the DOM
+ * (e.g., via a `<style>` tag) or as part of a CSS-in-JS solution.
+ *
+ * It includes:
+ * - A modern, minimal CSS reset to ensure consistent styling across browsers.
+ * - Base styles for the `body` element, defining default font, colors, and background.
+ * - Typography rules for headings (h1-h6), paragraphs, small text, and strong text.
+ * - Example utility classes for common styling needs.
+ *
+ * @remarks
+ * While this file exports the CSS as a string, in many modern web projects,
+ * a `.css` file would be directly imported (e.g., `import './global.css';`)
+ * and handled by a build tool like Webpack or Vite to inject styles.
+ * This TypeScript representation is useful for scenarios requiring programmatic
+ * access to the CSS content.
+ */
+export const globalStyles: string = `
+/*
+  Global CSS for base styles, resets, and typography.
+  This content is typically found in src/styles/global.css.
+*/
+
+/* CSS Reset - A modern, minimal reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  line-height: 1.15; /* 1. Correct the line height in all browsers. */
+  -webkit-text-size-adjust: 100%; /* 2. Prevent font size inflation in landscape mode. */
+  font-size: 16px; /* Base font size */
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #333;
+  background-color: #f8f8f8;
+  min-height: 100vh; /* Ensure body takes full viewport height */
+  text-rendering: optimizeLegibility;
+  -webkit-font-feature-settings: "liga" on, "clig" on;
+  -moz-font-feature-settings: "liga" on, "clig" on;
+  font-feature-settings: "liga" on, "clig" on;
+}
+
+/* Base Styles */
+a {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit; /* 1. Inherit font from body. */
+  font-size: 100%; /* 2. Correct font size not inheriting in all browsers. */
+  line-height: 1.15; /* 3. Correct line height not inheriting in all browsers. */
+  border: none; /* Remove default border */
+  background-color: transparent; /* Remove default background */
+  color: inherit; /* Inherit text color */
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #222;
+}
+
+h1 { font-size: 2.5rem; } /* ~40px */
+h2 { font-size: 2rem; }   /* ~32px */
+h3 { font-size: 1.75rem; } /* ~28px */
+h4 { font-size: 1.5rem; }  /* ~24px */
+h5 { font-size: 1.25rem; } /* ~20px */
+h6 { font-size: 1rem; }    /* ~16px */
+
+p {
+  margin-bottom: 1rem;
+}
+
+small {
+  font-size: 80%;
+}
+
+strong, b {
+  font-weight: 700;
+}
+
+em, i {
+  font-style: italic;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+/* Utility classes (example) */
+.text-center {
+  text-align: center;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+`;

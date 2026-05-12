@@ -1,0 +1,75 @@
+/**
+ * @file src/components/charts/DoughnutChart/DoughnutChart.module.css.d.ts
+ * @description TypeScript declaration for the CSS module DoughnutChart.module.css.
+ * This file defines the shape of the object exported when importing the CSS module,
+ * providing type safety for CSS class names used in TypeScript/React components.
+ */
+
+/**
+ * Defines the structure of the CSS module for DoughnutChart.
+ * Each key represents a CSS class name defined in DoughnutChart.module.css,
+ * and its value is the unique, generated class name string that can be used
+ * in React components (e.g., `<div className={styles.doughnutChartContainer}>`).
+ */
+declare const styles: {
+  /**
+   * Class name for the main container of the DoughnutChart component.
+   * Typically used to wrap the entire chart and its related elements.
+   */
+  readonly doughnutChartContainer: string;
+
+  /**
+   * Class name for an inner wrapper around the chart canvas,
+   * often used for positioning or sizing the chart itself.
+   */
+  readonly chartWrapper: string;
+
+  /**
+   * Class name for the HTML canvas element where the Doughnut Chart is rendered.
+   */
+  readonly chartCanvas: string;
+
+  /**
+   * Class name for the container holding the chart's legend.
+   */
+  readonly chartLegend: string;
+
+  /**
+   * Class name for an individual item within the chart legend.
+   */
+  readonly chartLegendItem: string;
+
+  /**
+   * Class name for the color box/indicator within a legend item.
+   */
+  readonly chartLegendColorBox: string;
+
+  /**
+   * Class name for the text label within a legend item.
+   */
+  readonly chartLegendLabel: string;
+
+  /**
+   * Class name for the wrapper around the central value/text displayed
+   * inside the doughnut hole.
+   */
+  readonly centerValueWrapper: string;
+
+  /**
+   * Class name for the main value text displayed in the center of the doughnut
+   * (e.g., a percentage or total).
+   */
+  readonly centerValue: string;
+
+  /**
+   * Class name for a supplementary label text displayed below the central value.
+   */
+  readonly centerLabel: string;
+
+  /**
+   * Class name for the title of the chart, if displayed separately from the legend.
+   */
+  readonly chartTitle: string;
+};
+
+export default styles;

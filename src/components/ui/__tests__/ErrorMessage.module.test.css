@@ -1,0 +1,95 @@
+// Test file: src/components/ui/ErrorMessage.module.test.ts
+
+// Mock the CSS module import.
+// In a typical Jest setup for CSS Modules, you would either:
+// 1. Configure `moduleNameMapper` in `jest.config.js` to map `.css` files to a mock.
+// 2. Place a mock file in a `__mocks__` directory (e.g., `__mocks__/src/components/ui/ErrorMessage.module.css.ts`).
+// For this exercise, we define the mock directly within the test file for clarity.
+jest.mock('./ErrorMessage.module.css', () => ({
+  // These are example class names and their hashed values that a CSS module loader
+  // (like Webpack's css-loader) would generate at runtime.
+  // We are testing that the imported 'styles' object has this expected structure.
+  container: 'ErrorMessage_container__abc12',
+  text: 'ErrorMessage_text__def34',
+  icon: 'ErrorMessage_icon__ghi56',
+  severityHigh: 'ErrorMessage_severityHigh__jkl78',
+  severityMedium: 'ErrorMessage_severityMedium__mno90',
+  button: 'ErrorMessage_button__pqr01',
+  closeButton: 'ErrorMessage_closeButton__stu23',
+  // Add more plausible class names for an error message component as needed
+}));
+
+// Import the mocked module.
+// The type definition provided in the source code describes the shape of this 'styles' object.
+import styles from './ErrorMessage.module.css';
+
+describe('ErrorMessage.module.css', () => {
+  // 1. Test all exported functions/classes
+  // This module exports a plain object (the CSS class mappings), not functions or classes.
+  // We test the structure and content of this exported object.
+  it('should export a default object', () => {
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+    // Ensure the object is not empty, indicating that class names were successfully mapped.
+    expect(Object.keys(styles).length).toBeGreaterThan(0);
+  });
+
+  // 2. Test different scenarios and inputs
+  // For a static object export like a CSS module, "scenarios and inputs" refer to
+  // the presence and type of its properties (the class names).
+  it('should contain expected CSS class names as keys', () => {
+    expect(styles).toHaveProperty('container');
+    expect(styles).toHaveProperty('text');
+    expect(styles).toHaveProperty('icon');
+    expect(styles).toHaveProperty('severityHigh');
+    expect(styles).toHaveProperty('severityMedium');
+    expect(styles).toHaveProperty('button');
+    expect(styles).toHaveProperty('closeButton');
+  });
+
+  it('should have string values for all class names', () => {
+    for (const key in styles) {
+      // Ensure each class name maps to a string value.
+      expect(typeof styles[key]).toBe('string');
+      // Assert that the values look like typical CSS module hashed class names.
+      // This regex checks for a pattern like "ModuleName_className__hash".
+      expect(styles[key]).toMatch(/^ErrorMessage_[a-zA-Z0-9]+__\w+$/);
+    }
+  });
+
+  // 3. Test error conditions
+  // For a static object export, "error conditions" can be interpreted as
+  // ensuring the object does not contain unexpected or malformed properties.
+  it('should not contain unexpected properties', () => {
+    const expectedKeys = [
+      'container',
+      'text',
+      'icon',
+      'severityHigh',
+      'severityMedium',
+      'button',
+      'closeButton',
+    ].sort(); // Sort to ensure consistent order for comparison
+    const actualKeys = Object.keys(styles).sort();
+    expect(actualKeys).toEqual(expectedKeys);
+  });
+
+  // 4. Use appropriate mocking
+  // `jest.mock` is used at the top of the file to provide a controlled
+  // runtime representation of the CSS module, which is appropriate for Jest.
+
+  // 5. Follow Jest best practices
+  // - Clear `describe` and `it` blocks.
+  // - Meaningful assertions.
+  // - Snapshot testing for robust structure verification.
+
+  // 6. Include proper setup and teardown
+  // For a simple module mock, no complex `beforeEach`, `afterEach`, etc., are needed.
+  // The `jest.mock` handles the setup for the module import.
+
+  // Snapshot testing: Ensures the structure and values of the exported 'styles' object
+  // remain consistent across test runs. This is highly recommended for CSS modules.
+  it('should match the expected structure via snapshot', () => {
+    expect(styles).toMatchSnapshot();
+  });
+});

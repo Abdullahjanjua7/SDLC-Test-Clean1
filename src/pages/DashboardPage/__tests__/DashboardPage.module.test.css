@@ -1,0 +1,78 @@
+// To test a .d.ts file that describes a CSS module, we typically import the actual CSS module.
+// Jest needs to be configured to handle CSS module imports, usually via `moduleNameMapper`
+// in `jest.config.js` with `identity-obj-proxy`.
+//
+// Example `jest.config.js` entry for CSS modules:
+// module.exports = {
+//   // ... other Jest configurations
+//   moduleNameMapper: {
+//     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+//   },
+// };
+//
+// This setup ensures that when `import styles from './DashboardPage.module.css'` is encountered,
+// Jest provides a mock object where `styles.className` resolves to `'className'`.
+
+// Assuming the test file is located relative to the source file, e.g.,
+// src/pages/DashboardPage/__tests__/DashboardPage.module.test.ts
+import styles from '../DashboardPage.module.css';
+
+describe('DashboardPage.module.css', () => {
+  // Test 1: Verify that the default export is an object and is defined.
+  test('should export a default object', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  // Define all expected CSS class names based on the .d.ts file.
+  const expectedClassNames = [
+    'dashboardContainer',
+    'dashboardHeader',
+    'dashboardContent',
+    'dashboardGrid',
+    'dashboardCard',
+    'dashboardSidebar',
+    'dashboardMainArea',
+    'dashboardSection',
+    'sectionTitle',
+    'dashboardFooter',
+  ];
+
+  // Test 2: Verify that each expected CSS class name exists as a property
+  // on the `styles` object and that its value is a string.
+  // With `identity-obj-proxy`, the value of each property will be the property name itself.
+  test.each(expectedClassNames)(
+    'should contain the class "%s" as a string property with its name as value',
+    (className) => {
+      // Check if the property exists on the styles object
+      expect(styles).toHaveProperty(className);
+
+      // Check if the value of the property is a string
+      const classValue = styles[className as keyof typeof styles];
+      expect(typeof classValue).toBe('string');
+
+      // With `identity-obj-proxy`, the value should be the class name itself
+      expect(classValue).toBe(className);
+    }
+  );
+
+  // Test 3: Ensure that the `styles` object only contains the expected properties
+  // and no extraneous ones. This helps catch accidental additions or removals.
+  test('should only contain the expected class names', () => {
+    const actualClassNames = Object.keys(styles);
+
+    // Check if all expected class names are present
+    expect(actualClassNames).toEqual(expect.arrayContaining(expectedClassNames));
+
+    // Check if the number of actual class names matches the number of expected class names
+    expect(actualClassNames.length).toBe(expectedClassNames.length);
+  });
+
+  // Test 4: Snapshot testing for the entire styles object.
+  // This provides a quick way to detect any unintended changes to the exported class names
+  // or their mocked values.
+  test('should match the snapshot', () => {
+    expect(styles).toMatchSnapshot();
+  });
+});

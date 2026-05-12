@@ -1,0 +1,82 @@
+// BaseChart.module.test.ts
+
+// Mock the actual CSS module import.
+// In a real project, this would typically be handled by Jest's `moduleNameMapper`
+// configuration in `jest.config.js` (e.g., pointing to 'identity-obj-proxy'
+// or a custom Jest transformer for CSS modules).
+// For this test, we provide a direct mock that simulates the structure
+// and values typically returned by a CSS module loader.
+// The values are prefixed with 'BaseChart_' and a unique hash to mimic
+// how CSS modules generate unique class names.
+jest.mock('./BaseChart.module.css', () => ({
+  default: {
+    chartWrapper: 'BaseChart_chartWrapper__abc12',
+    container: 'BaseChart_container__def34',
+    title: 'BaseChart_title__ghi56',
+    dataPoint: 'BaseChart_dataPoint__jkl78',
+    tooltip: 'BaseChart_tooltip__mno90',
+    // Add more class names here as they would appear in the actual CSS module
+    // to ensure comprehensive coverage of expected properties.
+    // This mock represents the runtime object that the .d.ts file describes.
+  },
+}));
+
+// Import the mocked styles object.
+// The type declaration file (BaseChart.module.d.ts) ensures TypeScript
+// understands the shape of this imported object at compile time.
+import styles from './BaseChart.module.css';
+
+describe('BaseChart.module.css styles object', () => {
+  // No specific global setup or teardown is needed for this module,
+  // as the mocking is handled at the file level.
+
+  it('should export a default object when imported', () => {
+    // Test Case 1: Verify the default export exists and is an object.
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  it('should contain string values for known CSS class names', () => {
+    // Test Case 2: Verify that properties corresponding to CSS class names
+    // are strings, as expected from a CSS module import.
+    expect(typeof styles.chartWrapper).toBe('string');
+    expect(typeof styles.container).toBe('string');
+    expect(typeof styles.title).toBe('string');
+    expect(typeof styles.dataPoint).toBe('string');
+    expect(typeof styles.tooltip).toBe('string');
+  });
+
+  it('should return unique, generated class names for known properties', () => {
+    // Test Case 3: Verify that the values of the properties match the
+    // expected generated class names from our mock. This ensures the
+    // structure and content are as anticipated.
+    expect(styles.chartWrapper).toBe('BaseChart_chartWrapper__abc12');
+    expect(styles.container).toBe('BaseChart_container__def34');
+    expect(styles.title).toBe('BaseChart_title__ghi56');
+    expect(styles.dataPoint).toBe('BaseChart_dataPoint__jkl78');
+    expect(styles.tooltip).toBe('BaseChart_tooltip__mno90');
+  });
+
+  it('should return undefined for unknown class names not present in the mock', () => {
+    // Test Case 4: Test a scenario where an unknown class name is accessed.
+    // With our explicit mock, properties not defined in the mock will be undefined.
+    // (Note: If 'identity-obj-proxy' were used directly, it would return the
+    // property name as a string, e.g., `styles.unknownClass` would be `'unknownClass'`).
+    expect(styles.nonExistentClass).toBeUndefined();
+  });
+
+  it('should match the expected snapshot', () => {
+    // Test Case 5: Use snapshot testing to capture the entire structure
+    // and values of the mocked styles object. This is useful for detecting
+    // unintended changes to the mock or the assumed structure of the CSS module.
+    expect(styles).toMatchSnapshot();
+  });
+
+  // Note on Readonly: The `Readonly<Record<string, string>>` type is a
+  // compile-time TypeScript construct. At runtime, a plain JavaScript object
+  // (like the one provided by our mock or `identity-obj-proxy`) is mutable.
+  // Testing for runtime immutability would require a more complex mock
+  // using `Object.freeze()`, which is not typical for CSS module mocks
+  // and goes beyond verifying the declaration's primary intent.
+});

@@ -1,0 +1,44 @@
+/**
+ * This module contains the CSS class names for the ErrorDisplay component.
+ * When imported, it provides a mapping from the original class names
+ * defined in `src/components/ui/ErrorDisplay/ErrorDisplay.module.css`
+ * to their unique, generated counterparts for CSS Modules.
+ *
+ * @file src/components/ui/ErrorDisplay/ErrorDisplay.module.css.d.ts
+ */
+declare const styles: {
+  /**
+   * The main container for the error display component.
+   */
+  readonly errorDisplay: string;
+  /**
+   * Styles for the title or heading of the error message.
+   */
+  readonly title: string;
+  /**
+   * Styles for the primary error message text.
+   */
+  readonly message: string;
+  /**
+   * Styles for an optional icon associated with the error.
+   */
+  readonly icon: string;
+  /**
+   * Styles for a container holding action buttons or links related to the error.
+   */
+  readonly actions: string;
+  /**
+   * Styles for individual action buttons within the error display.
+   */
+  readonly actionButton: string;
+  /**
+   * Styles for a specific variant of the error display, e.g., for critical errors.
+   */
+  readonly critical: string;
+  /**
+   * Styles for a specific variant of the error display, e.g., for warning errors.
+   */
+  readonly warning: string;
+};
+
+export default styles;

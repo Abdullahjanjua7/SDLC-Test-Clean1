@@ -1,0 +1,103 @@
+// __mocks__/src/components/charts/BaseChart/BaseChart.module.css.ts
+// This file mocks the output of a CSS module loader for BaseChart.module.css.
+// Jest will automatically use this mock when BaseChart.module.css is imported.
+
+const mockStyles = {
+  chartContainer: 'BaseChart_chartContainer_abc123',
+  chartTitle: 'BaseChart_chartTitle_def456',
+  chartLegend: 'BaseChart_chartLegend_ghi789',
+  chartContent: 'BaseChart_chartContent_jkl012',
+  loadingOverlay: 'BaseChart_loadingOverlay_mno345',
+  errorMessage: 'BaseChart_errorMessage_pqr678',
+  // Include a dynamic key to test the index signature `[key: string]: string;`
+  dynamicClass: 'BaseChart_dynamicClass_stu901',
+  anotherArbitraryClass: 'BaseChart_anotherArbitraryClass_vwx234',
+};
+
+export default mockStyles;
+
+```
+```typescript
+// src/components/charts/BaseChart/BaseChart.module.test.ts
+// This test file verifies the runtime structure of the object exported by
+// BaseChart.module.css, which is typed by BaseChart.module.css.d.ts.
+// Jest will automatically use the mock defined in __mocks__ for the CSS module import.
+
+import styles from './BaseChart.module.css';
+
+describe('BaseChart.module.css runtime object structure', () => {
+  // Test 1: Ensure the imported styles object is defined and is an object.
+  it('should export a defined object', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  // Test 2: Verify all explicitly defined class names are present and their values are strings.
+  it('should contain all explicitly defined class names as strings', () => {
+    const expectedClassNames = [
+      'chartContainer',
+      'chartTitle',
+      'chartLegend',
+      'chartContent',
+      'loadingOverlay',
+      'errorMessage',
+    ];
+
+    expectedClassNames.forEach(className => {
+      // Check if the property exists on the styles object
+      expect(styles).toHaveProperty(className);
+      // Check if the value associated with the property is a string
+      expect(typeof styles[className]).toBe('string');
+      // Optionally, check if the string value follows a typical CSS module naming convention
+      // This assumes a pattern like 'ComponentName_className_hash'
+      expect(styles[className]).toMatch(new RegExp(`^BaseChart_${className}_`));
+    });
+  });
+
+  // Test 3: Verify the index signature allows access to arbitrary string keys, returning a string.
+  // This tests the `readonly [key: string]: string;` part of the interface.
+  it('should allow access to arbitrary string keys, returning a string value from the mock', () => {
+    // Test a key that is not explicitly listed in the interface but is provided by the mock
+    const arbitraryClassName1 = 'dynamicClass';
+    expect(styles).toHaveProperty(arbitraryClassName1);
+    expect(typeof styles[arbitraryClassName1]).toBe('string');
+    expect(styles[arbitraryClassName1]).toMatch(new RegExp(`^BaseChart_${arbitraryClassName1}_`));
+
+    const arbitraryClassName2 = 'anotherArbitraryClass';
+    expect(styles).toHaveProperty(arbitraryClassName2);
+    expect(typeof styles[arbitraryClassName2]).toBe('string');
+    expect(styles[arbitraryClassName2]).toMatch(new RegExp(`^BaseChart_${arbitraryClassName2}_`));
+  });
+
+  // Test 4: Snapshot test for the entire styles object structure.
+  // This helps catch unexpected changes to the mocked CSS module output.
+  it('should match the snapshot of the styles object', () => {
+    expect(styles).toMatchSnapshot();
+  });
+
+  // Test 5: Ensure no unexpected properties are added to the styles object beyond what's mocked.
+  // This helps ensure the mock accurately reflects expected properties.
+  it('should only contain properties defined in the mock', () => {
+    const expectedAndMockedKeys = new Set([
+      'chartContainer',
+      'chartTitle',
+      'chartLegend',
+      'chartContent',
+      'loadingOverlay',
+      'errorMessage',
+      'dynamicClass',
+      'anotherArbitraryClass',
+    ]);
+
+    const actualKeys = Object.keys(styles);
+
+    // Check that every actual key is one of the expected keys
+    actualKeys.forEach(key => {
+      expect(expectedAndMockedKeys.has(key)).toBe(true);
+    });
+
+    // Check that the number of actual keys matches the number of expected keys
+    expect(actualKeys.length).toBe(expectedAndMockedKeys.size);
+  });
+});

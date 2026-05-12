@@ -1,0 +1,21 @@
+/**
+ * @fileoverview TypeScript declaration for the ChartGrid CSS module.
+ * This file provides type definitions for the imported CSS classes,
+ * allowing TypeScript to understand the shape of the `styles` object
+ * when importing `ChartGrid.module.css`.
+ */
+
+/**
+ * Declares the shape of the default export when importing a CSS module.
+ * The keys are the original CSS class names defined in `ChartGrid.module.css`,
+ * and the values are the unique, generated class names (e.g., `ChartGrid_gridContainer__abc12`)
+ * that are used at runtime.
+ *
+ * Using `readonly` ensures that the imported styles object cannot be
+ * accidentally modified at runtime, promoting immutability.
+ */
+declare const styles: {
+  readonly [key: string]: string;
+};
+
+export default styles;

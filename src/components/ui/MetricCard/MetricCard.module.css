@@ -1,0 +1,27 @@
+/**
+ * @file Type definitions for the CSS module 'src/components/ui/MetricCard/MetricCard.module.css'.
+ * @description This file provides TypeScript type safety for CSS class names
+ *              exported by the MetricCard.module.css file.
+ *              When a CSS module is imported, it typically exports a default object
+ *              where keys are the original CSS class names and values are the
+ *              generated unique class names.
+ *
+ * @example
+ * import styles from './MetricCard.module.css';
+ * // styles.metricCard will be typed as string
+ * // styles.header will be typed as string
+ * // etc.
+ */
+declare module 'src/components/ui/MetricCard/MetricCard.module.css' {
+  /**
+   * Represents the CSS classes defined in MetricCard.module.css.
+   * Each key corresponds to a CSS class name defined in the module,
+   * and its value is the unique, generated class string that will be
+   * applied to the DOM element.
+   *
+   * @property {string} [key: string] - A dynamically generated class name string
+   *                                    for each CSS class defined in the module.
+   */
+  const classes: { readonly [key: string]: string };
+  export default classes;
+}

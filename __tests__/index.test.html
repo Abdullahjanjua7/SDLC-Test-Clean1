@@ -1,0 +1,127 @@
+import { indexHtmlContent } from './index';
+
+describe('indexHtmlContent', () => {
+  let doc: Document;
+
+  // Setup: Parse the HTML content into a DOM document before all tests
+  // This allows us to query the HTML structure using DOM APIs, mimicking a browser environment.
+  beforeAll(() => {
+    const parser = new DOMParser();
+    doc = parser.parseFromString(indexHtmlContent, 'text/html');
+  });
+
+  // Test 1: Snapshot test for the entire content
+  // This ensures that the overall structure and content of the HTML string
+  // does not change unexpectedly.
+  test('should match the expected HTML snapshot', () => {
+    expect(indexHtmlContent).toMatchSnapshot();
+  });
+
+  // Test 2: Basic HTML structure and doctype validation
+  test('should be a valid HTML5 document with correct doctype and root element', () => {
+    // Check for the HTML5 doctype declaration at the beginning of the string
+    expect(indexHtmlContent).toMatch(/^<!DOCTYPE html>/i);
+
+    // Check if the root element is <html>
+    expect(doc.documentElement.tagName).toBe('HTML');
+
+    // Check for the 'lang' attribute on the html tag for accessibility
+    expect(doc.documentElement.getAttribute('lang')).toBe('en');
+  });
+
+  // Test 3: Head section elements and their properties
+  describe('head section', () => {
+    let head: HTMLHeadElement | null;
+
+    beforeAll(() => {
+      head = doc.querySelector('head');
+    });
+
+    test('should contain a head element', () => {
+      expect(head).not.toBeNull();
+    });
+
+    test('should contain a UTF-8 meta charset tag for proper character encoding', () => {
+      const metaCharset = head?.querySelector('meta[charset="UTF-8"]');
+      expect(metaCharset).not.toBeNull();
+    });
+
+    test('should contain a viewport meta tag for responsive design', () => {
+      const metaViewport = head?.querySelector('meta[name="viewport"]');
+      expect(metaViewport).not.toBeNull();
+      expect(metaViewport?.getAttribute('content')).toBe('width=device-width, initial-scale=1.0');
+    });
+
+    test('should contain a title tag with specific content', () => {
+      const title = head?.querySelector('title');
+      expect(title).not.toBeNull();
+      expect(title?.textContent).toBe('My TypeScript Application');
+    });
+
+    // Test for commented-out stylesheet link example
+    // We check the raw string content as DOMParser might represent comments differently
+    // or make them harder to query directly as elements.
+    test('should contain a commented-out stylesheet link example', () => {
+      expect(indexHtmlContent).toContain('<!-- <link rel="stylesheet" href="styles.css"> -->');
+    });
+
+    test('should not contain any active stylesheet links by default', () => {
+      const linkTags = head?.querySelectorAll('link[rel="stylesheet"]');
+      expect(linkTags?.length).toBe(0);
+    });
+  });
+
+  // Test 4: Body section elements and their content
+  describe('body section', () => {
+    let body: HTMLBodyElement | null;
+
+    beforeAll(() => {
+      body = doc.querySelector('body');
+    });
+
+    test('should contain a body element', () => {
+      expect(body).not.toBeNull();
+    });
+
+    test('should contain an app-root div as the main application mount point', () => {
+      const appRoot = body?.querySelector('#app-root');
+      expect(appRoot).not.toBeNull();
+      expect(appRoot?.tagName).toBe('DIV');
+    });
+
+    test('app-root should contain a welcome heading', () => {
+      const h1 = body?.querySelector('#app-root h1');
+      expect(h1).not.toBeNull();
+      expect(h1?.textContent).toBe('Welcome to Your TypeScript App!');
+    });
+
+    test('app-root should contain introductory paragraphs', () => {
+      const paragraphs = body?.querySelectorAll('#app-root p');
+      expect(paragraphs?.length).toBe(2);
+      expect(paragraphs?.[0]?.textContent).toBe('This is the main entry point for your browser-based application.');
+      expect(paragraphs?.[1]?.textContent).toBe('Content will be rendered here by your JavaScript application.');
+    });
+
+    // Test for commented-out script link examples
+    test('should contain commented-out script link examples', () => {
+      expect(indexHtmlContent).toContain('<!-- <script type="module" src="index.js"></script> -->');
+      expect(indexHtmlContent).toContain('<!-- <script src="app.js"></script> -->');
+    });
+
+    test('should not contain any active script tags by default', () => {
+      const scriptTags = body?.querySelectorAll('script');
+      expect(scriptTags?.length).toBe(0);
+    });
+  });
+
+  // Test 5: Overall content integrity - checking for unexpected elements
+  test('should not contain any unexpected elements outside head or body', () => {
+    // This checks for elements that might be accidentally placed directly under <html>
+    // but not within <head> or <body>.
+    const htmlChildren = Array.from(doc.documentElement.children);
+    const nonHeadBodyChildren = htmlChildren.filter(
+      (child) => child.tagName !== 'HEAD' && child.tagName !== 'BODY'
+    );
+    expect(nonHeadBodyChildren.length).toBe(0);
+  });
+});

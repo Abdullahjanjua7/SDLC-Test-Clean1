@@ -1,0 +1,45 @@
+/**
+ * @file src/components/layout/DashboardShell.module.css.d.ts
+ * @description TypeScript declaration file for the CSS module
+ *              `src/components/layout/DashboardShell.module.css`.
+ *
+ * This file provides type definitions for the CSS class names exported by the
+ * CSS module, enabling type-safe access and autocompletion in TypeScript files.
+ *
+ * When a CSS module is imported, it typically returns an object where keys are
+ * the original class names and values are the unique, generated class names
+ * (e.g., `dashboardShell_abc123`).
+ */
+declare const styles: {
+  /**
+   * The root container class for the entire dashboard shell layout.
+   * Represents the main wrapper for the dashboard structure.
+   */
+  readonly dashboardShell: string;
+  /**
+   * Class for the header section of the dashboard shell.
+   * Typically contains navigation, branding, and user controls.
+   */
+  readonly header: string;
+  /**
+   * Class for the sidebar navigation component within the dashboard shell.
+   * Provides primary navigation links.
+   */
+  readonly sidebar: string;
+  /**
+   * Class for the main content area where page-specific content is rendered.
+   * This is the primary region for dynamic content.
+   */
+  readonly mainContent: string;
+  /**
+   * Class for the footer section of the dashboard shell.
+   * Typically contains copyright information or secondary links.
+   */
+  readonly footer: string;
+  // Add any other specific class names defined in DashboardShell.module.css here.
+  // For example, if there are specific layout variations or utility classes:
+  // readonly compactSidebar: string;
+  // readonly fullWidthContent: string;
+};
+
+export default styles;

@@ -1,0 +1,96 @@
+// ui.module.test.ts
+
+// Mock the actual CSS module file.
+// This mock will be used by Jest when `import styles from './ui.module.css'` occurs.
+// The path should reflect where the actual `ui.module.css` would be located relative to the test file.
+// Assuming the provided `.ts` file is `src/components/ui/ui.module.ts`,
+// then the corresponding CSS module would likely be `src/components/ui/ui.module.css`.
+jest.mock('../src/components/ui/ui.module.css', () => ({
+  container: 'ui_module_container_hash',
+  button: 'ui_module_button_hash',
+  'some-dashed-class': 'ui_module_some-dashed-class_hash',
+  anotherClass: 'ui_module_anotherClass_hash',
+  // Simulate a class that might be conditionally applied or not always present
+  optionalClass: 'ui_module_optionalClass_hash',
+}));
+
+// Now, import the *mocked* CSS module.
+// At runtime, Jest will provide the object defined in `jest.mock`.
+// The TypeScript compiler, however, would use the type definition from `ui.module.ts`
+// (the source code provided in the prompt) to ensure type safety for this import.
+import styles from '../src/components/ui/ui.module.css';
+
+describe('ui.module.css (runtime behavior as typed by ui.module.ts)', () => {
+
+  // Test 1: Ensure the imported styles object is defined and is an object.
+  test('should import a defined object', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  // Test 2: Verify specific class names exist and have string values.
+  test('should contain expected class names with string values', () => {
+    expect(styles.container).toBe('ui_module_container_hash');
+    expect(typeof styles.container).toBe('string');
+
+    expect(styles.button).toBe('ui_module_button_hash');
+    expect(typeof styles.button).toBe('string');
+
+    expect(styles.anotherClass).toBe('ui_module_anotherClass_hash');
+    expect(typeof styles.anotherClass).toBe('string');
+  });
+
+  // Test 3: Verify class names with special characters (e.g., kebab-case) can be accessed.
+  test('should correctly handle kebab-case class names', () => {
+    expect(styles['some-dashed-class']).toBe('ui_module_some-dashed-class_hash');
+    expect(typeof styles['some-dashed-class']).toBe('string');
+  });
+
+  // Test 4: Test accessing a non-existent class name.
+  // At runtime, this would typically be `undefined`. TypeScript would catch this at compile time.
+  test('should return undefined for non-existent class names at runtime', () => {
+    // Intentionally accessing a non-existent property for runtime testing.
+    // TypeScript would flag this as an error during compilation if not ignored.
+    expect((styles as any).nonExistentClass).toBeUndefined();
+  });
+
+  // Test 5: Snapshot testing for the entire styles object.
+  // This ensures the structure and values of the imported object don't change unexpectedly.
+  test('should match snapshot', () => {
+    expect(styles).toMatchSnapshot();
+  });
+
+  // Test 6: Verify the object contains the expected set of keys.
+  test('should have the expected set of keys', () => {
+    const expectedKeys = [
+      'container',
+      'button',
+      'some-dashed-class',
+      'anotherClass',
+      'optionalClass',
+    ];
+    // Using `expect.arrayContaining` and checking length ensures all keys are present and no extra ones.
+    expect(Object.keys(styles)).toEqual(expect.arrayContaining(expectedKeys));
+    expect(Object.keys(styles).length).toBe(expectedKeys.length);
+  });
+
+  // Test 7: Demonstrate that TypeScript's `readonly` modifier does not enforce runtime immutability in JavaScript.
+  // This test highlights the distinction between compile-time type safety and runtime behavior.
+  test('should allow modification of properties at runtime despite TypeScript readonly declaration', () => {
+    const originalContainerValue = styles.container;
+    const newContainerValue = 'a_new_runtime_value';
+
+    // In plain JavaScript, properties of objects are mutable by default.
+    // TypeScript's `readonly` only prevents assignments at compile-time.
+    // We cast to `any` to bypass TypeScript's compile-time check for this specific test.
+    (styles as any).container = newContainerValue;
+
+    expect(styles.container).toBe(newContainerValue);
+    expect(styles.container).not.toBe(originalContainerValue);
+
+    // Note: This modification affects the singleton mock object for the remainder of this test suite.
+    // For more complex scenarios, consider using `beforeEach` to re-import or reset mocks
+    // to ensure test isolation.
+  });
+});

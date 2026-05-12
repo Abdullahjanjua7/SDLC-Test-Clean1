@@ -1,0 +1,100 @@
+/**
+ * @file src/components/charts/BarChartCard/BarChartCard.module.css.d.ts
+ * @description Type definitions for the CSS module `BarChartCard.module.css`.
+ * This file declares the shape of the object exported when `BarChartCard.module.css` is imported
+ * into a TypeScript file, allowing for type-safe access to CSS class names.
+ *
+ * This declaration file is automatically generated and provides type information
+ * for the CSS module, ensuring that class names are correctly referenced and
+ * caught by the TypeScript compiler if misspelled or non-existent.
+ */
+
+/**
+ * Interface representing the CSS module for the Bar Chart Card.
+ * Each property corresponds to a CSS class name defined in `BarChartCard.module.css`,
+ * and its value will be the unique, generated class name string provided by CSS Modules.
+ *
+ * Properties are marked as `readonly` to indicate that the generated class names
+ * should not be modified at runtime.
+ */
+interface BarChartCardModule {
+  /**
+   * The main container class for the bar chart card component.
+   * Corresponds to `.barChartCard` in the CSS.
+   */
+  readonly barChartCard: string;
+  /**
+   * The class for the header section of the bar chart card.
+   * Corresponds to `.header` in the CSS.
+   */
+  readonly header: string;
+  /**
+   * The class for the title element within the card's header.
+   * Corresponds to `.title` in the CSS.
+   */
+  readonly title: string;
+  /**
+   * The class for an optional description or subtitle element within the header.
+   * Corresponds to `.description` in the CSS.
+   */
+  readonly description?: string;
+  /**
+   * The class for the main content area where the bar chart itself will be rendered.
+   * Corresponds to `.content` in the CSS.
+   */
+  readonly content: string;
+  /**
+   * The class for a wrapper element around the actual chart rendering component (e.g., canvas, SVG).
+   * Corresponds to `.chartWrapper` in the CSS.
+   */
+  readonly chartWrapper?: string;
+  /**
+   * The class for the footer section of the bar chart card.
+   * Corresponds to `.footer` in the CSS.
+   */
+  readonly footer?: string;
+  /**
+   * The class for a container of action elements (e.g., buttons, links) within the footer.
+   * Corresponds to `.actions` in the CSS.
+   */
+  readonly actions?: string;
+  /**
+   * The class for displaying a message or state when there is no data to display in the chart.
+   * Corresponds to `.emptyState` in the CSS.
+   */
+  readonly emptyState?: string;
+  /**
+   * The class for displaying a loading indicator or message while data is being fetched.
+   * Corresponds to `.loadingState` in the CSS.
+   */
+  readonly loadingState?: string;
+  /**
+   * The class for displaying an error message if data fetching or chart rendering fails.
+   * Corresponds to `.errorState` in the CSS.
+   */
+  readonly errorState?: string;
+  /**
+   * A generic class for a button element within the card.
+   * Corresponds to `.button` in the CSS.
+   */
+  readonly button?: string;
+  /**
+   * A class for a primary action button style.
+   * Corresponds to `.primaryButton` in the CSS.
+   */
+  readonly primaryButton?: string;
+  /**
+   * A class for a secondary action button style.
+   * Corresponds to `.secondaryButton` in the CSS.
+   */
+  readonly secondaryButton?: string;
+}
+
+/**
+ * Declares the default export of the CSS module.
+ * When `import styles from './BarChartCard.module.css'` is used,
+ * the `styles` variable will be typed as `BarChartCardModule`,
+ * providing type safety for accessing CSS class names.
+ */
+declare const styles: BarChartCardModule;
+export default styles;

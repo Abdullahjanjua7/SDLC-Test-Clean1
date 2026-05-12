@@ -1,0 +1,80 @@
+/**
+ * @file src/components/layout/DashboardLayout/DashboardLayout.module.css.d.ts
+ * @description Type definitions for CSS Modules in DashboardLayout.module.css.
+ * This file provides type safety and autocompletion for CSS class names
+ * used in the DashboardLayout component, reflecting its grid and flexbox structure.
+ *
+ * The `styles` object exports a mapping from CSS class names defined in the
+ * .module.css file to their locally scoped, unique class names.
+ */
+declare const styles: {
+  /**
+   * The main container for the dashboard layout.
+   * Typically defines the overall grid or flex context for the entire dashboard.
+   */
+  readonly dashboardLayout: string;
+  /**
+   * A class for a container that uses CSS Grid for its layout.
+   */
+  readonly gridContainer: string;
+  /**
+   * A class for a container that uses CSS Flexbox for its layout.
+   */
+  readonly flexContainer: string;
+  /**
+   * Class for the header section of the dashboard.
+   * Often spans across multiple columns/rows in a grid or is a primary flex item.
+   */
+  readonly header: string;
+  /**
+   * Class for the sidebar or navigation section of the dashboard.
+   * Typically positioned on one side of the main content.
+   */
+  readonly sidebar: string;
+  /**
+   * Class for the main content area of the dashboard.
+   * This is where the primary application content resides.
+   */
+  readonly mainContent: string;
+  /**
+   * Class for the footer section of the dashboard.
+   * Often spans across multiple columns/rows or is a primary flex item at the bottom.
+   */
+  readonly footer: string;
+  /**
+   * Generic class for an item directly within a grid layout.
+   * Can be used to define grid-column/grid-row properties.
+   */
+  readonly gridItem: string;
+  /**
+   * Generic class for an item directly within a flexbox layout.
+   * Can be used to define flex-grow/flex-shrink/flex-basis properties.
+   */
+  readonly flexItem: string;
+  /**
+   * Utility class for a column-oriented layout, often used with flexbox.
+   */
+  readonly column: string;
+  /**
+   * Utility class for a row-oriented layout, often used with flexbox.
+   */
+  readonly row: string;
+  /**
+   * Class for a section that should take full width within its parent.
+   */
+  readonly fullWidth: string;
+  /**
+   * Class for a section that should take full height within its parent.
+   */
+  readonly fullHeight: string;
+  /**
+   * Class for a section that should be centered horizontally.
+   */
+  readonly centered: string;
+  /**
+   * Class for a responsive wrapper or container.
+   */
+  readonly responsiveWrapper: string;
+};
+
+export default styles;

@@ -1,0 +1,58 @@
+// Test file: src/components/dashboard/FilterControls/FilterControls.module.test.ts
+
+// We need to import the actual CSS module that this .d.ts file describes.
+// Assuming the test file is located such that this relative path correctly resolves
+// to the runtime JavaScript object exported by the CSS module loader.
+import styles from '../FilterControls.module.css';
+
+describe('FilterControls.module.css', () => {
+  // Test 1: Ensure the styles object is exported and is of the correct type.
+  // This verifies that the CSS module is correctly processed and provides an object.
+  it('should export a defined styles object', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  // Test 2: Verify that all expected CSS class names declared in the .d.ts file
+  // are present as properties in the runtime styles object and are non-empty strings.
+  it('should contain all expected CSS class names as non-empty string properties', () => {
+    // These class names are directly derived from the provided .d.ts file.
+    const expectedClassNames = [
+      'filterControlsContainer',
+      'filterGroup',
+      'filterLabel',
+      'filterInput',
+      'dateRangePicker',
+      'applyFiltersButton',
+      'clearFiltersButton',
+      'buttonGroup',
+      'search', // Assuming 'search' is the last complete property from the truncated source.
+    ];
+
+    expectedClassNames.forEach(className => {
+      expect(styles).toHaveProperty(className);
+      expect(typeof styles[className]).toBe('string');
+      expect(styles[className].length).toBeGreaterThan(0); // Ensure the generated class name string is not empty
+    });
+
+    // Optionally, verify that no unexpected properties are present.
+    // This can be brittle if the CSS module loader adds internal properties,
+    // but it helps ensure the module's public API matches the type definition.
+    const actualClassNames = Object.keys(styles);
+    expect(actualClassNames.sort()).toEqual(expectedClassNames.sort());
+  });
+
+  // Test 3: Snapshot testing to capture the exact generated class names.
+  // This helps detect unintended changes to the generated class names (e.g., due to build configuration changes,
+  // hashing algorithms, or renaming in the actual CSS file).
+  it('should match the snapshot for generated CSS class names', () => {
+    expect(styles).toMatchSnapshot();
+  });
+
+  // Note: This module is a type definition for a CSS module, not a module with executable functions or classes.
+  // Therefore, tests for "exported functions/classes", "different scenarios and inputs",
+  // "error conditions", and "appropriate mocking" are not applicable in the traditional sense.
+  // The tests above focus on verifying the structure and content of the runtime object
+  // that the .d.ts file describes, which is the only testable aspect of such a file.
+});

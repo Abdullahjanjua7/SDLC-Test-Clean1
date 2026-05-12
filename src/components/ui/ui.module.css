@@ -1,0 +1,31 @@
+/**
+ * @file This module provides TypeScript type definitions for the CSS module `ui.module.css`.
+ *
+ * When a CSS module (`.module.css` file) is imported into a TypeScript file,
+ * it typically resolves to an object. The keys of this object correspond to
+ * the class names defined in the CSS file, and the values are the unique,
+ * generated class names (e.g., `className_hash`) that are used at runtime.
+ *
+ * This declaration ensures type safety when accessing CSS class names from
+ * `src/components/ui/ui.module.css`, preventing typos and ensuring that
+ * only defined class names are used.
+ */
+
+/**
+ * Declares the shape of the object returned when importing `ui.module.css`.
+ *
+ * @property {readonly [key: string]: string} - An index signature indicating that
+ *   the imported styles object can have any string key (representing a CSS class name)
+ *   and its corresponding value will be a string (the generated unique class name).
+ *   The `readonly` modifier ensures that the imported styles object is treated as
+ *   immutable, which is good practice as these are typically static references.
+ */
+declare const styles: {
+  readonly [key: string]: string;
+};
+
+/**
+ * Exports the `styles` object as the default export of this module.
+ * This allows consumers to import it like: `import styles from './ui.module.css';`
+ */
+export default styles;

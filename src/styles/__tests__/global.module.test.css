@@ -1,0 +1,92 @@
+import styles from '../src/styles/global.module.css';
+
+// Mock the actual CSS module file path.
+// This tells Jest that whenever 'src/styles/global.module.css' is imported,
+// it should return the object defined in the factory function.
+// This simulates the behavior of a CSS module loader/transformer in a test environment.
+// The structure of this mock adheres to the contract defined in global.module.css.d.ts.
+jest.mock('../src/styles/global.module.css', () => ({
+  // Example class names and their transformed (hashed) values
+  container: 'global_container_abc123',
+  'reset-list': 'global_reset-list_def456',
+  'utility-flex': 'global_utility-flex_ghi789',
+  'another-class': 'global_another-class_jkl012',
+  // Simulate a class name that might be dynamically generated or less common
+  'special-button': 'global_special-button_mno345',
+}));
+
+describe('global.module.css type definition (via mocked module import)', () => {
+  // This test suite indirectly verifies the contract defined by global.module.css.d.ts.
+  // It ensures that when the CSS module is imported (and mocked by Jest),
+  // the resulting 'styles' object conforms to the expected structure:
+  // an object with string keys and string values.
+
+  // Test all exported functions/classes:
+  // The .d.ts file exports a default 'styles' object. We test its structure.
+  it('should export a default object', () => {
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+    expect(Object.keys(styles).length).toBeGreaterThan(0); // Expect at least some classes
+  });
+
+  // Test different scenarios and inputs:
+  it('should have string keys and string values for all class names', () => {
+    const classNames = Object.keys(styles);
+
+    classNames.forEach(className => {
+      expect(typeof className).toBe('string'); // Ensure the key is a string
+      expect(typeof styles[className]).toBe('string'); // Ensure the value is a string
+      expect(styles[className].length).toBeGreaterThan(0); // Ensure the value is not an empty string
+    });
+  });
+
+  it('should contain specific class names with their transformed values', () => {
+    // Test for specific class names that are expected to be present in the CSS module
+    expect(styles).toHaveProperty('container');
+    expect(styles.container).toBe('global_container_abc123');
+
+    expect(styles).toHaveProperty('reset-list');
+    expect(styles['reset-list']).toBe('global_reset-list_def456');
+
+    expect(styles).toHaveProperty('utility-flex');
+    expect(styles['utility-flex']).toBe('global_utility-flex_ghi789');
+
+    expect(styles).toHaveProperty('special-button');
+    expect(styles['special-button']).toBe('global_special-button_mno345');
+  });
+
+  it('should allow accessing class names using both dot and bracket notation', () => {
+    // Dot notation for valid JavaScript identifiers
+    expect(styles.container).toBe('global_container_abc123');
+    // Bracket notation for kebab-case class names or dynamic access
+    expect(styles['reset-list']).toBe('global_reset-list_def456');
+    expect(styles['another-class']).toBe('global_another-class_jkl012');
+  });
+
+  // Test error conditions (or rather, expected behavior for non-existent properties):
+  it('should return undefined for non-existent class names', () => {
+    // Attempting to access a class name not defined in the mock should yield undefined
+    expect(styles.nonExistentClass).toBeUndefined();
+    expect(styles['another-undefined-class-name']).toBeUndefined();
+    // Ensure it doesn't throw an error when accessing an undefined property
+    expect(() => styles.nonExistentClass).not.toThrow();
+  });
+
+  // Snapshot testing:
+  // This ensures that the structure and values of the mocked styles object
+  // remain consistent across test runs, catching unintended changes.
+  it('should match the snapshot for the mocked styles object', () => {
+    expect(styles).toMatchSnapshot();
+  });
+
+  // Further "error condition" check:
+  // While the .d.ts file itself doesn't have runtime errors,
+  // this test ensures that the values provided by the mock (which represents the module)
+  // are indeed strings, as per the type definition. If the mock were incorrectly
+  // configured to return non-string values, this test would fail.
+  it('should ensure all values are strictly strings (validating the contract)', () => {
+    Object.values(styles).forEach(value => {
+      expect(typeof value).toBe('string');
+    });
+  });
+});

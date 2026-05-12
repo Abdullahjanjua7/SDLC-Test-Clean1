@@ -1,0 +1,71 @@
+/**
+ * @file src/components/dashboard/ExportButton/ExportButton.module.css.d.ts
+ * @description Type definitions for CSS modules in src/components/dashboard/ExportButton/ExportButton.module.css.
+ *
+ * This file provides TypeScript with type information for the CSS module,
+ * allowing for type-safe imports and usage of CSS class names.
+ *
+ * When you import 'ExportButton.module.css' into a TypeScript file,
+ * the 'styles' object will conform to the `ExportButtonModule` interface.
+ */
+
+/**
+ * Defines the shape of the CSS module for ExportButton.
+ * Each property corresponds to a CSS class name defined in ExportButton.module.css,
+ * and its value will be the generated unique class string.
+ */
+interface ExportButtonModule {
+  /**
+   * Styles for the main container of the export button.
+   */
+  readonly exportButton: string;
+  /**
+   * Styles for the icon element within the export button.
+   */
+  readonly icon: string;
+  /**
+   * Styles for the text label within the export button.
+   */
+  readonly text: string;
+  /**
+   * Styles applied when the button is in a disabled state.
+   */
+  readonly disabled: string;
+  /**
+   * Styles applied when the button is in a loading state, e.g., showing a spinner.
+   */
+  readonly loading: string;
+  /**
+   * Styles for a dropdown menu associated with the export button, if applicable.
+   */
+  readonly dropdownMenu: string;
+  /**
+   * Styles for individual items within the dropdown menu.
+   */
+  readonly dropdownItem: string;
+  /**
+   * Styles for an active or highlighted item within the dropdown menu.
+   */
+  readonly dropdownItemActive: string;
+  /**
+   * Styles for a separator line within the dropdown menu.
+   */
+  readonly dropdownSeparator: string;
+  /**
+   * Styles for the success state of the button or an action.
+   */
+  readonly success: string;
+  /**
+   * Styles for the error state of the button or an action.
+   */
+  readonly error: string;
+}
+
+/**
+ * Declares the default export of the CSS module.
+ * When you import `styles from './ExportButton.module.css'`, `styles` will be
+ * an object conforming to `ExportButtonModule`.
+ */
+declare const styles: ExportButtonModule;
+
+export default styles;

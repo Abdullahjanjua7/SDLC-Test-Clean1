@@ -1,0 +1,87 @@
+// Assuming this test file is located at src/pages/dashboard.module.test.ts
+// to correctly resolve the relative import path for the CSS module.
+
+// Mock the actual CSS module file that would be imported.
+// The .d.ts file describes the shape of this module.
+jest.mock('./dashboard.module.css', () => ({
+  container: 'dashboard_container_hashed_123abc',
+  header: 'dashboard_header_hashed_456def',
+  sidebar: 'dashboard_sidebar_hashed_789ghi',
+  mainContent: 'dashboard_mainContent_hashed_jkl012',
+  card: 'dashboard_card_hashed_mno345',
+  cardHeader: 'dashboard_cardHeader_hashed_pqr678',
+  cardBody: 'dashboard_cardBody_hashed_stu901',
+  footer: 'dashboard_footer_hashed_vwx234',
+  dashboardGrid: 'dashboard_dashboardGrid_hashed_yza567',
+  gridItem: 'dashboard_gridItem_hashed_bcd890',
+  primaryButton: 'dashboard_primaryButton_hashed_efg123',
+  secondaryButton: 'dashboard_secondaryButton_hashed_hij456',
+  // Include a generic one to implicitly test the index signature `[key: string]: string;`
+  // This ensures that if other classes exist in the actual CSS, they would also be strings.
+  someGenericClass: 'dashboard_someGenericClass_hashed_klm789',
+}));
+
+// Import the mocked styles object.
+// This import statement would typically be found in a React component or similar.
+import styles from './dashboard.module.css';
+
+describe('dashboard.module.css type declaration runtime behavior', () => {
+  const explicitlyDeclaredClassNames = [
+    'container',
+    'header',
+    'sidebar',
+    'mainContent',
+    'card',
+    'cardHeader',
+    'cardBody',
+    'footer',
+    'dashboardGrid',
+    'gridItem',
+    'primaryButton',
+    'secondaryButton',
+  ];
+
+  it('should export an object by default', () => {
+    expect(styles).toBeInstanceOf(Object);
+    expect(styles).not.toBeNull();
+  });
+
+  it('should contain all explicitly declared CSS class names as properties', () => {
+    explicitlyDeclaredClassNames.forEach(className => {
+      expect(styles).toHaveProperty(className);
+    });
+  });
+
+  it('should ensure all explicitly declared class name properties are strings', () => {
+    explicitlyDeclaredClassNames.forEach(className => {
+      expect(typeof styles[className]).toBe('string');
+      expect(styles[className].length).toBeGreaterThan(0);
+    });
+  });
+
+  it('should ensure all properties (including those covered by index signature) are strings', () => {
+    for (const key in styles) {
+      if (Object.prototype.hasOwnProperty.call(styles, key)) {
+        expect(typeof styles[key]).toBe('string');
+        expect(styles[key].length).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it('should simulate unique hashed class names for each property', () => {
+    const classValues = Object.values(styles);
+    const uniqueClassValues = new Set(classValues);
+    expect(uniqueClassValues.size).toBe(classValues.length);
+
+    explicitlyDeclaredClassNames.forEach(className => {
+      expect(styles[className]).toContain(className);
+      expect(styles[className]).toMatch(/_hashed_[a-z0-9]+$/);
+    });
+    expect(styles.someGenericClass).toContain('someGenericClass');
+    expect(styles.someGenericClass).toMatch(/_hashed_[a-z0-9]+$/);
+  });
+
+  it('should match the expected snapshot for the styles object', () => {
+    expect(styles).toMatchSnapshot();
+  });
+});

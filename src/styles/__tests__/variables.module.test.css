@@ -1,0 +1,245 @@
+import designTokens, {
+  ColorTokens,
+  SpacingTokens,
+  FontTokens,
+  BorderRadiusTokens,
+  DesignTokens,
+  getCssVar,
+  getDesignToken,
+} from './variables';
+
+describe('Design Tokens Module', () => {
+  let consoleErrorSpy: jest.SpyInstance;
+  let consoleWarnSpy: jest.SpyInstance;
+
+  beforeEach(() => {
+    // Mock console.error and console.warn to prevent them from polluting test output
+    // and to allow us to assert if they were called.
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    // Restore original console methods after each test
+    consoleErrorSpy.mockRestore();
+    consoleWarnSpy.mockRestore();
+  });
+
+  describe('designTokens (default export)', () => {
+    it('should be an object matching the DesignTokens interface structure', () => {
+      expect(typeof designTokens).toBe('object');
+      expect(designTokens).toHaveProperty('colors');
+      expect(designTokens).toHaveProperty('spacing');
+      expect(designTokens).toHaveProperty('fonts');
+      expect(designTokens).toHaveProperty('borderRadius');
+
+      // Check types of top-level properties
+      expect(typeof designTokens.colors).toBe('object');
+      expect(typeof designTokens.spacing).toBe('object');
+      expect(typeof designTokens.fonts).toBe('object');
+      expect(typeof designTokens.borderRadius).toBe('object');
+    });
+
+    it('should contain expected color tokens', () => {
+      const colors: ColorTokens = designTokens.colors;
+      expect(colors.primary).toBe('#007bff');
+      expect(colors.secondary).toBe('#6c757d');
+      expect(colors.success).toBe('#28a745');
+      expect(colors.danger).toBe('#dc3545');
+      expect(colors.warning).toBe('#ffc107');
+      expect(colors.info).toBe('#17a2b8');
+      expect(colors.light).toBe('#f8f9fa');
+      expect(colors.dark).toBe('#343a40');
+      expect(colors.text).toBe('#212529');
+      expect(colors.background).toBe('#ffffff');
+    });
+
+    it('should contain expected spacing tokens', () => {
+      const spacing: SpacingTokens = designTokens.spacing;
+      expect(spacing.xs).toBe('0.25rem');
+      expect(spacing.sm).toBe('0.5rem');
+      expect(spacing.md).toBe('1rem');
+      expect(spacing.lg).toBe('1.5rem');
+      expect(spacing.xl).toBe('2rem');
+    });
+
+    it('should contain expected font tokens', () => {
+      const fonts: FontTokens = designTokens.fonts;
+      expect(fonts.familySans).toBe("'Arial', sans-serif");
+      expect(fonts.familySerif).toBe("'Georgia', serif");
+      expect(fonts.sizeSm).toBe('0.875rem');
+      expect(fonts.sizeMd).toBe('1rem');
+      expect(fonts.sizeLg).toBe('1.25rem');
+      expect(fonts.weightNormal).toBe(400);
+      expect(fonts.weightBold).toBe(700);
+    });
+
+    it('should contain expected border radius tokens', () => {
+      const borderRadius: BorderRadiusTokens = designTokens.borderRadius;
+      expect(borderRadius.sm).toBe('0.25rem');
+      expect(borderRadius.md).toBe('0.5rem');
+      expect(borderRadius.lg).toBe('1rem');
+      expect(borderRadius.full).toBe('50%');
+    });
+
+    it('should match the expected snapshot', () => {
+      expect(designTokens).toMatchSnapshot();
+    });
+  });
+
+  describe('getCssVar', () => {
+    it('should return a valid CSS var string for existing color tokens', () => {
+      expect(getCssVar('colors.primary')).toBe('var(--colors-primary)');
+      expect(getCssVar('colors.text')).toBe('var(--colors-text)');
+    });
+
+    it('should return a valid CSS var string for existing spacing tokens', () => {
+      expect(getCssVar('spacing.md')).toBe('var(--spacing-md)');
+      expect(getCssVar('spacing.xl')).toBe('var(--spacing-xl)');
+    });
+
+    it('should return a valid CSS var string for existing font tokens, converting camelCase', () => {
+      expect(getCssVar('fonts.familySans')).toBe('var(--fonts-family-sans)');
+      expect(getCssVar('fonts.sizeLg')).toBe('var(--fonts-size-lg)');
+      expect(getCssVar('fonts.weightNormal')).toBe('var(--fonts-weight-normal)');
+    });
+
+    it('should return a valid CSS var string for existing border radius tokens', () => {
+      expect(getCssVar('borderRadius.full')).toBe('var(--border-radius-full)');
+    });
+
+    it('should handle deeply nested paths correctly (if applicable)', () => {
+      // Although current structure is only 2 levels deep, test a hypothetical 3-level path
+      // to ensure the kebab-case conversion logic works for multiple dots.
+      // For this test, we'll use a non-existent path but verify the var name format.
+      const path = 'someCategory.subCategory.someValue';
+      expect(getCssVar(path)).toBe('var(--some-category-sub-category-some-value)');
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        expect.stringContaining(`getCssVar: Token path "${path}" not fully found in designTokens object.`)
+      );
+    });
+
+    it('should return an empty string and log an error for null input', () => {
+      // @ts-ignore: Intentionally passing null for testing error handling
+      expect(getCssVar(null)).toBe('');
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'getCssVar: Invalid tokenPath provided. Expected a non-empty string.'
+      );
+    });
+
+    it('should return an empty string and log an error for undefined input', () => {
+      // @ts-ignore: Intentionally passing undefined for testing error handling
+      expect(getCssVar(undefined)).toBe('');
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'getCssVar: Invalid tokenPath provided. Expected a non-empty string.'
+      );
+    });
+
+    it('should return an empty string and log an error for an empty string input', () => {
+      expect(getCssVar('')).toBe('');
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'getCssVar: Invalid tokenPath provided. Expected a non-empty string.'
+      );
+    });
+
+    it('should return an empty string and log an error for non-string input', () => {
+      // @ts-ignore: Intentionally passing a number for testing error handling
+      expect(getCssVar(123)).toBe('');
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'getCssVar: Invalid tokenPath provided. Expected a non-empty string.'
+      );
+    });
+
+    it('should return a CSS var string and log a warning for a non-existent token path', () => {
+      const nonExistentPath = 'colors.nonExistent';
+      expect(getCssVar(nonExistentPath)).toBe('var(--colors-non-existent)');
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        expect.stringContaining(`getCssVar: Token path "${nonExistentPath}" not fully found in designTokens object.`)
+      );
+    });
+
+    it('should return a CSS var string and log a warning for a partially non-existent token path', () => {
+      const partialPath = 'colors.primary.invalid';
+      expect(getCssVar(partialPath)).toBe('var(--colors-primary-invalid)');
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        expect.stringContaining(`getCssVar: Token path "${partialPath}" not fully found in designTokens object.`)
+      );
+    });
+  });
+
+  describe('getDesignToken', () => {
+    it('should return the correct value for an existing color token', () => {
+      expect(getDesignToken<string>('colors.primary')).toBe('#007bff');
+      expect(getDesignToken<string>('colors.background')).toBe('#ffffff');
+    });
+
+    it('should return the correct value for an existing spacing token', () => {
+      expect(getDesignToken<string>('spacing.md')).toBe('1rem');
+      expect(getDesignToken<string>('spacing.xs')).toBe('0.25rem');
+    });
+
+    it('should return the correct value for an existing font token', () => {
+      expect(getDesignToken<string>('fonts.familySans')).toBe("'Arial', sans-serif");
+      expect(getDesignToken<number>('fonts.weightBold')).toBe(700);
+    });
+
+    it('should return the correct value for an existing border radius token', () => {
+      expect(getDesignToken<string>('borderRadius.full')).toBe('50%');
+    });
+
+    it('should return undefined and log an error for null input', () => {
+      // @ts-ignore: Intentionally passing null for testing error handling
+      expect(getDesignToken(null)).toBeUndefined();
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'getDesignToken: Invalid tokenPath provided. Expected a non-empty string.'
+      );
+    });
+
+    it('should return undefined and log an error for undefined input', () => {
+      // @ts-ignore: Intentionally passing undefined for testing error handling
+      expect(getDesignToken(undefined)).toBeUndefined();
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'getDesignToken: Invalid tokenPath provided. Expected a non-empty string.'
+      );
+    });
+
+    it('should return undefined and log an error for an empty string input', () => {
+      expect(getDesignToken('')).toBeUndefined();
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'getDesignToken: Invalid tokenPath provided. Expected a non-empty string.'
+      );
+    });
+
+    it('should return undefined and log an error for non-string input', () => {
+      // @ts-ignore: Intentionally passing a number for testing error handling
+      expect(getDesignToken(123)).toBeUndefined();
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'getDesignToken: Invalid tokenPath provided. Expected a non-empty string.'
+      );
+    });
+
+    it('should return undefined and log a warning for a non-existent token path', () => {
+      const nonExistentPath = 'nonExistent.token';
+      expect(getDesignToken(nonExistentPath)).toBeUndefined();
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        `getDesignToken: Token path "${nonExistentPath}" not found in designTokens object.`
+      );
+    });
+
+    it('should return undefined and log a warning for a partially non-existent token path', () => {
+      const partialPath = 'colors.primary.invalid';
+      expect(getDesignToken(partialPath)).toBeUndefined();
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        `getDesignToken: Token path "${partialPath}" not found in designTokens object.`
+      );
+    });
+
+    it('should return undefined and log a warning for a path where an intermediate part is not an object', () => {
+      const invalidIntermediatePath = 'fonts.weightNormal.invalid'; // weightNormal is a number, not an object
+      expect(getDesignToken(invalidIntermediatePath)).toBeUndefined();
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        `getDesignToken: Token path "${invalidIntermediatePath}" not found in designTokens object.`
+      );
+    });
+  });
+});

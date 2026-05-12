@@ -1,0 +1,99 @@
+/**
+ * @file src/pages/dashboard.module.css.d.ts
+ * @description TypeScript declaration for the CSS module specific to the dashboard page layout.
+ *              This file provides type safety for importing CSS class names from
+ *              'src/pages/dashboard.module.css'.
+ *
+ *              When using CSS Modules, class names are typically hashed to ensure
+ *              global uniqueness. This declaration ensures that TypeScript
+ *              understands the structure of the imported styles object, where
+ *              each key corresponds to a CSS class name defined in the .css file,
+ *              and its value is the generated unique class string.
+ */
+
+/**
+ * Represents the type of the imported CSS module.
+ * Each property corresponds to a CSS class name defined in `dashboard.module.css`.
+ * The values are the generated unique class strings at runtime.
+ */
+declare const styles: {
+  readonly [key: string]: string; // General index signature for any other class names
+
+  /**
+   * CSS class for the main dashboard container.
+   * @example <div className={styles.container}>...</div>
+   */
+  readonly container: string;
+
+  /**
+   * CSS class for the dashboard header section.
+   * @example <header className={styles.header}>...</header>
+   */
+  readonly header: string;
+
+  /**
+   * CSS class for the dashboard sidebar navigation.
+   * @example <aside className={styles.sidebar}>...</aside>
+   */
+  readonly sidebar: string;
+
+  /**
+   * CSS class for the main content area of the dashboard.
+   * @example <main className={styles.mainContent}>...</main>
+   */
+  readonly mainContent: string;
+
+  /**
+   * CSS class for individual cards or widgets within the dashboard.
+   * @example <div className={styles.card}>...</div>
+   */
+  readonly card: string;
+
+  /**
+   * CSS class for the header section of a dashboard card.
+   * @example <div className={styles.cardHeader}>...</div>
+   */
+  readonly cardHeader: string;
+
+  /**
+   * CSS class for the body content section of a dashboard card.
+   * @example <div className={styles.cardBody}>...</div>
+   */
+  readonly cardBody: string;
+
+  /**
+   * CSS class for the dashboard footer section.
+   * @example <footer className={styles.footer}>...</footer>
+   */
+  readonly footer: string;
+
+  /**
+   * CSS class for a grid layout within the dashboard.
+   * @example <div className={styles.dashboardGrid}>...</div>
+   */
+  readonly dashboardGrid: string;
+
+  /**
+   * CSS class for a specific grid item.
+   * @example <div className={styles.gridItem}>...</div>
+   */
+  readonly gridItem: string;
+
+  /**
+   * CSS class for a primary button style.
+   * @example <button className={styles.primaryButton}>...</button>
+   */
+  readonly primaryButton: string;
+
+  /**
+   * CSS class for a secondary button style.
+   * @example <button className={styles.secondaryButton}>...</button>
+   */
+  readonly secondaryButton: string;
+};
+
+/**
+ * Exports the `styles` object as the default export for the CSS module.
+ * This allows importing the styles like: `import styles from './dashboard.module.css';`
+ */
+export default styles;

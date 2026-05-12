@@ -1,0 +1,75 @@
+/**
+ * @file src/components/layout/Navbar.module.css.d.ts
+ * @description TypeScript type definitions for the CSS module `src/components/layout/Navbar.module.css`.
+ *
+ * This file provides type safety and autocompletion for CSS class names
+ * defined in `Navbar.module.css` when imported into TypeScript files.
+ *
+ * When a CSS module is imported (e.g., `import styles from './Navbar.module.css';`),
+ * it typically exports a default object. The keys of this object are the original
+ * class names defined in the CSS file, and the values are the unique, generated
+ * class names (e.g., `Navbar_navbar__abc12`).
+ */
+declare const styles: {
+  /**
+   * CSS class for the main navigation bar container.
+   * Example usage: `<nav className={styles.navbar}>`
+   */
+  readonly navbar: string;
+
+  /**
+   * CSS class for the brand or logo section within the navbar.
+   * Example usage: `<a className={styles.navbarBrand} href="/">My Brand</a>`
+   */
+  readonly navbarBrand: string;
+
+  /**
+   * CSS class for the container of navigation links (e.g., `<ul>`).
+   * Example usage: `<ul className={styles.navbarNav}>`
+   */
+  readonly navbarNav: string;
+
+  /**
+   * CSS class for an individual navigation item (e.g., `<li>`).
+   * Example usage: `<li className={styles.navItem}>`
+   */
+  readonly navItem: string;
+
+  /**
+   * CSS class for a navigation link (e.g., `<a>`).
+   * Example usage: `<a className={styles.navLink} href="/about">About</a>`
+   */
+  readonly navLink: string;
+
+  /**
+   * CSS class indicating an active state for a navigation item or link.
+   * Example usage: `<a className={`${styles.navLink} ${styles.active}`} href="/">Home</a>`
+   */
+  readonly active: string;
+
+  /**
+   * CSS class for a button or icon used to toggle the navbar (e.g., for mobile views).
+   * Example usage: `<button className={styles.navbarToggler}>`
+   */
+  readonly navbarToggler: string;
+
+  /**
+   * CSS class for the icon inside the navbar toggler (e.g., a hamburger icon).
+   * Example usage: `<span className={styles.togglerIcon}></span>`
+   */
+  readonly togglerIcon: string;
+
+  /**
+   * CSS class for the collapsible content of the navbar, often hidden on mobile.
+   * Example usage: `<div className={styles.navbarCollapse}>`
+   */
+  readonly navbarCollapse: string;
+
+  // Add more specific class names as needed based on the actual content of Navbar.module.css.
+  // For example:
+  // readonly dropdownMenu: string;
+  // readonly dropdownItem: string;
+  // readonly searchInput: string;
+};
+
+export default styles;

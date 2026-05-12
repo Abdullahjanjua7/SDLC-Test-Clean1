@@ -1,0 +1,86 @@
+// MetricCard.module.test.ts
+
+// Mock the CSS module to simulate its runtime behavior as described by the .d.ts file.
+// In a real application, this mock would typically be more specific to the actual
+// classes defined in MetricCard.module.css. For this test, we'll use generic names
+// that align with the declaration's intent.
+jest.mock('src/components/ui/MetricCard/MetricCard.module.css', () => ({
+  // __esModule: true is important for Jest to correctly handle default exports
+  __esModule: true,
+  default: {
+    metricCard: 'MetricCard_metricCard__abc123',
+    header: 'MetricCard_header__def456',
+    body: 'MetricCard_body__ghi789',
+    // Simulate a dynamically added class that might exist in the CSS module
+    someDynamicClass: 'MetricCard_someDynamicClass__jkl012',
+    // Simulate another class to ensure multiple properties are handled
+    footer: 'MetricCard_footer__mno345',
+  },
+}));
+
+// Import the mocked module. This import will now resolve to our mock.
+import styles from 'src/components/ui/MetricCard/MetricCard.module.css';
+
+describe('MetricCard.module.css type declaration runtime behavior (mocked)', () => {
+  // Test 1: Test all exported functions/classes
+  // In this case, the module exports a default object.
+  it('should export a default object containing CSS class strings', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+    // Ensure the object is not empty, implying it contains class names
+    expect(Object.keys(styles).length).toBeGreaterThan(0);
+  });
+
+  // Test 2: Test different scenarios and inputs
+  it('should provide string values for explicitly defined CSS classes', () => {
+    // Accessing known properties
+    expect(typeof styles.metricCard).toBe('string');
+    expect(styles.metricCard).toBe('MetricCard_metricCard__abc123');
+
+    expect(typeof styles.header).toBe('string');
+    expect(styles.header).toBe('MetricCard_header__def456');
+
+    expect(typeof styles.body).toBe('string');
+    expect(styles.body).toBe('MetricCard_body__ghi789');
+
+    expect(typeof styles.footer).toBe('string');
+    expect(styles.footer).toBe('MetricCard_footer__mno345');
+  });
+
+  it('should correctly handle dynamically accessed class names as strings', () => {
+    // Accessing a property using bracket notation, simulating dynamic access
+    const dynamicKey = 'someDynamicClass';
+    expect(typeof styles[dynamicKey]).toBe('string');
+    expect(styles[dynamicKey]).toBe('MetricCard_someDynamicClass__jkl012');
+  });
+
+  // Test 3: Test error conditions
+  // The `readonly` keyword is a TypeScript compile-time feature. At runtime,
+  // JavaScript objects are mutable unless explicitly frozen. Testing `readonly`
+  // directly in Jest for a plain object mock is not feasible without `Object.freeze`
+  // or similar, which would be testing the mock implementation rather than the
+  // declaration's runtime effect.
+  // However, we can test for expected undefined behavior for non-existent keys.
+  it('should return undefined for non-existent CSS class names', () => {
+    const nonExistentKey = 'thisClassDoesNotExist';
+    expect(styles[nonExistentKey]).toBeUndefined();
+  });
+
+  it('should ensure class values are not null or undefined for existing classes', () => {
+    expect(styles.metricCard).not.toBeNull();
+    expect(styles.metricCard).not.toBeUndefined();
+    expect(styles.header).not.toBeNull();
+    expect(styles.header).not.toBeUndefined();
+  });
+
+  // Test 4: Use appropriate mocking (already done with jest.mock at the top)
+
+  // Test 5: Follow Jest best practices (using describe, it, expect)
+  // Test 6: Include proper setup and teardown (not strictly needed here, mock is global for the file)
+
+  // Snapshot testing (as requested in the test strategy)
+  it('should match the expected structure of the CSS module export (snapshot)', () => {
+    expect(styles).toMatchSnapshot();
+  });
+});

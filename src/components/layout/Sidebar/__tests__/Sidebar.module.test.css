@@ -1,0 +1,123 @@
+// src/components/layout/Sidebar/__tests__/Sidebar.module.css.test.ts
+
+// Define the interface locally within the test file.
+// This allows TypeScript to perform type checks on our mock and assertions,
+// ensuring that the test itself adheres to the contract defined in the .d.ts file.
+// In a real-world scenario, if `SidebarModule` were exported from a separate
+// type definition file, you would import it directly.
+interface SidebarModule {
+  readonly sidebar: string;
+  readonly sidebarCollapsed: string;
+  readonly sidebarHeader: string;
+  readonly sidebarNav: string;
+  readonly navItem: string;
+  readonly navItemActive: string;
+  readonly sidebarFooter: string;
+  readonly sidebarToggle: string;
+  readonly sidebarContent: string;
+}
+
+// Mock the CSS module.
+// This `jest.mock` call intercepts imports of '../Sidebar.module.css'
+// and provides a controlled object that simulates what a CSS loader
+// (e.g., Webpack's css-loader with modules) would return at runtime.
+// The mock object is explicitly typed as `SidebarModule` to ensure it
+// conforms to the expected interface.
+jest.mock('../Sidebar.module.css', (): { default: SidebarModule } => ({
+  __esModule: true,
+  default: {
+    sidebar: "Sidebar_sidebar__mock1",
+    sidebarCollapsed: "Sidebar_sidebarCollapsed__mock2",
+    sidebarHeader: "Sidebar_sidebarHeader__mock3",
+    sidebarNav: "Sidebar_sidebarNav__mock4",
+    navItem: "Sidebar_navItem__mock5",
+    navItemActive: "Sidebar_navItemActive__mock6",
+    sidebarFooter: "Sidebar_sidebarFooter__mock7",
+    sidebarToggle: "Sidebar_sidebarToggle__mock8",
+    sidebarContent: "Sidebar_sidebarContent__mock9",
+  },
+}));
+
+// Import the mocked module.
+// The `styles` variable will now hold the object defined in our `jest.mock` call.
+import styles from '../Sidebar.module.css';
+
+describe('Sidebar.module.css module contract', () => {
+  // Define the expected keys based on the `SidebarModule` interface.
+  // This array serves as a single source of truth for all expected properties,
+  // making the tests robust against changes in the interface.
+  const expectedKeys: (keyof SidebarModule)[] = [
+    'sidebar',
+    'sidebarCollapsed',
+    'sidebarHeader',
+    'sidebarNav',
+    'navItem',
+    'navItemActive',
+    'sidebarFooter',
+    'sidebarToggle',
+    'sidebarContent',
+  ];
+
+  // Test Case 1: Verify that the module exports a default object.
+  // This ensures the basic structure of a CSS module import is met.
+  it('should export a default object representing the CSS module', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  // Test Case 2: Verify that all properties defined in the `SidebarModule` interface
+  // are present in the exported object.
+  it('should contain all expected CSS class names defined in SidebarModule', () => {
+    expectedKeys.forEach(key => {
+      expect(styles).toHaveProperty(key);
+    });
+  });
+
+  // Test Case 3: Verify that the exported object does not contain any unexpected properties.
+  // This helps catch discrepancies between the `.d.ts` file and the actual CSS module
+  // if extra classes were added to the CSS without updating the type definition.
+  it('should only contain the expected CSS class names and no extraneous properties', () => {
+    const actualKeys = Object.keys(styles);
+    expect(actualKeys.sort()).toEqual(expectedKeys.sort());
+  });
+
+  // Test Case 4: Verify that all property values are non-empty strings.
+  // CSS modules typically resolve to unique string class names. This test
+  // ensures that the values conform to this expectation.
+  it('should have non-empty string values for all CSS class names', () => {
+    expectedKeys.forEach(key => {
+      expect(typeof styles[key]).toBe('string');
+      expect(styles[key].length).toBeGreaterThan(0); // Ensure the string is not empty
+    });
+  });
+
+  // Test Case 5: Use snapshot testing to capture the entire structure and values
+  // of the exported CSS module object.
+  // This provides a quick and effective way to detect any unintended changes
+  // to the module's output over time.
+  it('should match the snapshot for its structure and values', () => {
+    expect(styles).toMatchSnapshot();
+  });
+
+  // Note on "error conditions":
+  // For a TypeScript declaration file defining a CSS module, "error conditions"
+  // primarily relate to deviations from the defined contract (e.g., missing classes,
+  // incorrect value types, or unexpected classes). These are thoroughly covered
+  // by the tests above (presence, type, and absence of extraneous properties).
+  // Runtime errors related to the CSS module loading itself would typically be
+  // handled by the build system or runtime environment, not directly testable
+  // within the scope of this `.d.ts` file's contract.
+
+  // Note on "setup and teardown":
+  // This test suite is stateless and does not involve external resources,
+  // database connections, or complex component rendering. Therefore, explicit
+  // `beforeEach`, `afterEach`, `beforeAll`, or `afterAll` hooks are not necessary.
+
+  // Note on "jest-rtl", "integration tests", "accessibility testing":
+  // These testing strategies are typically applied to UI components or
+  // higher-level application logic that consumes CSS modules. For a low-level
+  // type definition file like `Sidebar.module.css.d.ts`, these strategies
+  // are not directly applicable. The focus here is on verifying the module's
+  // structural contract.
+});

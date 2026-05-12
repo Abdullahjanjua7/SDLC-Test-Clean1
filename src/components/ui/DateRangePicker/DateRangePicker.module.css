@@ -1,0 +1,20 @@
+/**
+ * @file Type definitions for the CSS module `DateRangePicker.module.css`.
+ * @description This file provides TypeScript type information for the CSS module,
+ *              allowing for type-safe imports and usage of CSS class names.
+ *              When imported, the CSS module resolves to an object where keys are
+ *              the original class names defined in the CSS file, and values are
+ *              the unique, generated class names.
+ */
+
+declare const cssModule: {
+  /**
+   * A string index signature indicating that any property accessed on this object
+   * (representing a CSS class name) will return a string (the generated class name).
+   * The `readonly` modifier ensures that the imported module's properties cannot be
+   * modified at runtime.
+   */
+  readonly [key: string]: string;
+};
+
+export default cssModule;

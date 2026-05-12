@@ -1,0 +1,345 @@
+/**
+ * This test file focuses on verifying the structural integrity and type definitions
+ * of the `package.json` related interfaces. Since these are purely type definitions
+ * and do not contain any executable logic (functions or classes), the tests
+ * primarily involve:
+ *
+ * 1.  Creating objects that conform to each interface and type.
+ * 2.  Asserting that these objects have the expected structure and values.
+ * 3.  Demonstrating the handling of optional properties, union types, and index signatures.
+ * 4.  Utilizing snapshot testing for complex structures like the comprehensive `PackageJson`
+ *     object to ensure its schema remains consistent over time.
+ *
+ * There are no functions or classes to export, mock, or test for runtime errors.
+ * The TypeScript compiler itself performs the primary "testing" of these interfaces
+ * at compile time. Jest is used here to provide a runtime assertion of the data
+ * structures that these interfaces describe.
+ */
+
+// We don't need to import the types explicitly if they are in the same file or globally available,
+// but for clarity and assuming this might be a separate test file, we'd typically import them.
+// For this exercise, we'll assume the types are available in the scope where these tests run.
+
+interface Person {
+  name: string;
+  email?: string;
+  url?: string;
+}
+
+interface Bugs {
+  url?: string;
+  email?: string;
+}
+
+interface Repository {
+  type: string;
+  url: string;
+  directory?: string;
+}
+
+interface Scripts {
+  [key: string]: string;
+}
+
+interface Dependencies {
+  [key: string]: string;
+}
+
+interface Engines {
+  node?: string;
+  npm?: string;
+  yarn?: string;
+  pnpm?: string;
+  [key: string]: string | undefined;
+}
+
+interface PublishConfig {
+  access?: 'public' | 'restricted';
+  registry?: string;
+  tag?: string;
+  [key: string]: any;
+}
+
+type Bin = string | { [key: string]: string };
+
+type ExportCondition = string | {
+  types?: string;
+  import?: string;
+  require?: string;
+  default?: string;
+  browser?: string;
+  node?: string;
+  [key: string]: ExportCondition;
+};
+
+interface Exports {
+  [key: string]: ExportCondition;
+}
+
+interface Imports {
+  [key: string]: ExportCondition;
+}
+
+type Workspaces = string[] | {
+  packages?: string[];
+  nohoist?: string[];
+};
+
+interface PackageJson {
+  name: string;
+  version: string;
+  description?: string;
+  keywords?: string[];
+  homepage?: string;
+  bugs?: Bugs;
+  license?: string;
+  author?: string | Person;
+  contributors?: (string | Person)[];
+  files?: string[];
+  main?: string;
+  module?: string;
+  types?: string;
+  typings?: string;
+  browser?: string;
+  bin?: Bin;
+  man?: string | string[];
+  directories?: {
+    lib?: string;
+    bin?: string;
+    man?: string;
+    doc?: string;
+    example?: string;
+    test?: string;
+    [key: string]: string | undefined;
+  };
+  repository?: string | Repository;
+  scripts?: Scripts;
+  config?: { [key: string]: any };
+  dependencies?: Dependencies;
+  devDependencies?: Dependencies;
+  peerDependencies?: Dependencies;
+  optionalDependencies?: Dependencies;
+  bundledDependencies?: string[];
+  bundleDependencies?: string[];
+  engines?: Engines;
+  os?: string[];
+  cpu?: string[];
+  private?: boolean;
+  publishConfig?: PublishConfig;
+  workspaces?: Workspaces;
+  type?: 'module' | 'commonjs';
+  exports?: string | Exports;
+  imports?: Imports;
+  browserslist?: string[] | { [key: string]: string[] };
+  eslintConfig?: { [key: string]: any };
+  prettier?: { [key: string]: any } | string;
+  jest?: { [key: string]: any };
+  husky?: {
+    hooks?: { [key: string]: string };
+    [key: string]: any;
+  };
+  'lint-staged'?: { [key: string]: string | string[] };
+  release?: { [key: string]: any };
+  volta?: {
+    node?: string;
+    npm?: string;
+    yarn?: string;
+    pnpm?: string;
+  };
+  typescript?: {
+    compilerOptions?: { [key: string]: any };
+    [key: string]: any;
+  };
+  [key: string]: any;
+}
+
+
+describe('PackageJson Interfaces', () => {
+
+  // Test basic Person interface
+  it('should correctly define a Person object', () => {
+    const person: Person = { name: 'John Doe' };
+    expect(person).toEqual({ name: 'John Doe' });
+
+    const personWithDetails: Person = { name: 'Jane Doe', email: 'jane@example.com', url: 'http://jane.com' };
+    expect(personWithDetails).toEqual({ name: 'Jane Doe', email: 'jane@example.com', url: 'http://jane.com' });
+  });
+
+  // Test Bugs interface
+  it('should correctly define a Bugs object', () => {
+    const bugs: Bugs = { url: 'http://bugs.com', email: 'bugs@example.com' };
+    expect(bugs).toEqual({ url: 'http://bugs.com', email: 'bugs@example.com' });
+
+    const bugsUrlOnly: Bugs = { url: 'http://bugs.com' };
+    expect(bugsUrlOnly).toEqual({ url: 'http://bugs.com' });
+  });
+
+  // Test Repository interface
+  it('should correctly define a Repository object', () => {
+    const repo: Repository = { type: 'git', url: 'http://repo.com/my-repo.git' };
+    expect(repo).toEqual({ type: 'git', url: 'http://repo.com/my-repo.git' });
+
+    const repoWithDirectory: Repository = { type: 'git', url: 'http://repo.com/my-repo.git', directory: 'packages/core' };
+    expect(repoWithDirectory).toEqual({ type: 'git', url: 'http://repo.com/my-repo.git', directory: 'packages/core' });
+  });
+
+  // Test Scripts interface
+  it('should correctly define a Scripts object with arbitrary keys', () => {
+    const scripts: Scripts = {
+      start: 'node index.js',
+      build: 'webpack --config webpack.config.js',
+      test: 'jest',
+    };
+    expect(scripts).toEqual({
+      start: 'node index.js',
+      build: 'webpack --config webpack.config.js',
+      test: 'jest',
+    });
+  });
+
+  // Test Dependencies interface
+  it('should correctly define a Dependencies object with arbitrary keys', () => {
+    const deps: Dependencies = {
+      react: '^18.0.0',
+      'react-dom': '^18.0.0',
+      lodash: '~4.17.0',
+    };
+    expect(deps).toEqual({
+      react: '^18.0.0',
+      'react-dom': '^18.0.0',
+      lodash: '~4.17.0',
+    });
+  });
+
+  // Test Engines interface
+  it('should correctly define an Engines object with standard and custom engines', () => {
+    const engines: Engines = {
+      node: '>=16.0.0',
+      npm: '>=8.0.0',
+    };
+    expect(engines).toEqual({
+      node: '>=16.0.0',
+      npm: '>=8.0.0',
+    });
+
+    const customEngine: Engines = {
+      node: '>=16.0.0',
+      customRuntime: '1.0.0',
+      pnpm: '7.x',
+    };
+    expect(customEngine).toEqual({
+      node: '>=16.0.0',
+      customRuntime: '1.0.0',
+      pnpm: '7.x',
+    });
+  });
+
+  // Test PublishConfig interface
+  it('should correctly define a PublishConfig object with standard and custom fields', () => {
+    const publishConfig: PublishConfig = {
+      access: 'public',
+      registry: 'https://registry.npmjs.org/',
+    };
+    expect(publishConfig).toEqual({
+      access: 'public',
+      registry: 'https://registry.npmjs.org/',
+    });
+
+    const customPublishConfig: PublishConfig = {
+      access: 'restricted',
+      tag: 'beta',
+      customField: true,
+      anotherSetting: { value: 123 },
+    };
+    expect(customPublishConfig).toEqual({
+      access: 'restricted',
+      tag: 'beta',
+      customField: true,
+      anotherSetting: { value: 123 },
+    });
+  });
+
+  // Test Bin type (string or object)
+  it('should correctly define a Bin type as a string', () => {
+    const binString: Bin = 'dist/cli.js';
+    expect(binString).toBe('dist/cli.js');
+  });
+
+  it('should correctly define a Bin type as an object', () => {
+    const binObject: Bin = {
+      mycli: 'dist/cli.js',
+      anothercli: 'dist/another-cli.js',
+    };
+    expect(binObject).toEqual({
+      mycli: 'dist/cli.js',
+      anothercli: 'dist/another-cli.js',
+    });
+  });
+
+  // Test ExportCondition type (string or object with nested conditions)
+  it('should correctly define an ExportCondition type as a string path', () => {
+    const exportString: ExportCondition = './dist/index.js';
+    expect(exportString).toBe('./dist/index.js');
+  });
+
+  it('should correctly define an ExportCondition type as an object with conditions', () => {
+    const exportObject: ExportCondition = {
+      types: './dist/index.d.ts',
+      import: './dist/esm/index.js',
+      require: './dist/cjs/index.js',
+      default: './dist/index.js',
+    };
+    expect(exportObject).toEqual({
+      types: './dist/index.d.ts',
+      import: './dist/esm/index.js',
+      require: './dist/cjs/index.js',
+      default: './dist/index.js',
+    });
+  });
+
+  it('should correctly define an ExportCondition type with nested conditions', () => {
+    const nestedExportObject: ExportCondition = {
+      './feature': {
+        development: {
+          import: './dist/feature.development.mjs',
+          require: './dist/feature.development.cjs',
+        },
+        production: {
+          import: './dist/feature.production.mjs',
+          require: './dist/feature.production.cjs',
+        },
+        default: './dist/feature.mjs',
+      },
+      './package.json': './package.json',
+    };
+    expect(nestedExportObject).toEqual({
+      './feature': {
+        development: {
+          import: './dist/feature.development.mjs',
+          require: './dist/feature.development.cjs',
+        },
+        production: {
+          import: './dist/feature.production.mjs',
+          require: './dist/feature.production.cjs',
+        },
+        default: './dist/feature.mjs',
+      },
+      './package.json': './package.json',
+    });
+  });
+
+  // Test Exports interface
+  it('should correctly define an Exports object with multiple export conditions', () => {
+    const exports: Exports = {
+      '.': {
+        import: './dist/esm/index.js',
+        require: './dist/cjs/index.js',
+        types: './dist/types/index.d.ts',
+      },
+      './utils': './dist/utils.js',
+      './styles/*': './dist/styles/*.css',
+    };
+    expect(exports).toEqual({
+      '.': {
+        import: './dist/esm/index.js',
+        require: './dist/

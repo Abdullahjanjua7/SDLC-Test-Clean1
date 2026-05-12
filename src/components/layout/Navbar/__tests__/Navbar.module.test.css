@@ -1,0 +1,55 @@
+import styles from './Navbar.module'; // Assuming this imports a concrete object matching the type definition
+
+describe('Navbar.module', () => {
+  const expectedClassNames = [
+    'navbar',
+    'navbarContainer',
+    'logo',
+    'navMenu',
+    'navItem',
+    'navLink',
+    'hamburger',
+    'iconBar',
+    'active',
+    'menuOpen',
+    'closeButton',
+    'menuOverlay',
+  ];
+
+  it('should export a default object', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  it('should contain all expected CSS class names as properties', () => {
+    expectedClassNames.forEach(className => {
+      expect(styles).toHaveProperty(className);
+    });
+  });
+
+  it('should have string values for all CSS class name properties', () => {
+    expectedClassNames.forEach(className => {
+      expect(typeof styles[className]).toBe('string');
+      expect(styles[className].length).toBeGreaterThan(0);
+    });
+  });
+
+  it('should not contain any unexpected properties', () => {
+    const actualKeys = Object.keys(styles);
+    expect(actualKeys.length).toBe(expectedClassNames.length);
+    actualKeys.forEach(key => {
+      expect(expectedClassNames).toContain(key);
+    });
+  });
+
+  it('should match the snapshot of the exported styles object', () => {
+    expect(styles).toMatchSnapshot();
+  });
+
+  it('should have string values that are primitive and not directly mutable', () => {
+    const originalNavbarValue = styles.navbar;
+    expect(originalNavbarValue.toUpperCase()).not.toBe(originalNavbarValue);
+    expect(styles.navbar).toBe(originalNavbarValue);
+  });
+});

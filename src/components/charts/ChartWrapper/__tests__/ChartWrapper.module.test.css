@@ -1,0 +1,86 @@
+// This test suite verifies the runtime shape of the CSS module
+// 'src/components/charts/ChartWrapper/ChartWrapper.module.css'
+// against the type declarations provided in 'ChartWrapper.module.css.d.ts'.
+//
+// For these tests to run correctly, Jest needs to be configured to handle
+// CSS module imports. A common setup involves using `identity-obj-proxy`
+// via `moduleNameMapper` in your `jest.config.js` or `package.json`.
+//
+// Example `jest.config.js` configuration:
+// module.exports = {
+//   // ... other Jest configurations
+//   moduleNameMapper: {
+//     "\\.(css|less|scss|sass)$": "identity-obj-proxy"
+//   },
+//   // If using TypeScript, you might also need:
+//   // preset: 'ts-jest',
+//   // testEnvironment: 'jsdom',
+// };
+//
+// Make sure to install `identity-obj-proxy`: `npm install --save-dev identity-obj-proxy`
+//
+// The actual CSS file (e.g., src/components/charts/ChartWrapper/ChartWrapper.module.css)
+// is assumed to exist and contain some class definitions. For the purpose of these
+// tests, we'll assume it defines classes like `.chartWrapper`, `.chartTitle`, etc.
+
+// We import the CSS module, and Jest's moduleNameMapper will resolve this
+// to an object (e.g., from `identity-obj-proxy`) whose shape should conform
+// to the `ChartWrapper.module.css.d.ts` declaration.
+import styles from './ChartWrapper.module.css';
+
+describe('ChartWrapper.module.css runtime shape and type declaration conformity', () => {
+
+  // Test 1: Verify that the default export is an object, as declared.
+  it('should export a default object of styles', () => {
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+    // Assuming the CSS module defines at least one class.
+    expect(Object.keys(styles).length).toBeGreaterThan(0);
+  });
+
+  // Test 2: Verify that all values in the exported styles object are strings,
+  // conforming to `readonly [key: string]: string` in the .d.ts file.
+  it('should have string values for all exported class names', () => {
+    for (const key in styles) {
+      if (Object.prototype.hasOwnProperty.call(styles, key)) {
+        expect(typeof styles[key]).toBe('string');
+        // In a real CSS Modules setup, these strings would be unique generated class names.
+        // With `identity-obj-proxy`, they will typically be the key itself.
+        expect(styles[key].length).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  // Test 3: Verify the presence and type of specific, expected class names.
+  // These class names are examples based on typical content for a ChartWrapper module.
+  // In a real project, you would list the actual class names defined in your CSS file.
+  it('should contain expected class names as strings', () => {
+    expect(styles).toHaveProperty('chartWrapper');
+    expect(typeof styles.chartWrapper).toBe('string');
+
+    expect(styles).toHaveProperty('chartTitle');
+    expect(typeof styles.chartTitle).toBe('string');
+
+    expect(styles).toHaveProperty('chartContainer');
+    expect(typeof styles.chartContainer).toBe('string');
+
+    // Example: If you had another class like `.chartFooter`
+    // expect(styles).toHaveProperty('chartFooter');
+    // expect(typeof styles.chartFooter).toBe('string');
+  });
+
+  // Test 4: Use snapshot testing to capture the entire structure of the
+  // exported styles object. This helps to detect any unintended changes
+  // (additions, removals, or renames) to the class names over time.
+  it('should match the snapshot of the exported styles object', () => {
+    expect(styles).toMatchSnapshot();
+  });
+
+  // Note on error conditions:
+  // For a .d.ts file, "error conditions" are primarily caught by the TypeScript compiler
+  // during compilation if the runtime module does not match its declaration.
+  // These Jest tests verify the runtime object's conformity to the declared shape,
+  // effectively acting as a guard against runtime mismatches that the .d.ts file
+  // is designed to prevent at compile time. There are no executable functions
+  // within the .d.ts file itself to test for runtime errors.
+});

@@ -1,0 +1,162 @@
+// ExportButton.module.test.ts
+
+// Mock the actual CSS module import.
+// This simulates what a CSS loader (e.g., Webpack's css-loader) would return
+// when 'ExportButton.module' (or 'ExportButton.module.css') is imported.
+// The content of this mock should reflect the expected structure and values
+// that would come from an actual CSS module file.
+const mockCssModuleContent = {
+  container: 'ExportButton_container__abc12',
+  buttonPrimary: 'ExportButton_buttonPrimary__def34',
+  buttonSecondary: 'ExportButton_buttonSecondary__ghi56',
+  icon: 'ExportButton_icon__jkl78',
+  // Add more class names as they would appear in the corresponding CSS module
+};
+
+// Use jest.mock to intercept the import of the module under test.
+// The path './ExportButton.module' assumes the test file is in the same directory
+// as 'ExportButton.module.ts' (or 'ExportButton.module.d.ts' which declares for 'ExportButton.module.css').
+// We mock the *runtime value* that would be exported.
+jest.mock('./ExportButton.module', () => ({
+  __esModule: true, // Essential for mocking ES module default exports
+  default: mockCssModuleContent,
+}));
+
+// Now, import the module. This will actually import our mock.
+import styles from './ExportButton.module';
+
+describe('ExportButton.module CSS Styles', () => {
+  // Test 1: Ensure the default export is an object and not null.
+  test('should export a default object', () => {
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  // Test 2: Verify that the exported object contains expected class names.
+  test('should contain expected CSS class names', () => {
+    expect(styles).toHaveProperty('container');
+    expect(styles).toHaveProperty('buttonPrimary');
+    expect(styles).toHaveProperty('buttonSecondary');
+    expect(styles).toHaveProperty('icon');
+  });
+
+  // Test 3: Verify that the values for all class names are strings, as declared in the TypeScript definition.
+  test('should have string values for all class names', () => {
+    Object.values(styles).forEach(value => {
+      expect(typeof value).toBe('string');
+    });
+  });
+
+  // Test 4: Verify specific generated class names.
+  // This tests the *content* of the mock, ensuring it's what we expect from a CSS module.
+  test('should provide unique, scoped class names as values', () => {
+    expect(styles.container).toBe('ExportButton_container__abc12');
+    expect(styles.buttonPrimary).toBe('ExportButton_buttonPrimary__def34');
+    expect(styles.buttonSecondary).toBe('ExportButton_buttonSecondary__ghi56');
+    expect(styles.icon).toBe('ExportButton_icon__jkl78');
+  });
+
+  // Test 5: Snapshot test for the entire styles object.
+  // This is useful for catching unintended changes to the structure or generated class names.
+  test('should match the snapshot of the generated class names object', () => {
+    expect(styles).toMatchSnapshot();
+  });
+
+  // Test 6: Accessing a non-existent class name should return undefined.
+  // This is standard JavaScript object behavior and confirms the dynamic nature of the keys.
+  test('should return undefined for non-existent class names', () => {
+    expect(styles.nonExistentClass).toBeUndefined();
+  });
+
+  // Test 7: Scenario for an empty CSS module.
+  // This requires resetting the module cache and re-mocking to simulate a different module state.
+  describe('when the CSS module is empty', () => {
+    // Clear the module cache before each test in this describe block
+    // to ensure we get the new mock when the module is re-imported.
+    beforeEach(() => {
+      jest.resetModules();
+      // Re-mock the module to return an empty object, simulating an empty CSS file.
+      jest.mock('./ExportButton.module', () => ({
+        __esModule: true,
+        default: {},
+      }));
+    });
+
+    test('should export an empty object', async () => {
+      // Dynamically import the module again to get the new mock.
+      // Using await import() is necessary after jest.resetModules()
+      // if the original import was at the top level.
+      const emptyStyles = (await import('./ExportButton.module')).default;
+      expect(typeof emptyStyles).toBe('object');
+      expect(Object.keys(emptyStyles).length).toBe(0);
+      expect(emptyStyles).toEqual({});
+      expect(emptyStyles).toMatchSnapshot(); // Snapshot for the empty state
+    });
+  });
+
+  // Test 8: Scenario with different mock data (e.g., fewer classes than the initial mock).
+  describe('when the CSS module has fewer classes', () => {
+    beforeEach(() => {
+      jest.resetModules();
+      jest.mock('./ExportButton.module', () => ({
+        __esModule: true,
+        default: {
+          onlyOneClass: 'ExportButton_onlyOneClass__xyz99',
+          anotherClass: 'ExportButton_anotherClass__pqr00',
+        },
+      }));
+    });
+
+    test('should export an object with only the specified classes', async () => {
+      const fewerStyles = (await import('./ExportButton.module')).default;
+      expect(Object.keys(fewerStyles).length).toBe(2);
+      expect(fewerStyles).toHaveProperty('onlyOneClass');
+      expect(fewerStyles.onlyOneClass).toBe('ExportButton_onlyOneClass__xyz99');
+      expect(fewerStyles).toHaveProperty('anotherClass');
+      expect(fewerStyles.anotherClass).toBe('ExportButton_anotherClass__pqr00');
+      // Ensure properties from the initial mock are no longer present
+      expect(fewerStyles).not.toHaveProperty('container');
+      expect(fewerStyles).toMatchSnapshot();
+    });
+  });
+
+  // Test 9: Error condition - simulating malformed data from the CSS loader.
+  // This tests how JavaScript runtime would behave if the loader returned something
+  // that doesn't conform to the declared type (e.g., null instead of an object).
+  // TypeScript would catch this at compile time for consumers, but at runtime, JS behaves differently.
+  describe('when the CSS module returns malformed data (e.g., null)', () => {
+    beforeEach(() => {
+      jest.resetModules();
+      jest.mock('./ExportButton.module', () => ({
+        __esModule: true,
+        default: null, // Malformed: should be an object according to the declaration
+      }));
+    });
+
+    test('should export null and accessing properties should throw a TypeError', async () => {
+      const malformedStyles = (await import('./ExportButton.module')).default;
+      expect(malformedStyles).toBeNull();
+      // Attempting to access a property on null should throw a TypeError at runtime.
+      expect(() => malformedStyles.container).toThrow(TypeError);
+      expect(() => malformedStyles.container).toThrow("Cannot read properties of null (reading 'container')");
+    });
+  });
+
+  // Test 10: Error condition - simulating malformed data (e.g., a string instead of an object).
+  describe('when the CSS module returns malformed data (e.g., a string)', () => {
+    beforeEach(() => {
+      jest.resetModules();
+      jest.mock('./ExportButton.module', () => ({
+        __esModule: true,
+        default: 'not-an-object', // Malformed: should be an object
+      }));
+    });
+
+    test('should export a string and accessing properties should return undefined', async () => {
+      const malformedStyles = (await import('./ExportButton.module')).default;
+      expect(malformedStyles).toBe('not-an-object');
+      // Attempting to access a property on a string primitive returns undefined.
+      expect(malformedStyles.container).toBeUndefined();
+    });
+  });
+});

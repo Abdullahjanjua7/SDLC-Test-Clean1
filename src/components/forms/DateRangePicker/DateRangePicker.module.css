@@ -1,0 +1,87 @@
+/**
+ * @file src/components/forms/DateRangePicker/DateRangePicker.module.css.d.ts
+ * @description Type definitions for the CSS module styles of the DateRangePicker component.
+ *
+ * This file provides TypeScript type declarations for the CSS classes defined
+ * in `DateRangePicker.module.css`. When importing the CSS module, TypeScript
+ * will recognize the shape of the exported object, allowing for type-safe
+ * access to class names.
+ */
+
+/**
+ * Interface representing the CSS module styles for the DateRangePicker component.
+ * Each property corresponds to a CSS class name defined in `DateRangePicker.module.css`,
+ * and its value will be the unique, generated class name string.
+ */
+interface DateRangePickerStyles {
+  /** The main container for the date range picker component. */
+  dateRangePicker: string;
+  /** Container for the input fields (start and end dates). */
+  inputContainer: string;
+  /** Style for the start date input field. */
+  startDateInput: string;
+  /** Style for the end date input field. */
+  endDateInput: string;
+  /** Separator element between the start and end date inputs (e.g., a dash). */
+  inputSeparator: string;
+  /** Container for the calendar/date picker UI. */
+  calendarContainer: string;
+  /** Header section of the calendar (e.g., month/year display, navigation buttons). */
+  calendarHeader: string;
+  /** Navigation button for moving to the previous period (e.g., previous month). */
+  navButtonPrev: string;
+  /** Navigation button for moving to the next period (e.g., next month). */
+  navButtonNext: string;
+  /** Display for the current month and year in the calendar header. */
+  monthYearDisplay: string;
+  /** Container for the weekdays header (e.g., "Sun", "Mon", etc.). */
+  weekdays: string;
+  /** Individual weekday header cell. */
+  weekday: string;
+  /** Container for the grid of day cells. */
+  daysGrid: string;
+  /** Individual day cell in the calendar. */
+  dayCell: string;
+  /** Style for a day cell that is part of the currently selected date range. */
+  dayInRange: string;
+  /** Style for the start date of the selected range. */
+  dayRangeStart: string;
+  /** Style for the end date of the selected range. */
+  dayRangeEnd: string;
+  /** Style for a day cell that is currently selected (can be start, end, or single date). */
+  daySelected: string;
+  /** Style for the current day (today). */
+  dayToday: string;
+  /** Style for a day cell that is disabled (e.g., outside min/max date, or not selectable). */
+  dayDisabled: string;
+  /** Style for a day cell that belongs to the previous or next month but is displayed in the current view. */
+  dayOutsideMonth: string;
+  /** Style for the footer section of the picker (e.g., "Apply", "Cancel" buttons). */
+  pickerFooter: string;
+  /** Generic style for an action button within the picker footer. */
+  footerButton: string;
+  /** Style for the "Apply" or "Confirm" button in the footer. */
+  applyButton: string;
+  /** Style for the "Cancel" button in the footer. */
+  cancelButton: string;
+  /** Style for the "Clear" button in the footer. */
+  clearButton: string;
+  /** Container for quick selection presets (e.g., "Last 7 days", "This Month"). */
+  presetsContainer: string;
+  /** Style for an individual quick selection preset button. */
+  presetButton: string;
+  /** Style for an active or currently selected quick selection preset button. */
+  presetButtonActive: string;
+  /** Style for the popover or dropdown container that holds the calendar UI. */
+  popover: string;
+  /** Style for the arrow element of the popover. */
+  popoverArrow: string;
+}
+
+/**
+ * The default export of the CSS module.
+ * When you import 'DateRangePicker.module.css', you will receive an object
+ * conforming to the `DateRangePickerStyles` interface.
+ */
+declare const styles: DateRangePickerStyles;
+export default styles;

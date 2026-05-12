@@ -1,0 +1,47 @@
+// src/components/ui/LoadingSpinner/LoadingSpinner.module.css.d.ts
+// This file provides TypeScript type definitions for the CSS module
+// 'LoadingSpinner.module.css'.
+
+/**
+ * Type definition for the CSS module 'LoadingSpinner.module.css'.
+ *
+ * When a CSS module is imported into a TypeScript file (e.g., a React component),
+ * it typically resolves to a JavaScript object. The keys of this object are
+ * the original class names defined in the CSS file, and the values are the
+ * unique, generated class names (e.g., `spinner_abc123`).
+ *
+ * This interface ensures type safety, provides autocompletion, and helps
+ * catch errors at compile time if a non-existent class name is used.
+ */
+interface LoadingSpinnerModuleCss {
+  /**
+   * The class name for the main loading spinner element.
+   * This class is expected to define the core styling and animation
+   * for the spinner (e.g., width, height, border, border-radius, animation).
+   *
+   * Example usage in a component: `<div className={styles.spinner}></div>`
+   */
+  readonly spinner: string;
+
+  /**
+   * An index signature to allow for any other class names that might be
+   * defined in the CSS module but are not explicitly listed above.
+   * This provides flexibility while still offering strong typing for known,
+   * commonly used classes.
+   *
+   * If specific variants (e.g., `spinnerSmall`, `spinnerLarge`) or
+   * internal elements (e.g., `spinnerDot`) were defined in the CSS,
+   * they would ideally be added as explicit `readonly` properties here
+   * for better type checking.
+   */
+  readonly [key: string]: string;
+}
+
+/**
+ * The default export of the CSS module.
+ *
+ * When you `import styles from './LoadingSpinner.module.css'`,
+ * the `styles` variable will be of type `LoadingSpinnerModuleCss`.
+ */
+declare const styles: LoadingSpinnerModuleCss;
+export default styles;

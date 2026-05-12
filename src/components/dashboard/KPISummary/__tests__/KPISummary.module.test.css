@@ -1,0 +1,76 @@
+import styles from '../src/components/dashboard/KPISummary/KPISummary.module';
+
+describe('KPISummary.module.css.d.ts', () => {
+  /**
+   * Test Case 1: Ensure the default export 'styles' exists and is an object.
+   */
+  it('should export a default object named "styles"', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  /**
+   * Test Case 2: Verify that all expected CSS class names are present as properties
+   * on the 'styles' object and are of type string.
+   */
+  it('should contain all expected CSS class names as string properties', () => {
+    const expectedClassNames = [
+      'kpiSummaryContainer',
+      'kpiCard',
+      'kpiTitle',
+      'kpiValue',
+      'kpiChange',
+      'positiveChange',
+      'negativeChange',
+      'kpiIcon',
+      'kpiDescription',
+      'kpiTrendArrow',
+      'kpiFooter',
+      'kpiCardLoading',
+    ];
+
+    expectedClassNames.forEach((className) => {
+      expect(styles).toHaveProperty(className);
+      expect(typeof (styles as any)[className]).toBe('string');
+      // Optionally, check that the string is not empty, implying a valid class name
+      expect((styles as any)[className]).not.toBe('');
+    });
+  });
+
+  /**
+   * Test Case 3: Ensure no unexpected properties are present on the 'styles' object.
+   * This helps maintain the contract defined by the .d.ts file.
+   */
+  it('should not contain any unexpected properties', () => {
+    const declaredClassNames = new Set([
+      'kpiSummaryContainer',
+      'kpiCard',
+      'kpiTitle',
+      'kpiValue',
+      'kpiChange',
+      'positiveChange',
+      'negativeChange',
+      'kpiIcon',
+      'kpiDescription',
+      'kpiTrendArrow',
+      'kpiFooter',
+      'kpiCardLoading',
+    ]);
+
+    for (const key in styles) {
+      if (Object.prototype.hasOwnProperty.call(styles, key)) {
+        expect(declaredClassNames.has(key)).toBe(true);
+      }
+    }
+  });
+
+  /**
+   * Test Case 4: Snapshot test to ensure the structure and names of the exported
+   * styles object do not change unexpectedly. This is crucial for .d.ts files
+   * as it captures the entire API surface.
+   */
+  it('should match the snapshot for its exported styles structure', () => {
+    expect(styles).toMatchSnapshot();
+  });
+});

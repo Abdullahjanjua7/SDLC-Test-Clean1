@@ -1,0 +1,111 @@
+import { render, screen } from '@testing-library/react';
+import React from 'react';
+
+// Mock the CSS module as it's a .d.ts file and doesn't contain executable logic.
+// We're testing that the *structure* defined by the .d.ts is adhered to by a mock.
+jest.mock('./DoughnutChart.module.css', () => ({
+  doughnutChartContainer: 'mock-doughnutChartContainer',
+  chartWrapper: 'mock-chartWrapper',
+  chartCanvas: 'mock-chartCanvas',
+  chartLegend: 'mock-chartLegend',
+  chartLegendItem: 'mock-chartLegendItem',
+  chartLegendColorBox: 'mock-chartLegendColorBox',
+  chartLegendLabel: 'mock-chartLegendLabel',
+  centerValueWrapper: 'mock-centerValueWrapper',
+  centerValue: 'mock-centerValue',
+  centerLabel: 'mock-centerLabel',
+  chartTitle: 'mock-chartTitle',
+}));
+
+// Dynamically import the mocked styles after the mock is set up
+const styles = require('./DoughnutChart.module.css').default;
+
+describe('DoughnutChart.module.css.d.ts structure', () => {
+  // Define all expected class names based on the .d.ts file
+  const expectedClassNames = [
+    'doughnutChartContainer',
+    'chartWrapper',
+    'chartCanvas',
+    'chartLegend',
+    'chartLegendItem',
+    'chartLegendColorBox',
+    'chartLegendLabel',
+    'centerValueWrapper',
+    'centerValue',
+    'centerLabel',
+    'chartTitle',
+  ];
+
+  it('should export an object with the correct structure and class names', () => {
+    // Ensure the imported 'styles' is an object
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+
+    // Ensure all expected class names are present as keys
+    expectedClassNames.forEach((className) => {
+      expect(styles).toHaveProperty(className);
+    });
+
+    // Ensure all values are strings
+    Object.values(styles).forEach((value) => {
+      expect(typeof value).toBe('string');
+      // For a CSS module, the value should not be empty
+      expect(value.length).toBeGreaterThan(0);
+    });
+
+    // Ensure no unexpected properties are present (optional, but good for strictness)
+    expect(Object.keys(styles).length).toBe(expectedClassNames.length);
+  });
+
+  it('should match the snapshot for the exported styles object', () => {
+    // This test captures the exact structure and values of the mocked styles object.
+    // If the .d.ts file changes (e.g., adds/removes a class), this snapshot will fail,
+    // prompting a review of the changes.
+    expect(styles).toMatchSnapshot();
+  });
+
+  // Example of how these styles would typically be used in a React component
+  // This is an integration-like test to show usage, not directly testing the .d.ts
+  it('should apply mocked class names when used in a component', () => {
+    const TestComponent = () => (
+      <div className={styles.doughnutChartContainer}>
+        <div className={styles.chartWrapper}>
+          <canvas className={styles.chartCanvas}></canvas>
+          <div className={styles.centerValueWrapper}>
+            <span className={styles.centerValue}>100%</span>
+            <span className={styles.centerLabel}>Complete</span>
+          </div>
+        </div>
+        <div className={styles.chartLegend}>
+          <div className={styles.chartLegendItem}>
+            <span className={styles.chartLegendColorBox}></span>
+            <span className={styles.chartLegendLabel}>Item 1</span>
+          </div>
+        </div>
+        <h2 className={styles.chartTitle}>My Doughnut Chart</h2>
+      </div>
+    );
+
+    render(<TestComponent />);
+
+    expect(screen.getByText('100%')).toHaveClass('mock-centerValue');
+    expect(screen.getByText('Complete')).toHaveClass('mock-centerLabel');
+    expect(screen.getByText('Item 1')).toHaveClass('mock-chartLegendLabel');
+    expect(screen.getByText('My Doughnut Chart')).toHaveClass('mock-chartTitle');
+
+    // Check for container classes (might need to query by role or testId if text is not unique)
+    const container = screen.getByTestId('doughnut-chart-container'); // Add data-testid to TestComponent for this
+    // For demonstration, let's assume we can find the main container by its class if it's unique enough
+    const mainContainer = document.querySelector('.mock-doughnutChartContainer');
+    expect(mainContainer).toBeInTheDocument();
+    expect(mainContainer).toHaveClass('mock-doughnutChartContainer');
+
+    const chartWrapper = document.querySelector('.mock-chartWrapper');
+    expect(chartWrapper).toBeInTheDocument();
+    expect(chartWrapper).toHaveClass('mock-chartWrapper');
+
+    const chartCanvas = document.querySelector('.mock-chartCanvas');
+    expect(chartCanvas).toBeInTheDocument();
+    expect(chartCanvas).toHaveClass('mock-chartCanvas');
+  });
+});

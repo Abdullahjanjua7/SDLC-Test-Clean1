@@ -1,0 +1,31 @@
+/**
+ * @fileoverview TypeScript declaration for `src/components/charts/BarChart/BarChart.module.css`.
+ *
+ * This file provides type definitions for the CSS module, allowing TypeScript
+ * to understand the structure of the object exported when this `.module.css` file is imported.
+ *
+ * When a CSS module is imported (e.g., `import styles from './BarChart.module.css';`),
+ * it typically exports a default object. The keys of this object correspond to
+ * the original CSS class names defined in the `.module.css` file, and their
+ * values are unique, generated string class names (e.g., `BarChart_bar__abc12`).
+ *
+ * This declaration ensures type safety, provides autocompletion, and enables
+ * compile-time checks for CSS class names used within TypeScript/React components
+ * that consume this module.
+ *
+ * Best practices:
+ * - Use `readonly` to indicate that the exported object and its properties should not be modified.
+ * - Use `[key: string]: string` to represent the dynamic nature of CSS class names.
+ * - Error handling is implicitly managed by TypeScript's type checking,
+ *   preventing usage of undefined class names at compile time.
+ */
+
+// Declare a constant named 'classes' (or 'styles', 'css') which will be the default export.
+// This object will contain all the CSS class names defined in BarChart.module.css
+// as keys, and their corresponding unique generated class names as string values.
+declare const classes: {
+  readonly [key: string]: string;
+};
+
+// Export the 'classes' object as the default export of this module.
+export default classes;

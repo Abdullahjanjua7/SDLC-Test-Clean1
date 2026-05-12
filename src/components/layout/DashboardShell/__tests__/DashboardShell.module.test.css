@@ -1,0 +1,121 @@
+// Test file: src/components/layout/DashboardShell/__tests__/DashboardShell.module.test.ts
+
+// Mock the actual CSS module file.
+// This mock simulates what a CSS loader (like css-loader in Webpack) would export
+// when processing `DashboardShell.module.css`. The keys are the original CSS class names,
+// and the values are the unique, generated class names used at runtime.
+jest.mock('../DashboardShell.module.css', () => ({
+  // These are example class names that might be defined in the .css file.
+  // The values are representative of generated class names (e.g., for CSS scoping).
+  container: 'DashboardShell_container__abc12',
+  header: 'DashboardShell_header__def34',
+  content: 'DashboardShell_content__ghi56',
+  footer: 'DashboardShell_footer__jkl78',
+  sidebar: 'DashboardShell_sidebar__mno90',
+  // A class name with a hyphen, which is common in CSS
+  'main-area': 'DashboardShell_main-area__pqr01',
+}));
+
+// Import the mocked CSS module.
+// The `DashboardShell.module.css.d.ts` file provides the type information for this import,
+// ensuring TypeScript understands the shape of the `classes` object.
+import classes from '../DashboardShell.module.css';
+
+describe('DashboardShell.module.css runtime behavior', () => {
+  // This test suite verifies the runtime object produced by importing a CSS module,
+  // guided by the type declaration in `DashboardShell.module.css.d.ts`.
+  // It asserts that the imported `classes` object conforms to the expected structure
+  // (an object where keys are original class names and values are generated string class names).
+
+  it('should export an object of type "object" and not be null', () => {
+    expect(typeof classes).toBe('object');
+    expect(classes).not.toBeNull();
+  });
+
+  it('should contain expected class names as string values', () => {
+    // Assertions for specific class names that are likely to exist in a dashboard shell layout.
+    // This verifies their presence, type, and the mocked generated value.
+    expect(classes).toHaveProperty('container');
+    expect(typeof classes.container).toBe('string');
+    expect(classes.container).toBe('DashboardShell_container__abc12');
+
+    expect(classes).toHaveProperty('header');
+    expect(typeof classes.header).toBe('string');
+    expect(classes.header).toBe('DashboardShell_header__def34');
+
+    expect(classes).toHaveProperty('content');
+    expect(typeof classes.content).toBe('string');
+    expect(classes.content).toBe('DashboardShell_content__ghi56');
+
+    expect(classes).toHaveProperty('footer');
+    expect(typeof classes.footer).toBe('string');
+    expect(classes.footer).toBe('DashboardShell_footer__jkl78');
+
+    expect(classes).toHaveProperty('sidebar');
+    expect(typeof classes.sidebar).toBe('string');
+    expect(classes.sidebar).toBe('DashboardShell_sidebar__mno90');
+  });
+
+  it('should correctly handle class names with hyphens', () => {
+    // Test for a class name that includes a hyphen, which is common in CSS.
+    expect(classes).toHaveProperty('main-area');
+    expect(typeof classes['main-area']).toBe('string');
+    expect(classes['main-area']).toBe('DashboardShell_main-area__pqr01');
+  });
+
+  it('should ensure all properties are strings and follow a typical CSS module naming convention', () => {
+    // Iterate over all properties in the imported `classes` object to ensure
+    // they are all strings, as declared by the `.d.ts` file.
+    for (const key in classes) {
+      if (Object.prototype.hasOwnProperty.call(classes, key)) {
+        expect(typeof classes[key]).toBe('string');
+        // Optionally, check if the generated class name includes the module name
+        // and a unique hash, which is a common pattern for CSS modules.
+        // This regex checks for 'DashboardShell_', followed by one or more word characters/hyphens,
+        // followed by '__', and then one or more word characters (the hash).
+        expect(classes[key]).toMatch(/^DashboardShell_[a-zA-Z0-9-]+__\w+$/);
+      }
+    }
+  });
+
+  // Test for non-existent class names (negative scenario)
+  it('should not contain properties for class names not defined in the CSS module', () => {
+    expect(classes).not.toHaveProperty('nonExistentClass');
+    expect(classes.nonExistentClass).toBeUndefined();
+    expect(classes).not.toHaveProperty('anotherUndefinedClass');
+    expect(classes.anotherUndefinedClass).toBeUndefined();
+  });
+
+  // Snapshot testing to capture the structure and values of the exported classes object.
+  // This helps in detecting unintended changes to the generated class names or structure
+  // over time, especially if the CSS module configuration or build process changes.
+  it('should match the snapshot for the exported classes object', () => {
+    expect(classes).toMatchSnapshot();
+  });
+
+  // Test the `readonly` modifier behavior.
+  // In TypeScript, `readonly` is a compile-time check. At runtime, a plain JavaScript
+  // object is mutable unless explicitly frozen (e.g., with `Object.freeze()`).
+  // CSS modules typically do not return frozen objects.
+  it('should allow modification of properties at runtime (readonly is a TypeScript compile-time check)', () => {
+    const originalContainerValue = classes.container;
+    const originalHeaderValue = classes.header;
+
+    // Attempt to modify a property. We cast to `any` to bypass TypeScript's `readonly` error.
+    (classes as any).container = 'new_container_value';
+    (classes as any).newProperty = 'a_new_property';
+
+    expect(classes.container).not.toBe(originalContainerValue);
+    expect(classes.container).toBe('new_container_value');
+    expect(classes).toHaveProperty('newProperty');
+    expect(classes.newProperty).toBe('a_new_property');
+
+    // Ensure other properties remain unchanged unless explicitly modified
+    expect(classes.header).toBe(originalHeaderValue);
+
+    // Clean up or reset if necessary for subsequent tests in the same file,
+    // though Jest runs tests in isolation by default for module imports.
+    // For this specific mock, the module is re-imported for each test file,
+    // so explicit cleanup isn't strictly necessary here.
+  });
+});

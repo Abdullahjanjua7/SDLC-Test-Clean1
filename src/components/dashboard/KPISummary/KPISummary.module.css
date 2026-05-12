@@ -1,0 +1,68 @@
+/**
+ * @file src/components/dashboard/KPISummary/KPISummary.module.css.d.ts
+ * @description Type definitions for the CSS module 'KPISummary.module.css'.
+ *
+ * This file provides type safety for CSS class names when importing
+ * 'src/components/dashboard/KPISummary/KPISummary.module.css' into TypeScript files.
+ * It ensures that only valid class names defined in the CSS module can be used,
+ * preventing typos and improving maintainability.
+ *
+ * This declaration file is typically generated automatically by a build tool
+ * (e.g., webpack with css-loader and typings-for-css-modules-loader, or a dedicated
+ * CSS Modules TypeScript plugin).
+ *
+ * Using `readonly` ensures that the class names are not accidentally reassigned
+ * and provides a clearer contract for their usage.
+ */
+declare const styles: {
+  /**
+   * Styles for the main container of the KPI summary section.
+   */
+  readonly kpiSummaryContainer: string;
+  /**
+   * Styles for an individual KPI card.
+   */
+  readonly kpiCard: string;
+  /**
+   * Styles for the title of a KPI.
+   */
+  readonly kpiTitle: string;
+  /**
+   * Styles for the main value displayed in a KPI card.
+   */
+  readonly kpiValue: string;
+  /**
+   * Styles for the change or delta value of a KPI.
+   */
+  readonly kpiChange: string;
+  /**
+   * Modifier class for positive change values.
+   */
+  readonly positiveChange: string;
+  /**
+   * Modifier class for negative change values.
+   */
+  readonly negativeChange: string;
+  /**
+   * Styles for an icon associated with a KPI.
+   */
+  readonly kpiIcon: string;
+  /**
+   * Styles for a small description or unit text for a KPI.
+   */
+  readonly kpiDescription: string;
+  /**
+   * Styles for a trend arrow or indicator within a KPI card.
+   */
+  readonly kpiTrendArrow: string;
+  /**
+   * Styles for a footer section within a KPI card.
+   */
+  readonly kpiFooter: string;
+  /**
+   * Styles for a loading state or skeleton for KPI cards.
+   */
+  readonly kpiCardLoading: string;
+};
+
+export default styles;

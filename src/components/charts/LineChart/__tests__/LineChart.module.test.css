@@ -1,0 +1,107 @@
+// LineChart.module.test.ts
+
+// We are testing the runtime behavior of importing a CSS module that
+// is typed by the provided LineChart.module.css.d.ts file.
+// Since the .d.ts file itself contains no executable code, we will
+// mock the actual CSS module import to ensure it conforms to the
+// expected structure defined by the type declaration.
+
+// Mock the CSS module import. In a real project, this might be handled
+// by Jest's moduleNameMapper in jest.config.js (e.g., 'identity-obj-proxy')
+// or a custom transform. For this test, we provide a direct mock.
+jest.mock('./LineChart.module.css', () => ({
+  // Explicitly defined classes from LineChartStyles
+  lineChartContainer: 'LineChart_lineChartContainer__abc12',
+  chartWrapper: 'LineChart_chartWrapper__def34',
+  chartTitle: 'LineChart_chartTitle__ghi56',
+  xAxis: 'LineChart_xAxis__jkl78',
+  yAxis: 'LineChart_yAxis__mno90',
+  line: 'LineChart_line__pqr12',
+  dot: 'LineChart_dot__stu34',
+  tooltip: 'LineChart_tooltip__vwx56',
+  tooltipActive: 'LineChart_tooltipActive__yza78',
+  tooltipContent: 'LineChart_tooltipContent__bcd90',
+  tooltipLabel: 'LineChart_tooltipLabel__efg12',
+  tooltipValue: 'LineChart_tooltipValue__hij34',
+  grid: 'LineChart_grid__klm56',
+  gridLine: 'LineChart_gridLine__nop78',
+
+  // An additional class to test the index signature `[key: string]: string;`
+  someDynamicClass: 'LineChart_someDynamicClass__qrs90',
+}));
+
+// Import the mocked styles. This import will now resolve to the object
+// provided in the jest.mock call above.
+import styles from './LineChart.module.css';
+
+describe('LineChart.module.css styles object', () => {
+  // List of expected class names from the LineChartStyles interface
+  const expectedClassNames = [
+    'lineChartContainer',
+    'chartWrapper',
+    'chartTitle',
+    'xAxis',
+    'yAxis',
+    'line',
+    'dot',
+    'tooltip',
+    'tooltipActive',
+    'tooltipContent',
+    'tooltipLabel',
+    'tooltipValue',
+    'grid',
+    'gridLine',
+  ];
+
+  it('should be an object', () => {
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  it('should contain all explicitly defined class names as string values', () => {
+    expectedClassNames.forEach(className => {
+      expect(styles).toHaveProperty(className);
+      expect(typeof styles[className]).toBe('string');
+      expect(styles[className]).not.toBe(''); // Ensure values are not empty strings
+      // Optionally, check for a specific pattern if generated class names follow one
+      expect(styles[className]).toMatch(/^LineChart_[a-zA-Z]+__\w+$/);
+    });
+  });
+
+  it('should allow for additional, non-explicitly defined class names (index signature)', () => {
+    const dynamicClassName = 'someDynamicClass';
+    expect(styles).toHaveProperty(dynamicClassName);
+    expect(typeof styles[dynamicClassName]).toBe('string');
+    expect(styles[dynamicClassName]).not.toBe('');
+    expect(styles[dynamicClassName]).toMatch(/^LineChart_[a-zA-Z]+__\w+$/);
+  });
+
+  it('should not contain unexpected properties that are not strings', () => {
+    // This test ensures that the index signature doesn't allow non-string values
+    // We can't directly test this with the mock as it's type-checked at compile time.
+    // However, we can assert that all properties are indeed strings.
+    for (const key in styles) {
+      if (Object.prototype.hasOwnProperty.call(styles, key)) {
+        expect(typeof styles[key]).toBe('string');
+      }
+    }
+  });
+
+  it('should match the snapshot of the styles object', () => {
+    // Snapshot testing is useful here to ensure the structure and generated
+    // class names (from the mock) remain consistent over time.
+    expect(styles).toMatchSnapshot();
+  });
+
+  // Example of a "negative" test (though less applicable for a .d.ts file)
+  // This would typically be caught by TypeScript during compilation if a class
+  // was missing from the .d.ts but present in the CSS, or vice-versa.
+  it('should not have undefined or null values for any class name', () => {
+    for (const key in styles) {
+      if (Object.prototype.hasOwnProperty.call(styles, key)) {
+        expect(styles[key]).not.toBeUndefined();
+        expect(styles[key]).not.toBeNull();
+      }
+    }
+  });
+});

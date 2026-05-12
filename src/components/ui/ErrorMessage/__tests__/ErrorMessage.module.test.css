@@ -1,0 +1,110 @@
+// ErrorMessage.module.test.ts
+
+// We are testing the runtime behavior of the object that would be produced
+// by a CSS module loader (e.g., Webpack's css-loader) when importing
+// `ErrorMessage.module.css`. The provided source code is a TypeScript
+// declaration file (`.d.ts`) that describes the *shape* of this object.
+//
+// Since the `.d.ts` file declares `readonly [key: string]: string;`,
+// it implies that the imported `styles` object should be an immutable
+// object where all property values are strings.
+//
+// To simulate this runtime behavior for testing, we will mock the
+// `ErrorMessage.module.css` import to return a frozen object with
+// example class names and their generated values.
+
+// Mock the actual CSS module import before any imports in the test file.
+jest.mock('./ErrorMessage.module.css', () => ({
+  // `__esModule: true` is crucial for Jest to correctly handle default exports
+  // when mocking ES modules.
+  __esModule: true,
+  // We use `Object.freeze()` to simulate the `readonly` aspect declared
+  // in the `.d.ts` file, ensuring the object cannot be modified at runtime.
+  default: Object.freeze({
+    // Example class names and their simulated generated values.
+    // These values typically include the module name and a hash.
+    container: 'ErrorMessage_container__abc12',
+    errorText: 'ErrorMessage_errorText__def34',
+    button: 'ErrorMessage_button__ghi56',
+    // Add more class names here if they were expected in the actual CSS file
+    // to ensure comprehensive coverage of the module's exposed classes.
+  }),
+}));
+
+// Now, import the mocked module. This `styles` object will be the frozen mock.
+import styles from './ErrorMessage.module.css';
+
+describe('ErrorMessage.module.css runtime behavior (based on .d.ts declaration)', () => {
+
+  // Test 1: Verify that the default export is a non-null object.
+  // This ensures the basic structure described by the `.d.ts` is met at runtime.
+  test('should export a default object', () => {
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+    expect(styles).toBeDefined();
+  });
+
+  // Test 2: Verify that the object contains expected class names and their values are strings.
+  // This checks against the `[key: string]: string;` part of the declaration.
+  test('should contain expected class names as string values', () => {
+    // Check for the presence and type of specific properties.
+    expect(styles).toHaveProperty('container');
+    expect(typeof styles.container).toBe('string');
+    // Optionally, use a regex to match the typical CSS module naming pattern.
+    expect(styles.container).toMatch(/^ErrorMessage_container__\w+$/);
+
+    expect(styles).toHaveProperty('errorText');
+    expect(typeof styles.errorText).toBe('string');
+    expect(styles.errorText).toMatch(/^ErrorMessage_errorText__\w+$/);
+
+    expect(styles).toHaveProperty('button');
+    expect(typeof styles.button).toBe('string');
+    expect(styles.button).toMatch(/^ErrorMessage_button__\w+$/);
+  });
+
+  // Test 3: Verify the 'readonly' aspect by attempting to modify the object.
+  // Since our mock is `Object.freeze()`d, attempts to add new properties or
+  // modify existing ones should throw a TypeError in strict mode.
+  test('should be read-only, preventing modification or addition of properties', () => {
+    // Attempt to add a new property to the styles object.
+    const newPropName = 'newClass';
+    const newPropValue = 'ErrorMessage_newClass__xyz78';
+    const addProperty = () => {
+      // Type assertion `as any` is used here to bypass TypeScript's compile-time
+      // readonly check, allowing us to test the runtime behavior.
+      (styles as any)[newPropName] = newPropValue;
+    };
+    // Expecting a TypeError because the object is frozen.
+    expect(addProperty).toThrow(TypeError);
+    // Ensure the property was not actually added.
+    expect(styles).not.toHaveProperty(newPropName);
+
+    // Attempt to modify an existing property.
+    const originalContainerValue = styles.container;
+    const modifyProperty = () => {
+      styles.container = 'modified_container';
+    };
+    // Expecting a TypeError for modifying a frozen property.
+    expect(modifyProperty).toThrow(TypeError);
+    // Ensure the property's value remains unchanged.
+    expect(styles.container).toBe(originalContainerValue);
+  });
+
+  // Test 4: Ensure that accessing non-existent properties returns `undefined`.
+  // While TypeScript prevents this at compile time, it's good practice to
+  // confirm the standard JavaScript runtime behavior.
+  test('should return undefined for non-existent class names', () => {
+    expect((styles as any).nonExistentClass).toBeUndefined();
+  });
+
+  // Test 5: Use snapshot testing to capture the structure and values of the styles object.
+  // This is useful for CSS modules to detect unintended changes in generated class names
+  // or the overall structure of the exported styles object.
+  test('should match snapshot for the styles object', () => {
+    expect(styles).toMatchSnapshot();
+  });
+
+  // No specific `beforeEach`, `afterEach`, `beforeAll`, `afterAll` are needed
+  // for this simple module mock, as Jest's module mocking provides sufficient
+  // isolation and setup/teardown implicitly.
+});

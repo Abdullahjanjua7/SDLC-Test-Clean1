@@ -1,0 +1,65 @@
+/**
+ * @file src/components/layout/Sidebar/Sidebar.module.css.d.ts
+ * @description TypeScript type definitions for the CSS module 'Sidebar.module.css'.
+ *
+ * This file provides type information for the CSS module, allowing TypeScript
+ * to understand the structure of the object returned when importing
+ * 'Sidebar.module.css'. Each property in the interface corresponds to a CSS
+ * class name defined in the module.
+ */
+
+/**
+ * Interface representing the CSS module 'Sidebar.module.css'.
+ *
+ * When 'Sidebar.module.css' is imported, it resolves to an object
+ * conforming to this interface. Each key is a CSS class name defined
+ * in the module, and its value is the unique, generated class name string
+ * that can be used in React components or other TypeScript files.
+ */
+interface SidebarModule {
+  /**
+   * The main container class for the sidebar component.
+   */
+  readonly sidebar: string;
+  /**
+   * Modifier class for when the sidebar is in a collapsed state.
+   */
+  readonly sidebarCollapsed: string;
+  /**
+   * Class for the header section of the sidebar.
+   */
+  readonly sidebarHeader: string;
+  /**
+   * Class for the navigation section within the sidebar.
+   */
+  readonly sidebarNav: string;
+  /**
+   * Class for an individual navigation item within the sidebar.
+   */
+  readonly navItem: string;
+  /**
+   * Modifier class for an active navigation item.
+   */
+  readonly navItemActive: string;
+  /**
+   * Class for the footer section of the sidebar.
+   */
+  readonly sidebarFooter: string;
+  /**
+   * Class for a toggle button or icon within the sidebar.
+   */
+  readonly sidebarToggle: string;
+  /**
+   * Class for the content area of the sidebar, typically where navigation items reside.
+   */
+  readonly sidebarContent: string;
+}
+
+/**
+ * Declares the default export of the CSS module.
+ *
+ * When you import `styles from './Sidebar.module.css'`, `styles` will be
+ * an object of type `SidebarModule`.
+ */
+declare const styles: SidebarModule;
+export default styles;

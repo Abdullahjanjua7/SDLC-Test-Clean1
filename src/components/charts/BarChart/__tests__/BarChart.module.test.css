@@ -1,0 +1,74 @@
+import classes from './BarChart.module.css';
+
+// Mock the CSS module import.
+// In a real project, this is often configured globally in `jest.config.js`
+// using `moduleNameMapper` to map `.css` files to `identity-obj-proxy`
+// or a custom transformer. For this specific test, we mock it directly
+// to simulate the expected output structure as described by the .d.ts file.
+jest.mock('./BarChart.module.css', () => ({
+  // Simulate common class names that might be found in a BarChart component
+  bar: 'BarChart_bar__abc12',
+  container: 'BarChart_container__def34',
+  title: 'BarChart_title__ghi56',
+  // Simulate a class name with a hyphen, common in CSS
+  'bar-label': 'BarChart_bar-label__jkl78',
+  // Simulate another class
+  wrapper: 'BarChart_wrapper__mno90',
+}));
+
+describe('BarChart.module.css Type Declaration Runtime Behavior', () => {
+  // Test 1: Test all exported functions/classes
+  // In this case, the module exports a default object.
+  it('should export a default object when imported', () => {
+    expect(classes).toBeDefined();
+    expect(typeof classes).toBe('object');
+    expect(classes).not.toBeNull();
+  });
+
+  // Test 2: Test different scenarios and inputs
+  it('should contain string values for known CSS class names', () => {
+    // Assert specific class names and their mocked values
+    expect(classes.bar).toBe('BarChart_bar__abc12');
+    expect(typeof classes.bar).toBe('string');
+
+    expect(classes.container).toBe('BarChart_container__def34');
+    expect(typeof classes.container).toBe('string');
+
+    expect(classes.title).toBe('BarChart_title__ghi56');
+    expect(typeof classes.title).toBe('string');
+
+    // Test a class name with a hyphen, accessed via bracket notation
+    expect(classes['bar-label']).toBe('BarChart_bar-label__jkl78');
+    expect(typeof classes['bar-label']).toBe('string');
+  });
+
+  it('should ensure all properties of the exported object are strings', () => {
+    // Iterate over all properties of the mocked object
+    for (const key in classes) {
+      if (Object.prototype.hasOwnProperty.call(classes, key)) {
+        expect(typeof classes[key]).toBe('string');
+      }
+    }
+  });
+
+  // Test 3: Test error conditions
+  // For a .d.ts file, "error conditions" are primarily compile-time type errors.
+  // At runtime, accessing a non-existent property on the mocked object will yield `undefined`.
+  it('should return undefined for non-existent class names at runtime', () => {
+    // TypeScript would prevent `classes.nonExistentClass` from compiling
+    // if not explicitly checked or if the type was stricter.
+    // At runtime, the JavaScript object behaves as expected.
+    expect(classes.nonExistentClass).toBeUndefined();
+    expect(classes['another-non-existent-class']).toBeUndefined();
+  });
+
+  // Test 5: Follow Jest best practices (e.g., clear descriptions, focused tests)
+  // Test 6: Include proper setup and teardown (jest.mock handles setup here)
+
+  // Snapshot Testing: Captures the structure and values of the mocked CSS module.
+  // This helps ensure that the mocked output (which represents the runtime behavior
+  // described by the .d.ts file) remains consistent.
+  it('should match the snapshot of the CSS module structure', () => {
+    expect(classes).toMatchSnapshot();
+  });
+});

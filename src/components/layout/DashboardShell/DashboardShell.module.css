@@ -1,0 +1,34 @@
+/**
+ * @file src/components/layout/DashboardShell/DashboardShell.module.css.d.ts
+ * @description TypeScript declaration file for the DashboardShell CSS module.
+ *
+ * This file provides type definitions for the CSS module, allowing TypeScript
+ * to understand the shape of the object exported when importing
+ * `DashboardShell.module.css`.
+ *
+ * When a CSS module is imported, it typically exports an object where keys
+ * are the original CSS class names defined in the `.module.css` file, and
+ * values are the unique, generated class names used at runtime (e.g., for
+ * CSS scoping).
+ */
+
+/**
+ * Represents the type of the CSS module.
+ *
+ * It is an object where:
+ * - Keys are the original CSS class names (e.g., 'container', 'header').
+ * - Values are the unique, generated class names (e.g., 'DashboardShell_container__abc12').
+ *
+ * The `readonly` modifier indicates that the imported object should not be
+ * modified after import, which is standard practice for CSS module imports.
+ */
+declare const classes: {
+  readonly [key: string]: string;
+  // If you need stricter typing for specific class names, you can uncomment
+  // and extend this interface, for example:
+  // readonly container: string;
+  // readonly header: string;
+  // readonly content: string;
+};
+
+export default classes;

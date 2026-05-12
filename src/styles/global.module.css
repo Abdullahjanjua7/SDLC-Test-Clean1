@@ -1,0 +1,27 @@
+/**
+ * @file src/styles/global.module.css.d.ts
+ * @description Type definitions for the global CSS module.
+ *
+ * This file provides TypeScript support for importing `global.module.css`.
+ * When you import this CSS module (e.g., `import styles from './global.module.css';`),
+ * TypeScript will use this declaration to understand the shape of the `styles` object.
+ *
+ * The `styles` object typically contains string keys corresponding to the class names
+ * defined in the CSS file, and string values representing the transformed (hashed) class names
+ * that should be used in the DOM.
+ *
+ * For global styles and resets, this module might define utility classes or specific
+ * element styles that are intended for broad application across the application.
+ */
+declare const styles: {
+  /**
+   * Represents a CSS class name defined within `global.module.css`.
+   *
+   * The key is the original class name as written in the CSS file (e.g., 'container', 'reset-list').
+   * The value is the transformed (e.g., hashed) class name string that should be used
+   * in your HTML elements (e.g., `<div class={styles.container}>`).
+   */
+  readonly [key: string]: string;
+};
+
+export default styles;

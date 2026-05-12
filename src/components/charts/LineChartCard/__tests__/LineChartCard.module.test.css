@@ -1,0 +1,87 @@
+// LineChartCard.module.test.ts
+
+// This test file verifies the runtime behavior of importing 'LineChartCard.module.css'
+// as described by its TypeScript declaration file (LineChartCard.module.css.d.ts).
+// Since the .d.ts file itself is not executable code, we test the contract it defines
+// for the corresponding CSS module by mocking the CSS module import.
+
+// Define a mock object that adheres to the `readonly {[key: string]: string}` type
+// declared in LineChartCard.module.css.d.ts.
+const mockStyles = {
+  cardContainer: 'LineChartCard_cardContainer_hash123',
+  cardTitle: 'LineChartCard_cardTitle_hash456',
+  cardContent: 'LineChartCard_cardContent_hash789',
+  buttonPrimary: 'LineChartCard_buttonPrimary_hashabc',
+  // Include a class name with a hyphen to test property access with string literals
+  'some-dashed-class': 'LineChartCard_some-dashed-class_hashdef',
+  // Simulate a dynamically generated class name
+  [`dynamic-class-${Math.random().toString(36).substring(7)}`]: 'LineChartCard_dynamic_hashxyz',
+};
+
+// Mock the actual CSS module file. Jest will intercept imports of
+// './LineChartCard.module.css' and return our `mockStyles` object.
+// The path here should reflect where the CSS module would be imported from
+// relative to this test file. Assuming they are in the same directory.
+jest.mock('./LineChartCard.module.css', () => mockStyles);
+
+// Import the module after the mock has been set up.
+// Using `require` ensures the mock is applied before the module is loaded,
+// which is important for top-level `jest.mock` calls.
+const styles = require('./LineChartCard.module.css');
+
+describe('LineChartCard.module.css runtime behavior based on type definition', () => {
+  // No specific setup/teardown needed beyond the top-level jest.mock,
+  // as Jest automatically handles mock isolation between test files.
+
+  it('should export a default object', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  it('should contain all mocked class names as properties', () => {
+    const expectedKeys = Object.keys(mockStyles);
+    const receivedKeys = Object.keys(styles);
+
+    // Ensure all keys from the mock are present in the imported styles object
+    expect(receivedKeys).toEqual(expect.arrayContaining(expectedKeys));
+    // Ensure no unexpected extra keys are present
+    expect(receivedKeys.length).toBe(expectedKeys.length);
+  });
+
+  it('should map all class names to string values', () => {
+    for (const key in mockStyles) {
+      if (Object.prototype.hasOwnProperty.call(mockStyles, key)) {
+        expect(styles[key]).toBeDefined();
+        expect(typeof styles[key]).toBe('string');
+        // Verify that the value matches the mocked value
+        expect(styles[key]).toBe(mockStyles[key]);
+      }
+    }
+  });
+
+  it('should correctly handle class names accessed with bracket notation (e.g., with hyphens)', () => {
+    const dashedClassName = 'some-dashed-class';
+    expect(styles[dashedClassName]).toBeDefined();
+    expect(typeof styles[dashedClassName]).toBe('string');
+    expect(styles[dashedClassName]).toBe(mockStyles[dashedClassName]);
+  });
+
+  it('should return undefined for non-existent class names', () => {
+    const nonExistentClass = 'thisClassDoesNotExistInTheCSSModule';
+    expect(styles[nonExistentClass]).toBeUndefined();
+    expect(typeof styles[nonExistentClass]).toBe('undefined');
+  });
+
+  // Snapshot testing to ensure the structure and values of the imported styles object
+  // remain consistent. This helps catch unintended changes to the mock or the
+  // expected output.
+  it('should have a consistent structure and values (snapshot)', () => {
+    expect(styles).toMatchSnapshot();
+  });
+
+  // Error conditions: For a type definition, runtime errors are not directly testable
+  // within the .d.ts file itself. Any errors would typically arise from the actual
+  // CSS module loader or incorrect usage in consuming components, which are outside
+  // the scope of testing the declaration file's contract.
+});

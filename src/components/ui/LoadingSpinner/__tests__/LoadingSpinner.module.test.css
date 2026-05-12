@@ -1,0 +1,105 @@
+// __tests__/LoadingSpinner.module.css.d.test.ts
+
+// This test file focuses on verifying the runtime implications of the TypeScript
+// declaration file `LoadingSpinner.module.css.d.ts`.
+// The `.d.ts` file itself is a compile-time construct that provides type safety
+// for CSS module imports. It does not export any executable JavaScript code.
+//
+// When a CSS module (e.g., `LoadingSpinner.module.css`) is imported into a
+// TypeScript file, the TypeScript compiler uses the `.d.ts` file to understand
+// the shape of the imported object.
+//
+// In a Jest testing environment, CSS module imports are typically mocked. A common
+// approach is to use `identity-obj-proxy` (configured via `moduleNameMapper` in
+// `jest.config.js`). This proxy returns an object where accessing a property
+// (e.g., `styles.spinner`) yields a string equal to the property name itself
+// (e.g., `'spinner'`).
+//
+// This test suite verifies that such a mocked CSS module object conforms to the
+// structure declared by the `LoadingSpinnerModuleCss` interface in the `.d.ts` file.
+
+// We import the CSS module path directly. Jest's moduleNameMapper (assuming it's
+// configured for CSS modules, e.g., with 'identity-obj-proxy') will intercept
+// this import and provide a mock object.
+import styles from '../src/components/ui/LoadingSpinner/LoadingSpinner.module.css';
+
+describe('LoadingSpinner.module.css.d.ts type definition implications', () => {
+
+  // Test 1: Ensure the default export (the styles object) is a non-null object.
+  // This confirms that importing a CSS module resolves to a usable JavaScript object.
+  test('should export a default object when imported', () => {
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+    // An identity-obj-proxy object might initially have no enumerable keys until accessed.
+    // So, we don't check for `Object.keys(styles).length > 0` directly here.
+  });
+
+  // Test 2: Verify the 'spinner' class property.
+  // This directly tests the `readonly spinner: string;` property defined in the interface.
+  test('should define a "spinner" class as a string property', () => {
+    // Check if the property exists on the styles object.
+    expect(styles).toHaveProperty('spinner');
+    // Check if the type of the property is a string.
+    expect(typeof styles.spinner).toBe('string');
+    // If 'identity-obj-proxy' is used, the value of `styles.spinner` will be 'spinner'.
+    expect(styles.spinner).toBe('spinner');
+  });
+
+  // Test 3: Verify the index signature for arbitrary class names.
+  // This tests the `readonly [key: string]: string;` part of the interface,
+  // ensuring that any accessed property (even if not explicitly listed) returns a string.
+  test('should allow for other arbitrary string class names via index signature', () => {
+    const dynamicClassName = 'someVariantClass';
+    // Accessing a property that isn't explicitly defined in the `.d.ts` but is allowed
+    // by the index signature. 'identity-obj-proxy' will return the key as the value.
+    expect(styles).toHaveProperty(dynamicClassName);
+    expect(typeof styles[dynamicClassName]).toBe('string');
+    expect(styles[dynamicClassName]).toBe(dynamicClassName);
+
+    const anotherDynamicClass = 'anotherSpinnerSize';
+    expect(styles).toHaveProperty(anotherDynamicClass);
+    expect(typeof styles[anotherDynamicClass]).toBe('string');
+    expect(styles[anotherDynamicClass]).toBe(anotherDynamicClass);
+  });
+
+  // Test 4: Snapshot test for the structure of the styles object.
+  // This provides a quick visual check for the expected shape of the mocked CSS module
+  // and helps catch unintended changes to the class names or their values.
+  test('should match the expected structure of the CSS module styles object (snapshot)', () => {
+    // We construct an object by accessing properties from the `styles` mock.
+    // This is necessary because `identity-obj-proxy` populates properties on demand.
+    const accessedStylesForSnapshot = {
+      spinner: styles.spinner,
+      // Include some other common or arbitrary keys to demonstrate the index signature's
+      // effect and ensure consistency in the snapshot.
+      spinnerSmall: styles.spinnerSmall,
+      spinnerLarge: styles.spinnerLarge,
+      container: styles.container,
+      wrapper: styles.wrapper,
+      // Access a property that might not exist in the actual CSS but is allowed by the type
+      nonExistentButTyped: styles.nonExistentButTyped,
+    };
+
+    expect(accessedStylesForSnapshot).toMatchSnapshot();
+  });
+
+  // Test 5: Error condition (or rather, a "safe" behavior for type safety).
+  // This test ensures that even for a property that might not exist in the actual CSS
+  // file, accessing it through the typed module will still yield a string,
+  // preventing runtime errors due to undefined properties when using the index signature.
+  test('should return a string for any accessed property due to the index signature, even if not explicitly defined', () => {
+    const definitelyNotAClass = 'thisClassDoesNotExistInCSS';
+    // Due to the `[key: string]: string;` index signature and `identity-obj-proxy`,
+    // accessing any string key will yield a string.
+    expect(typeof styles[definitelyNotAClass]).toBe('string');
+    expect(styles[definitelyNotAClass]).toBe(definitelyNotAClass); // identity-obj-proxy behavior
+  });
+
+  // Note on 'readonly': The `readonly` keyword in the `.d.ts` file is a TypeScript
+  // compile-time construct. It prevents reassignment of properties in TypeScript code.
+  // JavaScript objects do not have a direct runtime equivalent for interface `readonly`
+  // properties. Therefore, Jest cannot directly test this aspect at runtime.
+  // If one were to attempt to reassign `styles.spinner = 'new-value'` in plain JavaScript
+  // or within the `identity-obj-proxy` mock, it would succeed. The `readonly` check
+  // is enforced by the TypeScript compiler when consuming this module.
+});

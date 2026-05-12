@@ -1,0 +1,221 @@
+/**
+ * @file src/styles/variables.ts
+ * @description TypeScript representation of design tokens (colors, fonts, spacing, etc.).
+ * This file serves as the single source of truth for design tokens in TypeScript,
+ * mirroring the CSS variables that would typically be defined in `src/styles/variables.module.css`
+ * or a similar global CSS file. It provides type-safe access to design values across the application.
+ */
+
+/**
+ * Interface for color design tokens.
+ */
+export interface ColorTokens {
+  primary: string;
+  secondary: string;
+  success: string;
+  danger: string;
+  warning: string;
+  info: string;
+  light: string;
+  dark: string;
+  text: string;
+  background: string;
+  // Extend with more specific colors as needed, e.g., primaryHover, textLight, border
+}
+
+/**
+ * Interface for spacing design tokens.
+ * Values are typically in `rem` or `px`.
+ */
+export interface SpacingTokens {
+  xs: string; // Extra small spacing, e.g., '0.25rem'
+  sm: string; // Small spacing, e.g., '0.5rem'
+  md: string; // Medium spacing, e.g., '1rem' (often base unit)
+  lg: string; // Large spacing, e.g., '1.5rem'
+  xl: string; // Extra large spacing, e.g., '2rem'
+  // Extend with more specific spacing values if necessary
+}
+
+/**
+ * Interface for font design tokens.
+ */
+export interface FontTokens {
+  familySans: string; // Primary sans-serif font stack, e.g., "'Arial', sans-serif"
+  familySerif: string; // Primary serif font stack, e.g., "'Georgia', serif"
+  sizeSm: string; // Small font size, e.g., '0.875rem'
+  sizeMd: string; // Medium (base) font size, e.g., '1rem'
+  sizeLg: string; // Large font size, e.g., '1.25rem'
+  weightNormal: number; // Normal font weight, e.g., 400
+  weightBold: number; // Bold font weight, e.g., 700
+  // Extend with more font sizes, weights, line heights, or letter spacing as needed
+}
+
+/**
+ * Interface for border radius design tokens.
+ */
+export interface BorderRadiusTokens {
+  sm: string; // Small border radius, e.g., '0.25rem'
+  md: string; // Medium border radius, e.g., '0.5rem'
+  lg: string; // Large border radius, e.g., '1rem'
+  full: string; // Full border radius for circles/pills, e.g., '50%'
+}
+
+/**
+ * The complete set of design tokens used across the application.
+ * These tokens should ideally be kept in sync with the CSS variables
+ * defined in `src/styles/variables.module.css` (or similar global CSS)
+ * to ensure visual consistency between JavaScript/TypeScript and CSS.
+ */
+export interface DesignTokens {
+  colors: ColorTokens;
+  spacing: SpacingTokens;
+  fonts: FontTokens;
+  borderRadius: BorderRadiusTokens;
+  // Add other token categories like shadows, zIndex, breakpoints, transitions, etc.
+}
+
+/**
+ * The concrete design token values.
+ * These values are provided as an example. In a real application,
+ * they might be loaded from a JSON file, a design system configuration,
+ * or automatically generated from a CSS preprocessor or build tool.
+ */
+const designTokens: DesignTokens = {
+  colors: {
+    primary: '#007bff',
+    secondary: '#6c757d',
+    success: '#28a745',
+    danger: '#dc3545',
+    warning: '#ffc107',
+    info: '#17a2b8',
+    light: '#f8f9fa',
+    dark: '#343a40',
+    text: '#212529',
+    background: '#ffffff',
+  },
+  spacing: {
+    xs: '0.25rem',
+    sm: '0.5rem',
+    md: '1rem',
+    lg: '1.5rem',
+    xl: '2rem',
+  },
+  fonts: {
+    familySans: "'Arial', sans-serif",
+    familySerif: "'Georgia', serif",
+    sizeSm: '0.875rem',
+    sizeMd: '1rem',
+    sizeLg: '1.25rem',
+    weightNormal: 400,
+    weightBold: 700,
+  },
+  borderRadius: {
+    sm: '0.25rem',
+    md: '0.5rem',
+    lg: '1rem',
+    full: '50%',
+  },
+};
+
+export default designTokens;
+
+/**
+ * Generates a CSS `var()` string for a given design token path.
+ * This utility assumes a naming convention where token paths (e.g., 'colors.primary')
+ * are converted to kebab-case CSS variable names (e.g., '--colors-primary').
+ *
+ * @param tokenPath A dot-separated string representing the path to the token
+ *                  within the `designTokens` object (e.g., "colors.primary").
+ * @returns A CSS `var()` string (e.g., "var(--colors-primary)").
+ *          Returns an empty string if the input is invalid.
+ */
+export function getCssVar(tokenPath: string): string {
+  if (!tokenPath || typeof tokenPath !== 'string') {
+    console.error('getCssVar: Invalid tokenPath provided. Expected a non-empty string.');
+    return '';
+  }
+
+  // Convert dot-separated path to kebab-case CSS variable name
+  // Example: "colors.primary" -> "--colors-primary"
+  // Example: "fonts.familySans" -> "--fonts-family-sans"
+  const cssVarName = `--${tokenPath
+    .replace(/\./g, '-') // Replace dots with hyphens
+    .replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2') // Convert camelCase to kebab-case
+    .toLowerCase()}`; // Ensure all lowercase
+
+  // Optional: A runtime check to see if the token path exists in the JS object.
+  // This helps catch typos early, though the CSS variable might still exist.
+  let current: any = designTokens;
+  const pathParts = tokenPath.split('.');
+  let foundPath = true;
+  for (const part of pathParts) {
+    if (current && typeof current === 'object' && part in current) {
+      current = current[part];
+    } else {
+      console.warn(`getCssVar: Token path "${tokenPath}" not fully found in designTokens object. ` +
+                   `Returning CSS variable string anyway, but verify the path.`);
+      foundPath = false;
+      break;
+    }
+  }
+
+  return `var(${cssVarName})`;
+}
+
+/**
+ * Utility function to retrieve a design token value directly from the TypeScript object.
+ * This provides type-safe access to the token values.
+ *
+ * @param tokenPath A dot-separated string representing the path to the token
+ *                  within the `designTokens` object (e.g., "colors.primary").
+ * @returns The value of the design token, or `undefined` if the token path is not found.
+ * @example
+ * const primaryColor = getDesignToken('colors.primary'); // Returns '#007bff'
+ * const mdSpacing = getDesignToken('spacing.md');       // Returns '1rem'
+ */
+export function getDesignToken<T = any>(tokenPath: string): T | undefined {
+  if (!tokenPath || typeof tokenPath !== 'string') {
+    console.error('getDesignToken: Invalid tokenPath provided. Expected a non-empty string.');
+    return undefined;
+  }
+
+  let current: any = designTokens;
+  const pathParts = tokenPath.split('.');
+
+  for (const part of pathParts) {
+    if (current && typeof current === 'object' && part in current) {
+      current = current[part];
+    } else {
+      console.warn(`getDesignToken: Token path "${tokenPath}" not found in designTokens object.`);
+      return undefined;
+    }
+  }
+
+  return current as T;
+}
+
+// Example Usage (for demonstration, typically used in other files):
+/*
+import tokens, { getCssVar, getDesignToken } from './variables';
+
+// Accessing tokens directly (type-safe)
+console.log('Primary Color (direct):', tokens.colors.primary);
+console.log('Medium Spacing (direct):', tokens.spacing.md);
+
+// Getting CSS variable string for use in inline styles or CSS-in-JS
+const primaryCssVar = getCssVar('colors.primary');
+console.log('Primary Color (CSS var):', primaryCssVar); // "var(--colors-primary)"
+
+// Getting token value dynamically via helper
+const dynamicFontSize = getDesignToken('fonts.sizeLg');
+if (dynamicFontSize) {
+  console.log('Large Font Size (dynamic):', dynamicFontSize); // "1.25rem"
+}
+
+// Example of an invalid path
+const invalidToken = getDesignToken('nonExistent.token'); // Will log a warning and return undefined
+console.log('Invalid Token:', invalidToken);
+
+const invalidCssVar = getCssVar('nonExistent.token'); // Will log a warning and return "var(--non-existent-token)"
+console.log('Invalid CSS Var:', invalidCssVar);
+*/

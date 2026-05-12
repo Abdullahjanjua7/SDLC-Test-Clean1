@@ -1,0 +1,96 @@
+// __tests__/ExportButton.module.test.ts
+// Assuming the test file is located in a `__tests__` directory
+// and the source file is at `src/components/ui/ExportButton.module.css`.
+
+// Mock for the actual CSS module file.
+// This simulates the output of a CSS module loader (e.g., css-loader in Webpack)
+// or a Jest moduleNameMapper like 'identity-obj-proxy'.
+// We define specific class names here to make the tests concrete,
+// as the .d.ts file itself doesn't list them, but describes their type.
+const mockCssModule = {
+  exportButton: 'ExportButton_exportButton__abc123',
+  anotherClass: 'ExportButton_anotherClass__def456',
+  'some-dashed-class': 'ExportButton_some-dashed-class__ghi789',
+};
+
+// Use jest.mock to intercept imports of the CSS module file.
+// The path should match the actual import path used in components.
+jest.mock('../src/components/ui/ExportButton.module.css', () => mockCssModule);
+
+// Now, import the module. This will resolve to our mock.
+// The import statement itself is what the .d.ts file describes.
+import styles from '../src/components/ui/ExportButton.module.css';
+
+describe('ExportButton.module.d.ts runtime contract', () => {
+  // No specific setup or teardown needed beyond the module mock.
+
+  // Test 1: Verify the default export is an object.
+  test('should export a default object', () => {
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+    expect(Array.isArray(styles)).toBe(false);
+  });
+
+  // Test 2: Verify that properties can be accessed and are strings.
+  test('should allow access to class names as string properties', () => {
+    // Test known class names from our mock
+    expect(styles.exportButton).toBe('ExportButton_exportButton__abc123');
+    expect(typeof styles.exportButton).toBe('string');
+
+    expect(styles.anotherClass).toBe('ExportButton_anotherClass__def456');
+    expect(typeof styles.anotherClass).toBe('string');
+
+    expect(styles['some-dashed-class']).toBe('ExportButton_some-dashed-class__ghi789');
+    expect(typeof styles['some-dashed-class']).toBe('string');
+  });
+
+  // Test 3: Verify behavior for non-existent class names.
+  // The .d.ts file's index signature `[key: string]: string;` implies
+  // that any string key can be accessed, and its type will be `string`.
+  // At runtime, if the key doesn't exist, it will be `undefined`.
+  // This test ensures that accessing a non-existent key doesn't throw and returns undefined.
+  test('should return undefined for non-existent class names', () => {
+    expect(styles.nonExistentClass).toBeUndefined();
+    // TypeScript would still infer `styles.nonExistentClass` as `string` based on the .d.ts,
+    // but at runtime, it's `undefined`. This is a common pattern for CSS modules.
+  });
+
+  // Test 4: Verify that all enumerable properties are strings.
+  test('all enumerable properties of the styles object should be strings', () => {
+    for (const key in styles) {
+      if (Object.prototype.hasOwnProperty.call(styles, key)) {
+        expect(typeof styles[key]).toBe('string');
+      }
+    }
+  });
+
+  // Test 5: Runtime immutability (acknowledging TypeScript's `readonly` is compile-time).
+  // The `readonly` modifier in TypeScript is a compile-time check.
+  // It prevents reassignment of properties at compile time.
+  // At runtime, a plain JavaScript object is mutable unless explicitly frozen (e.g., with Object.freeze()).
+  // CSS module loaders typically return plain objects, not frozen ones.
+  // This test demonstrates that attempting to modify a property on the *imported* object
+  // (which is our mock) will succeed if the mock isn't frozen, highlighting the compile-time nature of `readonly`.
+  test('should allow runtime modification if not explicitly frozen (readonly is compile-time)', () => {
+    // Store the original value to verify the change
+    const originalValue = styles.exportButton;
+    const newValue = 'modified-value-at-runtime';
+
+    // Attempt to modify a property at runtime
+    styles.exportButton = newValue;
+
+    // Verify that the property has been modified
+    expect(styles.exportButton).toBe(newValue);
+    expect(styles.exportButton).not.toBe(originalValue);
+
+    // Reset the mock property to its original state for potential subsequent tests or snapshots
+    // (though in this isolated describe block, it's less critical).
+    styles.exportButton = originalValue;
+  });
+
+  // Test 6: Snapshot test to capture the structure and values of the styles object.
+  // This is useful for detecting unexpected changes in the mock's output over time.
+  test('should match snapshot', () => {
+    expect(styles).toMatchSnapshot();
+  });
+});

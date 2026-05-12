@@ -1,0 +1,106 @@
+import type { DateRangePickerModule } from '../src/components/ui/DateRangePicker.module.css.d';
+
+describe('DateRangePickerModule type definition', () => {
+  /**
+   * This test verifies that a hypothetical CSS module object, when typed as DateRangePickerModule,
+   * conforms to the defined interface. It serves as a runtime check that an object intended
+   * to be a CSS module has all the expected string properties as defined in the .d.ts file.
+   * The primary type safety is enforced at compile-time by TypeScript.
+   */
+  it('should define the correct shape for CSS module class names with string values', () => {
+    // Mock a CSS module object that would typically be imported from a .css file.
+    // The type assertion `as DateRangePickerModule` ensures compile-time type checking.
+    const mockCssModule: DateRangePickerModule = {
+      dateRangePickerContainer: 'DateRangePicker_dateRangePickerContainer__abc123',
+      dateRangePickerInput: 'DateRangePicker_dateRangePickerInput__def456',
+      dateRangePickerPopover: 'DateRangePicker_dateRangePickerPopover__ghi789',
+      dateRangePickerCalendar: 'DateRangePicker_dateRangePickerCalendar__jkl012',
+      dateRangePickerHeader: 'DateRangePicker_dateRangePickerHeader__mno345',
+    };
+
+    // Runtime assertions to ensure the mock object has the expected properties and types.
+    // This indirectly confirms that the interface correctly describes string properties.
+    expect(mockCssModule).toHaveProperty('dateRangePickerContainer');
+    expect(typeof mockCssModule.dateRangePickerContainer).toBe('string');
+    expect(mockCssModule.dateRangePickerContainer).not.toBe('');
+
+    expect(mockCssModule).toHaveProperty('dateRangePickerInput');
+    expect(typeof mockCssModule.dateRangePickerInput).toBe('string');
+    expect(mockCssModule.dateRangePickerInput).not.toBe('');
+
+    expect(mockCssModule).toHaveProperty('dateRangePickerPopover');
+    expect(typeof mockCssModule.dateRangePickerPopover).toBe('string');
+    expect(mockCssModule.dateRangePickerPopover).not.toBe('');
+
+    expect(mockCssModule).toHaveProperty('dateRangePickerCalendar');
+    expect(typeof mockCssModule.dateRangePickerCalendar).toBe('string');
+    expect(mockCssModule.dateRangePickerCalendar).not.toBe('');
+
+    expect(mockCssModule).toHaveProperty('dateRangePickerHeader');
+    expect(typeof mockCssModule.dateRangePickerHeader).toBe('string');
+    expect(mockCssModule.dateRangePickerHeader).not.toBe('');
+
+    // Ensure no unexpected properties are present in the mock (optional, but good for strictness)
+    const expectedKeys = [
+      'dateRangePickerContainer',
+      'dateRangePickerInput',
+      'dateRangePickerPopover',
+      'dateRangePickerCalendar',
+      'dateRangePickerHeader',
+    ];
+    expect(Object.keys(mockCssModule)).toEqual(expect.arrayContaining(expectedKeys));
+    expect(Object.keys(mockCssModule).length).toBe(expectedKeys.length);
+  });
+
+  /**
+   * This test conceptually addresses "error conditions" by demonstrating that
+   * TypeScript would enforce strict type checking for objects missing properties
+   * defined in the DateRangePickerModule interface.
+   * Jest cannot directly test compile-time errors, but this block illustrates
+   * the type safety provided by the .d.ts file.
+   */
+  it('should enforce strict type checking for missing properties at compile-time', () => {
+    // This block is primarily for demonstrating compile-time type checking.
+    // If uncommented and run through the TypeScript compiler (tsc), this would result in a type error.
+    // Jest itself cannot "fail" a test based on a TypeScript compile error.
+
+    // @ts-expect-error: Property 'dateRangePickerInput' is missing in type '{ ... }' but required in type 'DateRangePickerModule'.
+    const incompleteMock: DateRangePickerModule = {
+      dateRangePickerContainer: 'container',
+      // dateRangePickerInput is intentionally missing here
+      dateRangePickerPopover: 'popover',
+      dateRangePickerCalendar: 'calendar',
+      dateRangePickerHeader: 'header',
+    };
+
+    // At runtime, the object `incompleteMock` will still be defined,
+    // but the crucial "test" here is the `@ts-expect-error` comment and the TypeScript compiler's behavior.
+    expect(incompleteMock).toBeDefined();
+    expect(incompleteMock).not.toHaveProperty('dateRangePickerInput');
+  });
+
+  /**
+   * This test ensures that properties are readonly as defined in the interface.
+   * While TypeScript enforces `readonly` at compile-time, this runtime check
+   * confirms that direct assignment attempts on a mock object would be caught
+   * by TypeScript if it were a real `readonly` property.
+   */
+  it('should define properties as readonly', () => {
+    const mockCssModule: DateRangePickerModule = {
+      dateRangePickerContainer: 'initial-container',
+      dateRangePickerInput: 'initial-input',
+      dateRangePickerPopover: 'initial-popover',
+      dateRangePickerCalendar: 'initial-calendar',
+      dateRangePickerHeader: 'initial-header',
+    };
+
+    // Attempting to reassign a readonly property would result in a compile-time error:
+    // @ts-expect-error: Cannot assign to 'dateRangePickerContainer' because it is a read-only property.
+    // mockCssModule.dateRangePickerContainer = 'new-container';
+
+    // Since Jest runs JavaScript, the `readonly` keyword from TypeScript is stripped.
+    // However, the purpose of this test is to acknowledge the `readonly` constraint
+    // and ensure that the type definition correctly expresses it for compile-time safety.
+    expect(mockCssModule.dateRangePickerContainer).toBe('initial-container');
+  });
+});

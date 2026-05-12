@@ -1,0 +1,49 @@
+/**
+ * @file Type definitions for the CSS module 'ExportButton.module.css'.
+ * This file provides TypeScript type safety for importing CSS class names
+ * from the corresponding CSS module.
+ *
+ * It is typically generated automatically by a CSS module plugin (e.g., css-loader, postcss-modules)
+ * when using a build tool like Webpack or Vite with TypeScript.
+ *
+ * @remarks
+ * The `readonly` modifier is used to indicate that the properties of the
+ * exported styles object should not be modified at runtime, aligning with
+ * the immutable nature of CSS module class names.
+ *
+ * The index signature `[key: string]: string;` allows for accessing any
+ * class name defined in the CSS module as a string, providing flexibility
+ * while maintaining type safety.
+ */
+interface ExportButtonModule {
+  /**
+   * An index signature that allows accessing any class name defined in
+   * 'ExportButton.module.css'.
+   *
+   * @example
+   * // If 'ExportButton.module.css' contains:
+   * // .button { ... }
+   * // .container { ... }
+   *
+   * // Then `styles.button` and `styles.container` will be of type `string`.
+   * // The value will be the localized class name (e.g., 'ExportButton_button__abc12').
+   */
+  readonly [key: string]: string;
+}
+
+/**
+ * Declares the default export of the CSS module.
+ *
+ * When you import 'ExportButton.module.css' in a TypeScript file,
+ * you will receive an object conforming to the `ExportButtonModule` interface.
+ *
+ * @example
+ * import styles from './ExportButton.module.css';
+ *
+ * function MyComponent() {
+ *   return <button className={styles.button}>Click Me</button>;
+ * }
+ */
+declare const styles: ExportButtonModule;
+
+export default styles;

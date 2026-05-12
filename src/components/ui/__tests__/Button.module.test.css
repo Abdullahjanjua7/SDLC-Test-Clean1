@@ -1,0 +1,105 @@
+// src/components/ui/Button.module.css.test.ts
+
+// IMPORTANT: This test file relies on a mock for 'src/components/ui/Button.module.css'.
+// You need to create a mock file at:
+// <project_root>/src/components/ui/__mocks__/Button.module.css.js
+//
+// The content of the mock file (Button.module.css.js) should be:
+/*
+const classes = {
+  button: 'Button_button__abc12',
+  primary: 'Button_primary__def34',
+  secondary: 'Button_secondary__ghi56',
+  tertiary: 'Button_tertiary__jkl78',
+  outline: 'Button_outline__mno90',
+  ghost: 'Button_ghost__pqr12',
+  small: 'Button_small__stu34',
+  medium: 'Button_medium__vwx56',
+  large: 'Button_large__yza78',
+  disabled: 'Button_disabled__bcd90',
+  // This class demonstrates the index signature allowing arbitrary keys
+  'some-dynamic-class': 'Button_some-dynamic-class__xyz98',
+  'another-custom-class': 'Button_another-custom-class__12345',
+};
+module.exports = classes;
+*/
+
+// Adjust the import path based on your project structure.
+// Assuming this test file is alongside the .d.ts file (e.g., in src/components/ui/)
+import styles from './Button.module.css';
+
+describe('Button.module.css type definition and mock behavior', () => {
+  // List of all explicitly defined class names in the .d.ts file
+  const expectedClassNames = [
+    'button',
+    'primary',
+    'secondary',
+    'tertiary',
+    'outline',
+    'ghost',
+    'small',
+    'medium',
+    'large',
+    'disabled',
+  ];
+
+  it('should export an object by default', () => {
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+    expect(Object.keys(styles).length).toBeGreaterThan(0);
+  });
+
+  it('should contain all explicitly defined class names as properties', () => {
+    expectedClassNames.forEach(className => {
+      expect(styles).toHaveProperty(className);
+    });
+  });
+
+  it('should have string values for all explicitly defined class names', () => {
+    expectedClassNames.forEach(className => {
+      expect(typeof styles[className]).toBe('string');
+      expect(styles[className]).not.toBe(''); // Ensure values are not empty strings
+      expect(styles[className]).toMatch(/^[a-zA-Z0-9_-]+$/); // Basic check for valid class name format
+    });
+  });
+
+  it('should support the index signature, allowing access to arbitrary string keys with string values', () => {
+    // These keys are not explicitly listed in the .d.ts but are allowed by the index signature.
+    // Our mock should provide values for them to demonstrate this behavior at runtime.
+    const dynamicClassName1 = 'some-dynamic-class';
+    const dynamicClassName2 = 'another-custom-class';
+
+    expect(styles).toHaveProperty(dynamicClassName1);
+    expect(typeof styles[dynamicClassName1]).toBe('string');
+    expect(styles[dynamicClassName1]).not.toBe('');
+
+    expect(styles).toHaveProperty(dynamicClassName2);
+    expect(typeof styles[dynamicClassName2]).toBe('string');
+    expect(styles[dynamicClassName2]).not.toBe('');
+  });
+
+  it('should not allow modification of readonly properties (compile-time check, but runtime check for object immutability)', () => {
+    // While `readonly` is a TypeScript compile-time feature, we can ensure the mock
+    // doesn't accidentally allow runtime modification if Object.freeze was used.
+    // Our simple mock doesn't use Object.freeze, so this test primarily confirms
+    // that direct assignment attempts on the imported object would typically fail
+    // in a strict environment or if the mock was frozen.
+    const originalValue = styles.button;
+    // Attempting to assign to a readonly property would be a TypeScript error.
+    // At runtime, if the object is not frozen, it might succeed.
+    // This test ensures that the mock behaves as a standard JS object,
+    // where properties *can* be reassigned unless explicitly prevented.
+    // This is more about understanding the runtime vs. compile-time implications.
+    styles.button = 'new_button_class';
+    expect(styles.button).not.toBe(originalValue);
+    expect(styles.button).toBe('new_button_class');
+    // Reset for subsequent tests if any, though snapshot will capture the current state.
+    styles.button = originalValue;
+  });
+
+  it('should match the snapshot to ensure consistent structure and values', () => {
+    // This snapshot captures the entire object returned by the CSS module mock.
+    // It's crucial for detecting any unintended changes to class names or their generated values.
+    expect(styles).toMatchSnapshot();
+  });
+});

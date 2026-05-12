@@ -1,0 +1,41 @@
+import styles from '../Dropdown.module.css'; // Adjust path as necessary based on your test file location
+
+describe('Dropdown.module.css.ts', () => {
+  it('should export a default object', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  it('should contain all expected CSS class names as properties', () => {
+    const expectedClassNames = [
+      'dropdownContainer',
+      'dropdownButton',
+      'dropdownMenu',
+      'dropdownMenuItem',
+      'active',
+      'open',
+    ];
+
+    expectedClassNames.forEach(className => {
+      expect(styles).toHaveProperty(className);
+      expect(typeof (styles as any)[className]).toBe('string');
+    });
+
+    // Ensure no unexpected properties are present (optional, but good for strictness)
+    expect(Object.keys(styles).sort()).toEqual(expectedClassNames.sort());
+  });
+
+  it('should have string values for all class names matching their keys (mock behavior)', () => {
+    expect(styles.dropdownContainer).toBe('dropdownContainer');
+    expect(styles.dropdownButton).toBe('dropdownButton');
+    expect(styles.dropdownMenu).toBe('dropdownMenu');
+    expect(styles.dropdownMenuItem).toBe('dropdownMenuItem');
+    expect(styles.active).toBe('active');
+    expect(styles.open).toBe('open');
+  });
+
+  it('should match the snapshot to ensure consistent structure and values', () => {
+    expect(styles).toMatchSnapshot();
+  });
+});

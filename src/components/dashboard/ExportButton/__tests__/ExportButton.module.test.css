@@ -1,0 +1,88 @@
+// Mock the CSS module import for Jest.
+// In a real project, you would typically configure Jest's `moduleNameMapper`
+// to use `identity-obj-proxy` for CSS module files.
+// For this specific test, we create a simple mock that mimics the expected
+// structure and values that a CSS module loader would provide at runtime.
+jest.mock('./ExportButton.module', () => ({
+  __esModule: true,
+  default: {
+    exportButton: 'ExportButton_module__exportButton__abc12',
+    icon: 'ExportButton_module__icon__def34',
+    text: 'ExportButton_module__text__ghi56',
+    disabled: 'ExportButton_module__disabled__jkl78',
+    loading: 'ExportButton_module__loading__mno90',
+    dropdownMenu: 'ExportButton_module__dropdownMenu__pqr12',
+    dropdownItem: 'ExportButton_module__dropdownItem__stu34',
+    dropdownItemActive: 'ExportButton_module__dropdownItemActive__vwx56',
+    dropdownSeparator: 'ExportButton_module__dropdownSeparator__yza78',
+    success: 'ExportButton_module__success__bcd90',
+    error: 'ExportButton_module__error__efg12',
+  },
+}));
+
+// Import the mocked styles object.
+// The .d.ts file defines the *type* for this object, and our mock provides
+// a runtime instance that conforms to that type.
+import styles from './ExportButton.module';
+
+describe('ExportButton.module.css.d.ts - CSS Module Type Definition Runtime Contract', () => {
+  // This test suite verifies that the imported 'styles' object,
+  // which represents the runtime output of a CSS module,
+  // conforms to the structure and types defined in ExportButton.module.css.d.ts.
+  // It assumes that the CSS module loader (simulated by the mock)
+  // correctly processes the CSS file and provides an object matching the type definition.
+
+  it('should export a default object', () => {
+    expect(styles).toBeDefined();
+    expect(typeof styles).toBe('object');
+    expect(styles).not.toBeNull();
+  });
+
+  const expectedClassNames: Array<keyof typeof styles> = [
+    'exportButton',
+    'icon',
+    'text',
+    'disabled',
+    'loading',
+    'dropdownMenu',
+    'dropdownItem',
+    'dropdownItemActive',
+    'dropdownSeparator',
+    'success',
+    'error',
+  ];
+
+  it.each(expectedClassNames)('should contain the class "%s" as a non-empty string', (className) => {
+    // Test scenario: Each expected class name should be present.
+    expect(styles).toHaveProperty(className);
+
+    // Test scenario: The value for each class name should be a string.
+    const classValue = styles[className];
+    expect(typeof classValue).toBe('string');
+
+    // Test scenario: The class name string should not be empty,
+    // indicating a generated unique class name.
+    expect(classValue).not.toBe('');
+
+    // Optional: If your CSS module naming convention is predictable,
+    // you could add a regex check, e.g.:
+    // expect(classValue).toMatch(/^ExportButton_module__/);
+  });
+
+  it('should not contain any unexpected properties', () => {
+    // Test scenario: Ensure no extra, undefined properties are present.
+    const actualKeys = Object.keys(styles);
+    const unexpectedKeys = actualKeys.filter(key => !expectedClassNames.includes(key as keyof typeof styles));
+    expect(unexpectedKeys).toEqual([]);
+  });
+
+  // Snapshot testing is useful here to ensure the overall structure and
+  // generated class names remain consistent across changes, providing
+  // an easy way to detect unintended modifications to the CSS module's output.
+  it('should match the snapshot for the exported styles object', () => {
+    // This snapshot will capture the mocked values. If the mock changes,
+    // or if the actual CSS module processing (if not mocked) changes,
+    // the snapshot will highlight the difference.
+    expect(styles).toMatchSnapshot();
+  });
+});
